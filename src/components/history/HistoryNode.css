@@ -1,0 +1,10 @@
+.history-node-rolled-up {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.history-node-unrolled-header {
+  display: flex;
+  justify-content: space-between;
+}
