@@ -1,6 +1,6 @@
 import { FC, createContext, useState, useEffect, ReactNode } from "react";
 import JsSIP from "jssip";
-import SipStorage from "../lib/sip-account.ts";
+import Storage from "../../lib/storage.ts";
 
 export enum ConnectionState {
   CONNECTING = "connecting",
@@ -19,6 +19,8 @@ export interface SipAccount {
   domain: string;
   proxy: string;
 }
+
+export const SipAccountStorage = new Storage<SipAccount>("sip.account");
 
 interface Sip {
   sipAccount: SipAccount | null;
@@ -45,7 +47,7 @@ const SipProvider: FC<Props> = ({ children }) => {
   const [registrationFailed, setRegistrationFailed] = useState<string>("");
 
   useEffect(() => {
-    const savedSipAccount = SipStorage.get();
+    const savedSipAccount = SipAccountStorage.get();
     if (savedSipAccount) {
       register(savedSipAccount);
     }
@@ -90,7 +92,7 @@ const SipProvider: FC<Props> = ({ children }) => {
       ua.on("registered", (e) => {
         console.log("registered", e);
         setRegistrationState(RegistrationState.REGISTERED);
-        SipStorage.set(newSipAccount);
+        SipAccountStorage.set(newSipAccount);
       });
 
       ua.on("unregistered", (e) => {

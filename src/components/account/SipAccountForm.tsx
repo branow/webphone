@@ -12,10 +12,10 @@ import {
   BsEraserFill,
   BsCloudUploadFill
 } from "react-icons/bs";
-import TextInput from "./TextInput";
-import Button from "./Button";
-import FileChooser from "./FileChooser";
-import Error from "./ErrorMessage";
+import TextInput from "../TextInput";
+import Button from "../Button";
+import FileChooser from "../FileChooser";
+import Error from "../ErrorMessage";
 import { SipAccount, SipContext } from "./SipProvider";
 
 interface Props {}
