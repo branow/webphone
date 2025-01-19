@@ -1,12 +1,17 @@
 import { FC } from 'react'
-import { BsTelephoneInboundFill } from 'react-icons/bs'
+import PhoneContainer from './components/PhoneContainer'
+import SipProvider from './components/account/SipProvider'
+import Phone from './components/Phone'
 import './App.css'
 
 const App: FC = () => {
   return (
-    <div>
-      <BsTelephoneInboundFill />
-      <span>WEBPHONE</span>
+    <div className="app">
+      <SipProvider>
+        <PhoneContainer>
+          <Phone />
+        </PhoneContainer>
+      </SipProvider>
     </div>
   )
 }

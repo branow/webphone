@@ -1,0 +1,17 @@
+.phone-container-outer {
+  width: 100vw;
+  height: 100vh;
+  background: gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.phone-container-inner {
+  width: 350px;
+  height: 600px;
+  background: white;
+}
+
