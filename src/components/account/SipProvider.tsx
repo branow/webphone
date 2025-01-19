@@ -22,7 +22,8 @@ export interface SipAccount {
 
 export const SipAccountStorage = new Storage<SipAccount>("sip.account");
 
-interface Sip {
+interface SipValue {
+  ua: JsSIP.UA | null;
   sipAccount: SipAccount | null;
   connectionState: ConnectionState;
   connectionFailed: string;
@@ -31,20 +32,32 @@ interface Sip {
   register: (sa: SipAccount) => void;
 }
 
-export const SipContext = createContext<Sip | null>(null);
+export const SipContext = createContext<SipValue | null>(null);
+
+interface SipState {
+  ua: JsSIP.UA | null;
+  sipAccount: SipAccount | null;
+  connectionState: ConnectionState;
+  connectionFailed: string;
+  registrationState: RegistrationState;
+  registrationFailed: string;
+}
+
+const initialSipState: SipState = {
+  ua: null,
+  sipAccount: null,
+  connectionState: ConnectionState.DISCONNECTED,
+  connectionFailed: "",
+  registrationState: RegistrationState.UNREGISTERED,
+  registrationFailed: "",
+}
 
 interface Props {
   children: ReactNode;
 }
 
 const SipProvider: FC<Props> = ({ children }) => {
-  const [sipAccount, setSipAccount] = useState<SipAccount | null>(null);
-  const [connectionState, setConnectionState] 
-    = useState<ConnectionState>(ConnectionState.DISCONNECTED);
-  const [registrationState, setRegistrationState] 
-    = useState<RegistrationState>(RegistrationState.UNREGISTERED);
-  const [connectionFailed, setConnectionFailed] = useState<string>("");
-  const [registrationFailed, setRegistrationFailed] = useState<string>("");
+  const [sipState, setSipState] = useState<SipState>(initialSipState);
 
   useEffect(() => {
     const savedSipAccount = SipAccountStorage.get();
@@ -54,8 +67,6 @@ const SipProvider: FC<Props> = ({ children }) => {
   }, []);
 
   const register = (newSipAccount: SipAccount) => {
-    setSipAccount(newSipAccount);
-
     const socket 
       = new JsSIP.WebSocketInterface(`wss://${newSipAccount.proxy}`);
     const configuration = {
@@ -65,64 +76,88 @@ const SipProvider: FC<Props> = ({ children }) => {
       password: newSipAccount.password,
     };
     
+    // Shadow the sipState value, bacuse of loosing data during frequent 
+    // react state updating.
+    let sipState: SipState = { ...initialSipState };
+    setSipState(sipState);
+
+    const changeState = (newState: any) => {
+      const newSipState = { ...sipState, ...newState };
+      sipState = newSipState;
+      setSipState(newSipState);
+    }
+
     try {
       const ua = new JsSIP.UA(configuration);
 
       ua.on("connecting", (e) => {
         console.log("connecting", e);
-        setConnectionState(ConnectionState.CONNECTING);
-        setConnectionFailed("");
+        changeState({
+          connectionState: ConnectionState.CONNECTING,
+          connectionFailed: "",
+        });
       });
 
       ua.on("connected", (e) => {
         console.log("connected", e);
-        setConnectionState(ConnectionState.CONNECTED);
+        changeState({ connectionState: ConnectionState.CONNECTED });
       });
 
       ua.on("disconnected", (e) => {
         console.log("disconnected", e);
-        setConnectionState(ConnectionState.DISCONNECTED);
+        let message = "";
         if (e.error) {
-          const message = "Connection failed: invalid proxy";
-          setConnectionFailed(message);
+          message = "Connection failed: invalid proxy";
           ua.stop();
         }
+        changeState({
+          connectionState: ConnectionState.DISCONNECTED,
+          connectionFailed: message,
+        });
       });
 
       ua.on("registered", (e) => {
         console.log("registered", e);
-        setRegistrationState(RegistrationState.REGISTERED);
+        changeState({ registrationState: RegistrationState.REGISTERED });
         SipAccountStorage.set(newSipAccount);
       });
 
       ua.on("unregistered", (e) => {
         console.log("unregistered", e);
-        setRegistrationState(RegistrationState.UNREGISTERED);
+        changeState({ registrationState: RegistrationState.UNREGISTERED });
       });
 
       ua.on("registrationFailed", (e) => {
         console.log("registrationFailed", e);
-        setRegistrationState(RegistrationState.UNREGISTERED);
-        setRegistrationFailed("Registration failed: invalid username, password or domain");
+        changeState({
+          registrationState: RegistrationState.UNREGISTERED,
+          registrationFailed: "Registration failed: invalid username, password or domain",
+        });
       });
 
       ua.start();
+      changeState({ sipAccount: newSipAccount, ua: ua });
+
     } catch (error) {
       console.error(error);
       const message = (error as Error).message;
-      setRegistrationFailed(message);
+      changeState({
+        connectionState: ConnectionState.DISCONNECTED,
+        connectionFailed: message,
+      });
     }
   }
 
   return (
     <SipContext.Provider 
       value={{ 
-        sipAccount,
+        ua: sipState.ua,
+        sipAccount: sipState.sipAccount,
         register,
-        connectionState,
-        connectionFailed,
-        registrationState,
-        registrationFailed,
+        connectionState: sipState.connectionState,
+        connectionFailed: sipState.connectionFailed,
+        registrationState: sipState.registrationState,
+        registrationFailed: sipState.registrationFailed,
       }}
     >
       {children}
