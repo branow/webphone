@@ -1,4 +1,5 @@
 import { FC } from "react";
+import DTMFAudio from "../../util/dtmf.js";
 import "./Keypad.css";
 
 export interface Key {
@@ -26,10 +27,15 @@ const keys: Key[] = [
 ];
 
 const Keypad: FC<Props> = ({ onPressKey }) => {
+  const handlePressKey = (key: Key) => {
+    onPressKey(key);
+    DTMFAudio.play(key.sign);
+  }
+
   return (
     <div className="keypad">
       {keys.map(key => (
-        <button key={"key-" + key.sign} onClick={() => onPressKey(key)}>
+        <button key={"key-" + key.sign} onClick={() => handlePressKey(key)}>
           <div>{key.sign}</div>
           <div>{key.label}</div>
         </button>

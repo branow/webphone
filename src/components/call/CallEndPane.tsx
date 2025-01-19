@@ -4,6 +4,7 @@ import { CallContext, CallState, Call, CallAgent } from "./CallProvider";
 import { HistoryContext, Node, CallStatus } from "../history/HistoryProvider";
 import Button from "../Button";
 import DurationInMs from "../history/DurationInMs";
+import DTMFAudio from "../../util/dtmf.js";
 
 const CallEndPane: FC = () => {
   const { switchTab } = useContext(TabContext)!;
@@ -19,6 +20,12 @@ const CallEndPane: FC = () => {
       endDate: call!.endDate,
     }
     addNode(node);
+
+    DTMFAudio.playCustom('howler');
+    setTimeout(function(){
+        DTMFAudio.stop();
+    }, 1000);
+    return () => DTMFAudio.stop();
   }, [])
 
   const handleBack = () => switchTab(Tab.DIALPAD);
