@@ -5,11 +5,12 @@ interface Props {
   Icon?: IconType;
   text?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }
 
-const Button: FC<Props> = ({ Icon, text, onClick }) => {
+const Button: FC<Props> = ({ Icon, text, onClick, disabled }) => {
   return (
-    <button onClick={onClick}>
+    <button onClick={onClick} disabled={disabled || false}>
       {Icon && (<Icon />)}
       {text && (<span>{text}</span>)}
     </button>

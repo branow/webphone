@@ -1,0 +1,77 @@
+import { FC, useContext, useEffect } from "react";
+import { TabContext, Tab } from "../Phone";
+import { CallContext, CallState, Call, CallAgent } from "./CallProvider";
+import { HistoryContext, Node, CallStatus } from "../history/HistoryProvider";
+import Button from "../Button";
+import DurationInMs from "../history/DurationInMs";
+
+const CallEndPane: FC = () => {
+  const { switchTab } = useContext(TabContext)!;
+  const { addNode } = useContext(HistoryContext)!;
+  const { call } = useContext(CallContext)!;
+  const status = getCallStatus(call!);
+  
+  useEffect(() => {
+    const node: Node = {
+      number: call!.number,
+      status: status,
+      startDate: call!.startDate,
+      endDate: call!.endDate,
+    }
+    addNode(node);
+  }, [])
+
+  const handleBack = () => switchTab(Tab.DIALPAD);
+
+  const isEndedByLocal = () => {
+    return call!.endedBy === CallAgent.LOCAL;
+  }
+
+  const isEndedByRemote = () => {
+    return call!.endDate && call!.endedBy === CallAgent.REMOTE;
+  }
+
+  const localDoNotAnswer = () => {
+    return status === CallStatus.MISSED;
+  }
+
+  const remoteDoNotAnswer = () => {
+    return !call!.endDate && call!.endedBy === CallAgent.REMOTE;
+  }
+
+  const callFailed = () => {
+    return call!.state === CallState.FAILED && status !== CallStatus.MISSED;
+  }
+
+  return (
+    <div>
+      <div>
+        {isEndedByLocal() && (<div>You ended the call.</div>)}
+        {isEndedByRemote() && (<div>The other participant ended the call.</div>)}
+        {localDoNotAnswer() && (<div>You missed the call.</div>)}
+        {remoteDoNotAnswer() && (<div>The other participant did not answer.</div>)}
+        {callFailed() && (<div>Call failed.</div>)}
+        {call!.endDate && <DurationInMs date1={call!.startDate} date2={call!.endDate} />}
+      </div>
+      <Button text="Back" onClick={handleBack} />
+    </div>
+  );
+};
+
+function getCallStatus(call: Call): CallStatus {
+  if (call.state === CallState.FAILED && 
+    call.startedBy === CallAgent.REMOTE &&
+    !call.endDate) {
+    return CallStatus.MISSED;
+  } 
+  if (call.endDate) {
+    if (call.startedBy === CallAgent.LOCAL) {
+      return CallStatus.OUTCOMING;
+    } else {
+      return CallStatus.INCOMING;
+    }
+  }
+  return CallStatus.FAILED;
+}
+
+export default CallEndPane;
