@@ -16,10 +16,25 @@ export interface Node {
   number: string;
   status: CallStatus;
   startDate: Date;
-  endDate: Date;
+  endDate?: Date;
 }
 
-const HistoryStorage = new Storage<Node[]>("history");
+const nodeStorage = new Storage<Node[]>("history");
+const HistoryStorage = {
+  get: (): Node[] | null => {
+    const nodes = nodeStorage.get();
+    return (nodes ? nodes.map(node => {
+      return {
+        number: node.number as string,
+        status: node.status as CallStatus,
+        startDate: new Date(node.startDate),
+        endDate: node.endDate ? new Date(node.endDate) : node.endDate,
+      };
+    }) : null);
+  },
+  set: (nodes: Node[]) => nodeStorage.set(nodes),
+  remove: () => nodeStorage.remove(),
+}
 
 interface HistoryValue {
   nodes: Node[];
