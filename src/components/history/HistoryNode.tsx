@@ -9,7 +9,10 @@ import {
 import { FiPhone } from "react-icons/fi";
 import DurationInMs from "./DurationInMs";
 import Button from "../Button";
+import { TabContext, Tab } from "../Phone";
 import { HistoryContext, Node, CallStatus } from "./HistoryProvider";
+import { CallContext } from "../call/CallProvider";
+import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
 import "./HistoryNode.css";
 
 interface Props {
@@ -19,9 +22,16 @@ interface Props {
 }
 
 const HistoryNode: FC<Props> = ({ node, unrolled, onUnroll }) => {
+  const { switchTab } = useContext(TabContext)!;
   const { removeNode } = useContext(HistoryContext)!;
+  const { doCall } = useContext(CallContext)!;
 
   const handleRemove = () => removeNode(node);
+
+  const handleCall = () => {
+    switchTab(Tab.CALL);
+    doCall(extractPhoneNumber(node.number));
+  }
 
   return (
     <div className="history-node">
@@ -34,13 +44,13 @@ const HistoryNode: FC<Props> = ({ node, unrolled, onUnroll }) => {
               <Button Icon={BsFillTrash3Fill} onClick={handleRemove} />
             </div>
             <div>
-              {node.status === CallStatus.INCOMING && (<span>Incoming, <DurationInMs date1={node.startDate} date2={node.endDate} /></span>)}
-              {node.status === CallStatus.OUTCOMING && (<span>Outcoming, <DurationInMs date1={node.startDate} date2={node.endDate} /></span>)}
+              {node.status === CallStatus.INCOMING && (<span>Incoming, <DurationInMs date1={node.startDate} date2={node.endDate!} /></span>)}
+              {node.status === CallStatus.OUTCOMING && (<span>Outcoming, <DurationInMs date1={node.startDate} date2={node.endDate!} /></span>)}
               {node.status === CallStatus.MISSED && (<span>Missed</span>)}
               {node.status === CallStatus.FAILED && (<span>Failed</span>)}
             </div>
             <div>{node.startDate.toTimeString().substring(0, 5)}</div>
-            <Button Icon={FiPhone} />
+            <Button Icon={FiPhone} onClick={handleCall} />
           </div>
         ) :
         (
@@ -51,7 +61,7 @@ const HistoryNode: FC<Props> = ({ node, unrolled, onUnroll }) => {
               {node.status === CallStatus.MISSED && (<BsFillTelephoneXFill />)}
               {node.status === CallStatus.FAILED && (<BsBan />)}
             </div>
-            <div>{node.number}</div>
+            <div>{formatPhoneNumber(node.number)}</div>
             <div>{node.startDate.toTimeString().substring(0, 5)}</div>
           </div>
         )
