@@ -38,6 +38,7 @@ interface CallInfo {
 
 export interface Call extends CallInfo {
   muteMicro: (mute: boolean) => void;
+  sendDTMF: (tone: string | number) => void;
   answer: () => void;
   terminate: () => void;
 }
@@ -149,6 +150,12 @@ const CallProvider: FC<Props> = ({ children }) => {
     }
   }
 
+  const sendDTMF = (tone: string | number) => {
+    if (session) {
+      session.sendDTMF(tone);
+    }
+  }
+
   const muteMicro = (mute: boolean) => {
     if (session) {
       if (mute) {
@@ -175,6 +182,7 @@ const CallProvider: FC<Props> = ({ children }) => {
     call = {
       ...callState,
       muteMicro,
+      sendDTMF,
       answer,
       terminate,
     }

@@ -8,12 +8,14 @@ import {
 import { IoIosKeypad } from "react-icons/io";
 import { ImPhoneHangUp } from "react-icons/im";
 import { CallContext } from "./CallProvider";
+import KeypadPane from "./KeypadPane";
 import Button from "../Button";
 
 const CallActivePane: FC = () => {
   const { call } = useContext(CallContext)!;
   const audioRef = useRef(null);
   const [volume, setVolume] = useState(true);
+  const [showKeypad, setShowKeypad] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -38,10 +40,13 @@ const CallActivePane: FC = () => {
 
   const handleTerminate = () => call!.terminate();
 
+  const handleSwitchKeypad = () => setShowKeypad(!showKeypad);
+
   return (
     <div className="call-active-pane">
       <audio ref={audioRef} />
       <div>Waves...</div>
+      {showKeypad && (<KeypadPane />)}
       <div className="call-active-pane-controls">
         <div>
           {
@@ -58,7 +63,7 @@ const CallActivePane: FC = () => {
           }
         </div>
         <div>
-          <Button Icon={IoIosKeypad}/>
+          <Button Icon={IoIosKeypad} onClick={handleSwitchKeypad}/>
         </div>
       </div>
       <Button Icon={ImPhoneHangUp} onClick={handleTerminate} />
