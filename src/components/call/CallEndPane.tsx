@@ -13,6 +13,7 @@ const CallEndPane: FC = () => {
   const status = getCallStatus(call!);
   
   useEffect(() => {
+    console.log("open call ended page");
     const node: Node = {
       number: call!.number,
       status: status,
@@ -22,10 +23,17 @@ const CallEndPane: FC = () => {
     addNode(node);
 
     DTMFAudio.playCustom('howler');
-    setTimeout(function(){
-        DTMFAudio.stop();
+    setTimeout(() => {
+      DTMFAudio.stop();
     }, 1000);
-    return () => DTMFAudio.stop();
+
+    const timeout = setTimeout(() => {
+      switchTab(Tab.DIALPAD);
+    }, 5000);
+    return () => {
+      clearTimeout(timeout);
+      DTMFAudio.stop();
+    }
   }, [])
 
   const handleBack = () => switchTab(Tab.DIALPAD);
