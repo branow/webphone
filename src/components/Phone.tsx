@@ -7,6 +7,7 @@ import HistoryPage from "./history/HistoryPage";
 import DialPadPage from "./dialpad/DialPadPage";
 import CallProvider from "./call/CallProvider";
 import CallPage from "./call/CallPage";
+import "./Phone.css";
 
 export enum Tab {
   CALL = "call",
@@ -31,10 +32,11 @@ const Phone: FC = () => {
 
   const switchTab = (tab: Tab) => setTab(tab);
   return (
-    <div>
-      <NavBar />
-      <div>
-      <div>
+    <div className="phone">
+      <div className="phone-navbar">
+        <NavBar />
+      </div>
+      <div className="phone-tab">
         { isRegistered() ? 
           (
             <HistoryProvider>
@@ -50,7 +52,6 @@ const Phone: FC = () => {
           (
             <SipAccountPage />
           ) }
-      </div>
       </div>
     </div>
   );

@@ -1,3 +1,16 @@
 body {
   margin: 0;
 }
+
+body {
+  --c-icon: #fff;
+  --c-yellow: #ffb40b;
+  --c-red: #f44336;
+  --c-red-dark: darkred;
+  --c-green: #5fdd5a;
+  --c-green-dark: #22c65b;
+  --c-disabled: #eee;
+  --c-hover: #eee;
+  --c-active: #ccc;
+  --c-sub-text: #666;
+}
