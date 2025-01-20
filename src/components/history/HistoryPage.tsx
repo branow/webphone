@@ -50,7 +50,7 @@ function groupByDate(nodes: Node[]): Node[][] {
   nodes.sort((n1, n2) => n2.startDate - n1.startDate);
   const grouped: Node[][] = [[]];
   
-  const curDate: string = nodes[0].startDate.toDateString();
+  let curDate: string = nodes[0].startDate.toDateString();
   grouped[0].push(nodes[0]);
   for (let i = 1, j = 0; i < nodes.length; i++) {
     const nextDate = nodes[i].startDate.toDateString();
@@ -59,6 +59,7 @@ function groupByDate(nodes: Node[]): Node[][] {
     } else {
       grouped.push([]);
       grouped[++j].push(nodes[i]);
+      curDate = nextDate;
     }
   }
   
