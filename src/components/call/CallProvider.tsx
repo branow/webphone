@@ -69,7 +69,7 @@ const CallProvider: FC<Props> = ({ children }) => {
         number: request.ruri.user,
         state: CallState.PROGRESS,
         startDate: new Date(),
-        isMuted: false,
+        isMuted: session.isMuted().audio,
       }
       setCallState(callState);
 
@@ -170,7 +170,7 @@ const CallProvider: FC<Props> = ({ children }) => {
       }
       setCallState({
         ...callState!,
-        isMuted: session.isMuted(),
+        isMuted: session.isMuted().audio,
       });
     }
   }
