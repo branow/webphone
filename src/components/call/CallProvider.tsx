@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext, useContext, useState } from "react";
+import { FC, ReactNode, createContext, useContext, useState, useEffect } from "react";
 import { SipContext } from "../account/SipProvider";
 import { RTCSession } from "jssip/lib/RTCSession";
 import { IncomingRequest, OutgoingRequest } from "jssip/lib/SIPMessage";
@@ -55,89 +55,94 @@ let session: RTCSession | null = null;
 const CallProvider: FC<Props> = ({ children }) => {
   const { ua } = useContext(SipContext)!;
   const [callState, setCallState] = useState<CallInfo | null>(null);
-  
-  ua!.on("newRTCSession", (event) => {
-    let originator = event.originator;
-    session = event.session as RTCSession;
-    let request = event.request as IncomingRequest | OutgoingRequest;
 
-    // Hide the initial callState var, because of loosing
-    // data during frequent react state updating.
-    let callState: CallInfo = {
-      startedBy: originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE,
-      number: request.ruri.user,
-      state: CallState.PROGRESS,
-      startDate: new Date(),
-      isMuted: false,
-    }
-    setCallState(callState);
+  useEffect(() => {
+    ua!.on("newRTCSession", (event) => {
+      let originator = event.originator;
+      session = event.session as RTCSession;
+      let request = event.request as IncomingRequest | OutgoingRequest;
 
-    const changeState = (newState: any) => {
-      const newCallState = { ...callState, ...newState }
-      callState = newCallState;
-      setCallState(newCallState);
-    } 
+      // Hide the initial callState var, because of loosing
+      // data during frequent react state updating.
+      let callState: CallInfo = {
+        startedBy: originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE,
+        number: request.ruri.user,
+        state: CallState.PROGRESS,
+        startDate: new Date(),
+        isMuted: false,
+      }
+      setCallState(callState);
 
-    session.connection.ontrack = (event) => {
-      const remoteStream = new MediaStream();
-      event.streams[0]?.getTracks()
-        .forEach((track) => remoteStream.addTrack(track));
+      const changeState = (newState: any) => {
+        const newCallState = { ...callState, ...newState }
+        callState = newCallState;
+        setCallState(newCallState);
+      } 
 
-      console.log('call provider add stream', remoteStream);
-      changeState({ stream: remoteStream });
-    }
+      session.connection.ontrack = (event) => {
+        const remoteStream = new MediaStream();
+        event.streams[0]?.getTracks()
+          .forEach((track) => remoteStream.addTrack(track));
 
-    session.on("peerconnection", (e) => {
-      console.log("peerconneciton", e, callState);
+        console.log('call provider add stream', remoteStream);
+        changeState({ stream: remoteStream });
+      }
+
+      session.on("peerconnection", (e) => {
+        console.log("peerconneciton", e, callState);
+      });
+
+      session.on("connecting", (e) => {
+        console.log("connecting", e, callState);
+      });
+
+      session.on("sending", (e) => {
+        console.log("sending", e, callState);
+      });
+
+      session.on("progress", (e) => {
+        console.log("progress", e, callState);
+        changeState({ state: CallState.PROGRESS });
+      });
+
+      session.on("accepted", (e) => {
+        console.log("accepted", e, callState);
+      });
+
+      session.on("confirmed", (e) => {
+        console.log("comfirmed", e, callState);
+        changeState({ state: CallState.CONFIRMED });
+      });
+
+      session.on("ended", (e) => {
+        console.log("ended", e, callState);
+        const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
+        const endedBy = e.originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE;
+        changeState({ state: CallState.ENDED, endDate, endedBy });
+      });
+
+      session.on("failed", (e) => {
+        console.log("failed", e);
+        const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
+        changeState({ state: CallState.FAILED, endDate });
+      });
+
+      session.on("hold", (e) => {
+        console.log("hold", e);
+        changeState({ state: CallState.HOLD });
+      });
+
+      session.on("unhold", (e) => {
+        console.log("unhold", e);
+        changeState({ state: CallState.CONFIRMED });
+      });
     });
 
-    session.on("connecting", (e) => {
-      console.log("connecting", e, callState);
-    });
-
-    session.on("sending", (e) => {
-      console.log("sending", e, callState);
-    });
-
-    session.on("progress", (e) => {
-      console.log("progress", e, callState);
-      changeState({ state: CallState.PROGRESS });
-    });
-
-    session.on("accepted", (e) => {
-      console.log("accepted", e, callState);
-    });
-
-    session.on("confirmed", (e) => {
-      console.log("comfirmed", e, callState);
-      changeState({ state: CallState.CONFIRMED });
-    });
-
-    session.on("ended", (e) => {
-      console.log("ended", e, callState);
-      const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
-      const endedBy = e.originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE;
-      changeState({ state: CallState.ENDED, endDate, endedBy });
-    });
-
-    session.on("failed", (e) => {
-      console.log("failed", e);
-      const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
-      changeState({ state: CallState.FAILED, endDate });
-    });
-
-    session.on("hold", (e) => {
-      console.log("hold", e);
-      changeState({ state: CallState.HOLD });
-    });
-
-    session.on("unhold", (e) => {
-      console.log("unhold", e);
-      changeState({ state: CallState.CONFIRMED });
-    });
-  });
+    return () => { ua!.removeAllListeners(); }
+  }, []);
 
   const doCall = (number: string) => {
+    console.log("do call:", number);
     const options = {
       "mediaConstraints": { "audio": true }
     }
