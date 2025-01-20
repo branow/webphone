@@ -10,33 +10,33 @@ import { ImPhoneHangUp } from "react-icons/im";
 import { CallContext } from "./CallProvider";
 import KeypadPane from "./KeypadPane";
 import Button from "../Button";
+import AudioVisualizer from "../../util/waveform.js";
 
 const CallActivePane: FC = () => {
   const { call } = useContext(CallContext)!;
   const audioRef = useRef(null);
+  const canvasRef = useRef(null);
   const [volume, setVolume] = useState(true);
   const [showKeypad, setShowKeypad] = useState(false);
 
   useEffect(() => {
-    if (audioRef.current) {
+    if (call!.stream && audioRef.current && canvasRef.current) {
       const audio = audioRef.current as HTMLAudioElement;
       audio.autoplay = true;
+      audio.srcObject = call!.stream;
+      const canvas = canvasRef.current as HTMLCanvasElement;
+      AudioVisualizer.init(canvas, audio);
+      AudioVisualizer.start();
+      return () => AudioVisualizer.stop();
     }
-  }, [audioRef])
+  }, [call!.stream, audioRef, canvasRef])
 
   useEffect(() => {
     if (audioRef.current) {
       const audio = audioRef.current as HTMLAudioElement;
       audio.muted = !volume;
     }
-  }, [volume])
-
-  useEffect(() => {
-    if (call!.stream && audioRef.current) {
-      const audio = audioRef.current as HTMLAudioElement;
-      audio.srcObject = call!.stream;
-    }
-  }, [call!.stream])
+  }, [audioRef, volume])
 
   const handleTerminate = () => call!.terminate();
 
@@ -45,7 +45,9 @@ const CallActivePane: FC = () => {
   return (
     <div className="call-active-pane">
       <audio ref={audioRef} />
-      <div>Waves...</div>
+      <div>
+        <canvas ref={canvasRef} />
+      </div>
       {showKeypad && (<KeypadPane />)}
       <div className="call-active-pane-controls">
         <div>
