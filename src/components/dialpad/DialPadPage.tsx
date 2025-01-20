@@ -42,7 +42,7 @@ const DialPadPage: FC = () => {
     <div className="dial-pad-page">
       <div className="dial-pad-page-top">
         <Button
-          className="history-btn"
+          className="transparent-btn history-btn"
           Icon={VscHistory}
           onClick={handleHistoryPage}
         />

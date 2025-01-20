@@ -8,29 +8,17 @@
 .dial-pad-page-top {
   display: flex;
   gap: 10px;
+  padding: 10px;
 }
 
 .history-btn {
-  background-color: #0000;
   color: var(--c-yellow);
-  border: none;
-  border-radius: 50%;
-  aspect-ratio: 1/1;
   padding: 5px;
   font-size: 28px;
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-  display: flex;
-  align-items: center;
 }
 
 .history-btn:hover {
-  background-color: var(--c-hover);
   box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.03);
-}
-
-.history-btn:active {
-  background-color: var(--c-active);
 }
 
 .backspace-btn {
@@ -71,4 +59,19 @@
 /* Edge 12 - 18 */
 .number-in::-ms-input-placeholder {
   color: var(--c-disabled);
+}
+
+.dial-pad-page .call-btn {
+  font-size: 32px;
+  padding: 10px;
+  padding-left: 12px;
+  width: 55px;
+  box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dial-pad-page .call-btn:not(:disabled):hover {
+  width: 66px;
+  font-size: 38px;
+  padding: 12px;
+  padding-left: 15px;
 }

@@ -36,7 +36,7 @@ const Keypad: FC<Props> = ({ onPressKey }) => {
     <div className="keypad">
       {keys.map(key => (
         <button
-          className="keypad-key"
+          className="transparent-btn keypad-key"
           key={"key-" + key.sign}
           onClick={() => handlePressKey(key)}
         >
