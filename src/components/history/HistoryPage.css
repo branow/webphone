@@ -1,4 +1,68 @@
+.history-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  padding: 20px;
+  padding-top: 10px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .history-page-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  padding: 10px;
+}
+
+.history-page-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--c-subtext);
+}
+
+.history-page-dial-page-pad-btn {
+  color: var(--c-yellow);
+  padding: 7px;
+  font-size: 26px;
+}
+
+.history-page-dial-pad-page-btn:hover {
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.025);
+}
+
+.history-page-delete-btn {
+  padding: 7px;
+  font-size: 24px;
+}
+
+.history-page-delete-btn:hover {
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.025);
+}
+
+.history-page-nodes {
+  overflow: auto;
+  box-sizing: border-box;
+  width: calc(100%);
+  height: calc(100% - 20px - 40px);
+  padding: 10px;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-page-nodes-date {
+  color: var(--c-subtext);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.history-page-nodes-of-date {
+  background-color: var(--c-hover);
+  padding: 5px;
+  border-radius: 10px;
 }

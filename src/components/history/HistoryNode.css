@@ -1,10 +1,77 @@
+.history-node-rolled-up, .history-node-unrolled {
+  padding: 5px;
+  border-bottom: 2px solid var(--c-active);
+}
+
 .history-node-rolled-up {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
 }
 
+.history-node-rolled-up-time {
+  color: var(--c-subtext);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.icon-incoming {
+  color: var(--c-gray);
+}
+
+.icon-outcoming {
+  color: var(--c-green);
+}
+
+.icon-missed {
+  color: var(--c-red);
+}
+
+.icon-failed {
+  color: var(--c-blue);
+}
+
 .history-node-unrolled-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.history-node-delete-btn {
+  padding: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.history-node-delete-btn:hover {
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.025);
+}
+
+.history-node-unrolled-status, .history-node-unrolled-time {
+  color: var(--c-subtext);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.history-node-unrolled-call-btn-con {
+  display: flex;
+  justify-content: center;
+}
+
+.history-node .call-btn {
+  font-size: 21px;
+  padding: 6px;
+  padding-left: 8px;
+  width: 36px;
+  box-shadow: 0 0 3px 6px rgba(0, 0, 0, 0.025);
+}
+
+.history-node .call-btn:hover {
+  font-size: 23px;
+  padding: 7px;
+  padding-left: 9.5px;
+  width: 39px;
 }

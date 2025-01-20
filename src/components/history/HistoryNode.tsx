@@ -6,7 +6,7 @@ import {
   BsBan,
   BsFillTrash3Fill,
 } from "react-icons/bs";
-import { FiPhone } from "react-icons/fi";
+import { ImPhone } from "react-icons/im";
 import DurationInMs from "./DurationInMs";
 import Button from "../Button";
 import { TabContext, Tab } from "../Phone";
@@ -41,28 +41,52 @@ const HistoryNode: FC<Props> = ({ node, unrolled, onUnroll }) => {
           <div className="history-node-unrolled">
             <div className="history-node-unrolled-header">
               <div>{node.number}</div>
-              <Button Icon={BsFillTrash3Fill} onClick={handleRemove} />
+              <Button
+                className="transparent-btn delete-btn history-node-delete-btn"
+                Icon={BsFillTrash3Fill}
+                onClick={handleRemove}
+              />
             </div>
-            <div>
-              {node.status === CallStatus.INCOMING && (<span>Incoming, <DurationInMs date1={node.startDate} date2={node.endDate!} /></span>)}
-              {node.status === CallStatus.OUTCOMING && (<span>Outcoming, <DurationInMs date1={node.startDate} date2={node.endDate!} /></span>)}
+            <div className="history-node-unrolled-status">
+              {node.status === CallStatus.INCOMING && 
+                (<span>Incoming,{' '}
+                  <DurationInMs date1={node.startDate} date2={node.endDate!} />
+                </span>)}
+              {node.status === CallStatus.OUTCOMING && 
+                (<span>Outcoming,{' '}
+                  <DurationInMs date1={node.startDate} date2={node.endDate!} />
+                </span>)}
               {node.status === CallStatus.MISSED && (<span>Missed</span>)}
               {node.status === CallStatus.FAILED && (<span>Failed</span>)}
             </div>
-            <div>{node.startDate.toTimeString().substring(0, 5)}</div>
-            <Button Icon={FiPhone} onClick={handleCall} />
+            <div className="history-node-unrolled-time">
+              {node.startDate.toTimeString().substring(0, 5)}
+            </div>
+            <div className="history-node-unrolled-call-btn-con">
+              <Button
+                className="call-btn"
+                Icon={ImPhone}
+                onClick={handleCall}
+              />
+            </div>
           </div>
         ) :
         (
           <div className="history-node-rolled-up" onClick={() => onUnroll(node.startDate)}>
             <div>
-              {node.status === CallStatus.INCOMING && (<BsFillTelephoneInboundFill />)}
-              {node.status === CallStatus.OUTCOMING && (<BsFillTelephoneOutboundFill />)}
-              {node.status === CallStatus.MISSED && (<BsFillTelephoneXFill />)}
-              {node.status === CallStatus.FAILED && (<BsBan />)}
+              {node.status === CallStatus.INCOMING && 
+                (<div className="icon-incoming"><BsFillTelephoneInboundFill /></div>)}
+              {node.status === CallStatus.OUTCOMING && 
+                (<div className="icon-outcoming"><BsFillTelephoneOutboundFill /></div>)}
+              {node.status === CallStatus.MISSED && 
+                (<div className="icon-missed"><BsFillTelephoneXFill /></div>)}
+              {node.status === CallStatus.FAILED && 
+                (<div className="icon-failed"><BsBan /></div>)}
             </div>
             <div>{formatPhoneNumber(node.number)}</div>
-            <div>{node.startDate.toTimeString().substring(0, 5)}</div>
+            <div className="history-node-rolled-up-time">
+              {node.startDate.toTimeString().substring(0, 5)}
+            </div>
           </div>
         )
       }

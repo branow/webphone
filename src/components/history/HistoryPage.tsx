@@ -18,17 +18,27 @@ const HistoryPage: FC = () => {
   const handleDialPadPage = () => switchTab(Tab.DIALPAD);
 
   return (
-    <div>
+    <div className="history-page">
       <div className="history-page-header">
-        <Button Icon={BsArrowLeftCircle} onClick={handleDialPadPage}/>
-        <div>History</div>
-        <Button Icon={BsFillTrash3Fill} onClick={clean}/>
+        <Button
+          className="transparent-btn history-page-dial-page-pad-btn"
+          Icon={BsArrowLeftCircle}
+          onClick={handleDialPadPage}
+        />
+        <div className="history-page-title">History</div>
+        <Button
+          className="transparent-btn delete-btn history-page-delete-btn"
+          Icon={BsFillTrash3Fill}
+          onClick={clean}
+        />
       </div>
-      <div>
+      <div className="history-page-nodes">
         {groupByDate(nodes).map(nodeGroup => (
           <div key={nodeGroup[0].startDate.toDateString()}>
-            <div>{nodeGroup[0].startDate.toDateString()}</div>
-            <div>
+            <div className="history-page-nodes-date">
+              {nodeGroup[0].startDate.toDateString()}
+            </div>
+            <div className="history-page-nodes-of-date">
               {nodeGroup.map(node => (
                 <HistoryNode
                   key={node.startDate.getTime()}
