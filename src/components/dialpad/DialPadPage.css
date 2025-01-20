@@ -1,0 +1,74 @@
+.dial-pad-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.dial-pad-page-top {
+  display: flex;
+  gap: 10px;
+}
+
+.history-btn {
+  background-color: #0000;
+  color: var(--c-yellow);
+  border: none;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  padding: 5px;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.history-btn:hover {
+  background-color: var(--c-hover);
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.03);
+}
+
+.history-btn:active {
+  background-color: var(--c-active);
+}
+
+.backspace-btn {
+  background-color: #0000;
+  color: var(--c-red);
+  border: none;
+  padding: 5px;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.backspace-btn:disabled {
+  color: var(--c-disabled);
+}
+
+.backspace-btn:not(:disabled):active {
+  color: var(--c-red-dark);
+}
+
+.number-in {
+  border: none;
+  font-size: 24px;
+  width: 155px;
+}
+
+.number-in:focus-visible {
+  outline: none;
+}
+
+/* Firefox */
+.number-in::placeholder { 
+  color: var(--c-disabled);
+}
+
+/* Edge 12 - 18 */
+.number-in::-ms-input-placeholder {
+  color: var(--c-disabled);
+}

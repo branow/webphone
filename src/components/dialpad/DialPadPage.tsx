@@ -1,12 +1,14 @@
 import { FC, useState, useContext, ChangeEvent } from "react";
 import Keypad, { Key } from "./Keypad";
 import Button from "../Button"
-import { FiPhone } from "react-icons/fi";
+import { ImPhone } from "react-icons/im";
 import { VscHistory } from "react-icons/vsc";
-import { TiBackspaceOutline } from "react-icons/ti";
+import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
 import { TabContext, Tab } from "../Phone";
-import { CallContext } from "../call/CallProvider.tsx";
+import { CallContext } from "../call/CallProvider";
+import Hover from "../Hover";
 import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
+import "./DialPadPage.css";
 
 const DialPadPage: FC = () => {
   const { switchTab } = useContext(TabContext)!;
@@ -37,16 +39,38 @@ const DialPadPage: FC = () => {
   const handleHistoryPage = () => switchTab(Tab.HISTORY);
 
   return (
-    <div>
-      <Button Icon={VscHistory} onClick={handleHistoryPage}/>
-      <input 
-        type="text" 
-        placeholder="phone number"
-        value={number} 
-        onChange={handleChange} />
-      <Button Icon={TiBackspaceOutline} onClick={handleRemove} />
+    <div className="dial-pad-page">
+      <div className="dial-pad-page-top">
+        <Button
+          className="history-btn"
+          Icon={VscHistory}
+          onClick={handleHistoryPage}
+        />
+        <input
+          className="number-in"
+          type="text"
+          placeholder="Phone number"
+          value={number}
+          onChange={handleChange}
+        />
+        <Hover>
+          {isHovered => (
+            <Button
+              className="backspace-btn"
+              Icon={number && isHovered ? MdBackspace : MdOutlineBackspace}
+              onClick={handleRemove}
+              disabled={!number}
+            />
+          )}
+        </Hover>
+      </div>
       <Keypad onPressKey={handleKey} />
-      <Button Icon={FiPhone} onClick={handleCall} disabled={!number} />
+      <Button
+        className="call-btn medium-btn"
+        Icon={ImPhone}
+        onClick={handleCall}
+        disabled={!number}
+      />
     </div>
   );
 };

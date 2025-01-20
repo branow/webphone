@@ -35,9 +35,13 @@ const Keypad: FC<Props> = ({ onPressKey }) => {
   return (
     <div className="keypad">
       {keys.map(key => (
-        <button key={"key-" + key.sign} onClick={() => handlePressKey(key)}>
-          <div>{key.sign}</div>
-          <div>{key.label}</div>
+        <button
+          className="keypad-key"
+          key={"key-" + key.sign}
+          onClick={() => handlePressKey(key)}
+        >
+          <div className="keypad-key-sign" >{key.sign}</div>
+          <div className="keypad-key-label" >{key.label}</div>
         </button>
       ))}
     </div>
