@@ -1,18 +1,16 @@
-import { FC, MouseEventHandler } from "react";
+import { FC } from "react";
 import { IconType } from "react-icons";
 
 interface Props {
   Icon?: IconType;
   text?: string;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
 }
 
-const Button: FC<Props> = ({ Icon, text, onClick, disabled }) => {
+const Button: FC<Props> = (props) => {
   return (
-    <button onClick={onClick} disabled={disabled || false}>
-      {Icon && (<Icon />)}
-      {text && (<span>{text}</span>)}
+    <button {...props}>
+      {props.Icon && (<props.Icon />)}
+      {props.text && (<span>{props.text}</span>)}
     </button>
   );
 };
