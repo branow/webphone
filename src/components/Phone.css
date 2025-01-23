@@ -4,7 +4,7 @@
 }
 
 .phone-navbar {
-  height: 40px;
+  height: 60px;
 }
 
 .phone-tab {
@@ -12,7 +12,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100% - 40px);
+  height: calc(100% - 60px);
 }
 
 .transparent-btn {
