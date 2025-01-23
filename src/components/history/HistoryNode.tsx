@@ -40,7 +40,7 @@ const HistoryNode: FC<Props> = ({ node, unrolled, onUnroll }) => {
         (
           <div className="history-node-unrolled">
             <div className="history-node-unrolled-header">
-              <div>{node.number}</div>
+              <div>{formatPhoneNumber(node.number)}</div>
               <Button
                 className="transparent-btn delete-btn history-node-delete-btn"
                 Icon={BsFillTrash3Fill}

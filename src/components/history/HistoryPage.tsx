@@ -25,7 +25,7 @@ const HistoryPage: FC = () => {
           Icon={BsArrowLeftCircle}
           onClick={handleDialPadPage}
         />
-        <div className="history-page-title">History</div>
+        <div className="history-page-title">HISTORY</div>
         <Button
           className="transparent-btn delete-btn history-page-delete-btn"
           Icon={BsFillTrash3Fill}
