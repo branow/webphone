@@ -12,10 +12,10 @@ interface Props {
 
 const TextInput: FC<Props> = ({ className, Icon, label, name, value, onChange }) => {
   return (
-    <div>
+    <div className={className}>
       {label && (<label htmlFor={name}>{label}</label>)}
       <div>
-        {Icon && (<Icon />)}
+        {Icon && (<Icon className="text-input-icon" />)}
         <input
           className={className}
           id={name}
