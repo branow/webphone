@@ -2,6 +2,7 @@ import { FC, ReactNode, createContext, useContext, useState, useEffect } from "r
 import { SipContext } from "../account/SipProvider";
 import { RTCSession } from "jssip/lib/RTCSession";
 import { IncomingRequest, OutgoingRequest } from "jssip/lib/SIPMessage";
+import { IncomingRTCSessionEvent, OutgoingRTCSessionEvent } from "jssip/lib/UA";
 
 interface Props {
   children: ReactNode;
@@ -57,7 +58,8 @@ const CallProvider: FC<Props> = ({ children }) => {
   const [callState, setCallState] = useState<CallInfo | null>(null);
 
   useEffect(() => {
-    ua!.on("newRTCSession", (event) => {
+    ua!.on("newRTCSession",
+      (event: IncomingRTCSessionEvent | OutgoingRTCSessionEvent) => {
       let originator = event.originator;
       session = event.session as RTCSession;
       let request = event.request as IncomingRequest | OutgoingRequest;
@@ -100,16 +102,16 @@ const CallProvider: FC<Props> = ({ children }) => {
         console.log("sending", e, callState);
       });
 
-      session.on("progress", (e) => {
+      session.on("progress", (e: any) => {
         console.log("progress", e, callState);
         changeState({ state: CallState.PROGRESS });
       });
 
-      session.on("accepted", (e) => {
+      session.on("accepted", (e: any) => {
         console.log("accepted", e, callState);
       });
 
-      session.on("confirmed", (e) => {
+      session.on("confirmed", (e: any) => {
         console.log("comfirmed", e, callState);
         changeState({ state: CallState.CONFIRMED });
       });
