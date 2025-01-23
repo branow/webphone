@@ -14,7 +14,6 @@ const CallEndPane: FC = () => {
   const status = getCallStatus(call!);
   
   useEffect(() => {
-    console.log("open call ended page");
     const node: Node = {
       number: call!.number,
       status: status,
@@ -28,13 +27,13 @@ const CallEndPane: FC = () => {
       DTMFAudio.stop();
     }, 1000);
 
-    // const timeout = setTimeout(() => {
-    //   switchTab(Tab.DIALPAD);
-    // }, 5000);
-    // return () => {
-    //   clearTimeout(timeout);
-    //   DTMFAudio.stop();
-    // }
+    const timeout = setTimeout(() => {
+      switchTab(Tab.DIALPAD);
+    }, 5000);
+    return () => {
+      clearTimeout(timeout);
+      DTMFAudio.stop();
+    }
   }, [])
 
   const handleBack = () => switchTab(Tab.DIALPAD);
@@ -71,7 +70,7 @@ const CallEndPane: FC = () => {
         </div>
         {call!.endDate && 
           (<div className="call-end-pane-duration">
-            <DurationInMs date1={new Date()} date2={new Date()} />
+            <DurationInMs date1={call!.startDate} date2={call!.endDate} />
           </div>)}
       </div>
       <Button
