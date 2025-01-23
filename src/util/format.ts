@@ -13,5 +13,13 @@ export function formatPhoneNumber(number: string) {
 }
 
 export function extractPhoneNumber(number: string) {
-  return number.replaceAll(/[^0-9*#]+/g, "");
+  let newNumber;
+  while(true) {
+    newNumber = number.replace(/[^0-9*#]+/g, "");
+    if (newNumber === number) {
+      return number;
+    }
+    number = newNumber;
+  }
 }
+

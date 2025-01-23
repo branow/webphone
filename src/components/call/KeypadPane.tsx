@@ -2,6 +2,7 @@ import { FC, useContext, useState, ChangeEvent } from "react";
 import { CallContext } from "./CallProvider";
 import Keypad, { Key } from "../dialpad/Keypad";
 import TextInput from "../TextInput";
+import { extractPhoneNumber } from "../../util/format.js";
 import "./KeypadPane.css";
 
 const KeypadPane: FC = () => {
@@ -17,7 +18,7 @@ const KeypadPane: FC = () => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     let curInput = event.target.value;
     
-    curInput = curInput.replaceAll(/[^0-9*#]/g, "");
+    curInput = extractPhoneNumber(curInput);
     // Take only first sign if there were paste more than one.
     if (curInput.length > input.length + 1) {
       curInput = curInput.substring(0, input.length + 1); 
