@@ -3,6 +3,7 @@ import JsSIP from "jssip";
 import Storage from "../../lib/storage.ts";
 
 export enum ConnectionState {
+  FETCHING = "fetching",
   CONNECTING = "connecting",
   CONNECTED = "connected",
   DISCONNECTED = "connected",
@@ -63,6 +64,22 @@ const SipProvider: FC<Props> = ({ children }) => {
     const savedSipAccount = SipAccountStorage.get();
     if (savedSipAccount) {
       register(savedSipAccount);
+    } else {
+      setSipState({...sipState, connectionState: ConnectionState.FETCHING });
+      fetch("/sip-credentials").then(response => {
+        if (response.status === 200) {
+          const fetchedSipAccount: SipAccount = {
+            username: response.headers.get("x-sip-username") || "",
+            password: response.headers.get("x-sip-password") || "",
+            domain: response.headers.get("x-sip-domain") || "",
+            proxy: response.headers.get("x-sip-proxy") || "",
+          }
+          register(fetchedSipAccount);
+        }
+      }).catch(error => {
+        setSipState({...sipState, connectionState: ConnectionState.FETCHING });
+        console.error(error);
+      });
     }
   }, []);
 
