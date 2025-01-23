@@ -57,7 +57,7 @@ const HistoryPage: FC = () => {
 
 function groupByDate(nodes: Node[]): Node[][] {
   if (nodes.length === 0) return [];
-  nodes.sort((n1, n2) => n2.startDate - n1.startDate);
+  nodes.sort((n1, n2) => n2.startDate.getTime() - n1.startDate.getTime());
   const grouped: Node[][] = [[]];
   
   let curDate: string = nodes[0].startDate.toDateString();
