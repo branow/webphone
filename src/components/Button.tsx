@@ -1,9 +1,10 @@
-import { FC } from "react";
+import { FC, HTMLAttributes } from "react";
 import { IconType } from "react-icons";
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLButtonElement> {
   Icon?: IconType;
   text?: string;
+  disabled?: boolean;
 }
 
 const Button: FC<Props> = (props) => {
@@ -16,3 +17,4 @@ const Button: FC<Props> = (props) => {
 };
 
 export default Button;
+
