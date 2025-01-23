@@ -1,0 +1,22 @@
+.sip-account-page {
+}
+
+.sip-account-page-connecting {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.sip-account-page-connecting-animation {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.sip-account-page-connecting-message {
+  color: var(--c-subtext);
+  font-size: 18px;
+  font-weight: bold;
+}

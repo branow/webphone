@@ -17,6 +17,7 @@ import Button from "../Button";
 import FileChooser from "../FileChooser";
 import Error from "../ErrorMessage";
 import { SipAccount, SipContext } from "./SipProvider";
+import "./SipAccountForm.css";
 
 interface Props {}
 
@@ -95,12 +96,23 @@ const SipAccountForm: FC<Props> = ({}) => {
   }
 
   return (
-    <form>
-      <Error  error={error} />
-      <Button Icon={BsCloudUploadFill} onClick={handleFileSelector} />
-      <Button Icon={BsEraserFill} onClick={handleClean} />
+    <form className="sip-account-form">
+      <Error className="sip-account-form-error" error={error} />
+      <div className="sip-account-form-control-con">
+        <Button
+          className="upload sip-account-form-control transparent-btn"
+          Icon={BsCloudUploadFill}
+          onClick={handleFileSelector}
+        />
+        <Button
+          className="erase sip-account-form-control transparent-btn"
+          Icon={BsEraserFill}
+          onClick={handleClean}
+        />
+      </div>
       <FileChooser trigger={fileTrigger} onLoadFile={handleLoadFile}/>
       <TextInput
+        className="sip-account-form-text-in"
         Icon={BsPersonFill}
         label="User"
         name="username"
@@ -108,6 +120,7 @@ const SipAccountForm: FC<Props> = ({}) => {
         onChange={handleChange}
       />
       <TextInput
+        className="sip-account-form-text-in"
         Icon={BsKeyFill}
         label="Password"
         name="password"
@@ -115,18 +128,24 @@ const SipAccountForm: FC<Props> = ({}) => {
         onChange={handleChange}
       />
       <TextInput
+        className="sip-account-form-text-in"
         label="Domain"
         name="domain"
         value={localSipAccount.domain}
         onChange={handleChange}
       />
       <TextInput
+        className="sip-account-form-text-in"
         label="SIP Proxy"
         name="proxy"
         value={localSipAccount.proxy}
         onChange={handleChange}
       />
-      <Button text="Save" onClick={handleSave} />
+      <Button
+        className="sip-account-form-save-btn"
+        text="Save"
+        onClick={handleSave}
+      />
     </form>
   );
 }
