@@ -9,7 +9,7 @@ body {
   --c-gray: #888; /* for incoming call icons */
   --c-yellow: #ffb40b; /* for history icon */
   --c-red: #f44336; /* for reject button and backspace icon */
-  --c-red-dark: darkred; /* for backspace icon */
+  --c-red-dark: #d32f2f; /* for backspace icon */
   --c-green: #5fdd5a; /* for call/accept call buttons and outcoming call icons */
   --c-green-dark: #22c65b; /* for call/accept call buttons */
   --c-disabled: #eee; /* for disabled call buttons */
