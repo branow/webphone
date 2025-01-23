@@ -2,6 +2,7 @@ import { FC, useContext, useState, ChangeEvent } from "react";
 import { CallContext } from "./CallProvider";
 import Keypad, { Key } from "../dialpad/Keypad";
 import TextInput from "../TextInput";
+import "./KeypadPane.css";
 
 const KeypadPane: FC = () => {
   const { call } = useContext(CallContext)!;
@@ -30,8 +31,12 @@ const KeypadPane: FC = () => {
   }
 
   return (
-    <div>
-      <TextInput value={input} onChange={handleChange} />
+    <div className="keypad-pane">
+      <TextInput
+        className="keypad-pane-in"
+        value={input}
+        onChange={handleChange}
+      />
       <Keypad onPressKey={handlePressKey}/>
     </div>
   );

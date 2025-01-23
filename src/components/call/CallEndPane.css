@@ -1,0 +1,45 @@
+.call-end-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.call-end-pane-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.call-end-pane-status {
+  color: var(--c-subtext);
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.call-end-pane-duration {
+  color: var(--c-subtext);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.call-end-pane-back-btn {
+  background-color: var(--c-green);
+  color: var(--c-icon);
+  border: none;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  transition: all ease-in-out 0.5s;
+  font-size: 18px;
+  padding: 10px;
+  box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.05);
+}
+
+.call-end-pane-back-btn:hover {
+  background-color: var(--c-green-dark);
+  font-size: 22px;
+}

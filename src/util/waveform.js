@@ -11,14 +11,16 @@ var AudioVisualizer = (function () {
     var canvas;
     var remoteAudio; // if you use reote
     var analyser;
+    var options;
 
     /**
      * @param {*} _canva 
      * @param {*} (Optional) _remoteAudio - For WebRCT visualization
      */
-    this.init = function (_canvas, _remoteAudio) {
+    this.init = function (_canvas, _remoteAudio, _options) {
         canvas = _canvas;
         remoteAudio = _remoteAudio;
+        options = _options;
     }
 
     this.start = function(){
@@ -117,11 +119,11 @@ var AudioVisualizer = (function () {
             //analyser.getByteTimeDomainData(dataArray);
             analyser.getFloatTimeDomainData(dataArray);
             
-            canvasCtx.fillStyle = '#56585a';
+            canvasCtx.fillStyle = options.fillStyle || '#56585a';
             canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
         
-            canvasCtx.lineWidth = 2;
-            canvasCtx.strokeStyle = '#23d160';
+            canvasCtx.lineWidth = options.lineWidth || 2;
+            canvasCtx.strokeStyle = options.strokeStyle || '#23d160';
         
             canvasCtx.beginPath();
         

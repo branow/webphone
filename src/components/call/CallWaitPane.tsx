@@ -1,9 +1,9 @@
 import { FC, useContext, useEffect } from "react";
-import { ImPhoneHangUp } from "react-icons/im";
-import { FiPhone } from "react-icons/fi";
+import { ImPhone, ImPhoneHangUp } from "react-icons/im";
 import { CallContext, CallAgent } from "./CallProvider";
 import Button from "../Button";
 import DTMFAudio from "../../util/dtmf.js";
+import "./CallWaitPane.css";
 
 const CallWaitPane: FC = () => {
   const { call } = useContext(CallContext)!;
@@ -23,11 +23,21 @@ const CallWaitPane: FC = () => {
   const handleAnswer = () => call!.answer();
 
   return (
-    <div>
-      <div>Calling...</div>
-      <div>
-        <Button Icon={ImPhoneHangUp} onClick={handleTerminate} />
-        {isIncoming() && (<Button Icon={FiPhone} onClick={handleAnswer} />)}
+    <div className="call-wait-pane">
+      <div className="calling"></div>
+      <div className="call-wait-pane-control">
+        <Button
+          className="hang-up-btn control-btn"
+          Icon={ImPhoneHangUp}
+          onClick={handleTerminate}
+        />
+        {isIncoming() &&
+          (<Button
+            className="call-btn control-btn"
+            Icon={ImPhone}
+            onClick={handleAnswer}
+          />)
+        }
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { HistoryContext, Node, CallStatus } from "../history/HistoryProvider";
 import Button from "../Button";
 import DurationInMs from "../history/DurationInMs";
 import DTMFAudio from "../../util/dtmf.js";
+import "./CallEndPane.css";
 
 const CallEndPane: FC = () => {
   const { switchTab } = useContext(TabContext)!;
@@ -27,13 +28,13 @@ const CallEndPane: FC = () => {
       DTMFAudio.stop();
     }, 1000);
 
-    const timeout = setTimeout(() => {
-      switchTab(Tab.DIALPAD);
-    }, 5000);
-    return () => {
-      clearTimeout(timeout);
-      DTMFAudio.stop();
-    }
+    // const timeout = setTimeout(() => {
+    //   switchTab(Tab.DIALPAD);
+    // }, 5000);
+    // return () => {
+    //   clearTimeout(timeout);
+    //   DTMFAudio.stop();
+    // }
   }, [])
 
   const handleBack = () => switchTab(Tab.DIALPAD);
@@ -59,19 +60,28 @@ const CallEndPane: FC = () => {
   }
 
   return (
-    <div>
-      <div>
-        {isEndedByLocal() && (<div>You ended the call.</div>)}
-        {isEndedByRemote() && (<div>The other participant ended the call.</div>)}
-        {localDoNotAnswer() && (<div>You missed the call.</div>)}
-        {remoteDoNotAnswer() && (<div>The other participant did not answer.</div>)}
-        {callFailed() && (<div>Call failed.</div>)}
-        {call!.endDate && <DurationInMs date1={call!.startDate} date2={call!.endDate} />}
+    <div className="call-end-pane">
+      <div className="call-end-pane-message">
+        <div className="call-end-pane-status">
+          {isEndedByLocal() && (<div>You ended the call.</div>)}
+          {isEndedByRemote() && (<div>The other participant ended the call.</div>)}
+          {localDoNotAnswer() && (<div>You missed the call.</div>)}
+          {remoteDoNotAnswer() && (<div>The other participant did not answer.</div>)}
+          {callFailed() && (<div>Call failed.</div>)}
+        </div>
+        {call!.endDate && 
+          (<div className="call-end-pane-duration">
+            <DurationInMs date1={new Date()} date2={new Date()} />
+          </div>)}
       </div>
-      <Button text="Back" onClick={handleBack} />
+      <Button
+        className="call-end-pane-back-btn"
+        text="BACK"
+        onClick={handleBack}
+      />
     </div>
   );
-};
+}
 
 function getCallStatus(call: Call): CallStatus {
   if (call.state === CallState.FAILED && 
