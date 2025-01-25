@@ -1,0 +1,42 @@
+version: 38
+jobs:
+- name: ts + react ci
+  steps:
+  - !CheckoutStep
+    name: checkout code
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !SetBuildVersionStep
+    name: set build version
+    buildVersion: '@script:builtin:node:determine-project-version@'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: build
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands: |
+        npm config set legacy-peer-deps true
+        npm install
+        export CI=TRUE
+        npm run build
+        echo "Done"
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: clear old build and deploy a new
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands: |
+        rm -rf /home/onedev/bodnar/bodnar.scisbo.com/dist/*
+        cp -rf dist /home/onedev/bodnar/bodnar.scisbo.com/
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: master
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 14400
