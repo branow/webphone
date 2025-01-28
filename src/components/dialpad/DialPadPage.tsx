@@ -47,6 +47,7 @@ const DialPadPage: FC = () => {
           onClick={handleHistoryPage}
         />
         <input
+          id="phoneNumber"
           className="number-in"
           type="text"
           placeholder="Phone number"
