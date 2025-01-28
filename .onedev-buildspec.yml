@@ -29,8 +29,6 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands: |
-        rm -rf /home/onedev/bodnar/bodnar.scisbo.com/*
-        mkdir -p /home/onedev/bodnar/bodnar.scisbo.com/webroot
         cp -rf dist/* /home/onedev/bodnar/bodnar.scisbo.com/
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
