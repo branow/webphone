@@ -58,6 +58,8 @@ const CallProvider: FC<Props> = ({ children }) => {
   const [callState, setCallState] = useState<CallInfo | null>(null);
 
   useEffect(() => {
+    if (ua == null) return;
+
     ua!.on("newRTCSession",
       (event: IncomingRTCSessionEvent | OutgoingRTCSessionEvent) => {
       let originator = event.originator;
@@ -141,7 +143,7 @@ const CallProvider: FC<Props> = ({ children }) => {
     });
 
     return () => { ua!.removeAllListeners(); }
-  }, []);
+  }, [ua]);
 
   const doCall = (number: string) => {
     console.log("do call:", number);

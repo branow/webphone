@@ -1,9 +1,10 @@
-import { FC, useState, useContext, ChangeEvent } from "react";
+import { FC, useState, useContext, useEffect, ChangeEvent } from "react";
 import Keypad, { Key } from "./Keypad";
 import Button from "../Button"
 import { ImPhone } from "react-icons/im";
 import { VscHistory } from "react-icons/vsc";
 import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
+import { SipContext, RegistrationState } from "../account/SipProvider";
 import { TabContext, Tab } from "../Phone";
 import { CallContext } from "../call/CallProvider";
 import Hover from "../Hover";
@@ -11,9 +12,16 @@ import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
 import "./DialPadPage.css";
 
 const DialPadPage: FC = () => {
+  const { registrationState } = useContext(SipContext)!;
   const { switchTab } = useContext(TabContext)!;
   const { doCall } = useContext(CallContext)!;
   const [number, setNumber] = useState("");
+
+  useEffect(() => {
+    if (registrationState !== RegistrationState.REGISTERED) {
+      switchTab(Tab.ACCOUNT);
+    }
+  }, [registrationState]);
 
   const handleCall = () => {
     switchTab(Tab.CALL);

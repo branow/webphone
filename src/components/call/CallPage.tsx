@@ -1,5 +1,7 @@
-import { FC, useContext } from "react";
+import { FC, useEffect, useContext } from "react";
 import { BsPersonFill } from "react-icons/bs";
+import { SipContext, RegistrationState } from "../account/SipProvider";
+import { TabContext, Tab } from "../Phone";
 import { CallContext, CallState } from "./CallProvider";
 import CallWaitPane from "./CallWaitPane";
 import CallActivePane from "./CallActivePane";
@@ -7,7 +9,15 @@ import CallEndPane from "./CallEndPane";
 import "./CallPage.css";
 
 const CallPage: FC = ({}) => {
+  const { registrationState } = useContext(SipContext)!;
+  const { switchTab } = useContext(TabContext)!;
   const { call } = useContext(CallContext)!;
+
+  useEffect(() => {
+    if (registrationState !== RegistrationState.REGISTERED) {
+      switchTab(Tab.ACCOUNT);
+    }
+  }, [registrationState]);
 
   const isWaiting = () => {
     return call!.state  === CallState.PROGRESS;

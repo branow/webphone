@@ -1,5 +1,6 @@
-import { FC, useState, useContext } from "react";
+import { FC, useState, useEffect, useContext } from "react";
 import { BsArrowLeftCircle, BsFillTrash3Fill } from "react-icons/bs";
+import { SipContext, RegistrationState } from "../account/SipProvider";
 import HistoryNode from "./HistoryNode";
 import { HistoryContext, Node } from "./HistoryProvider";
 import { TabContext, Tab } from "../Phone";
@@ -7,9 +8,16 @@ import Button from "../Button";
 import "./HistoryPage.css";
 
 const HistoryPage: FC = () => {
+  const { registrationState } = useContext(SipContext)!;
   const { switchTab } = useContext(TabContext)!;
   const { nodes, clean } = useContext(HistoryContext)!;
   const [selectedNode, setSelectedNode] = useState<Date | null>();
+
+  useEffect(() => {
+    if (registrationState !== RegistrationState.REGISTERED) {
+      switchTab(Tab.ACCOUNT);
+    }
+  }, [registrationState]);
 
   const handleOnUnrolled = (date: Date) => {
     setSelectedNode(date);

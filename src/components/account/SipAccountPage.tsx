@@ -1,14 +1,18 @@
-import { FC, useContext } from "react";
+import { FC, useEffect, useContext } from "react";
 import SipAccountForm from "./SipAccountForm"
 import { SipContext, RegistrationState, ConnectionState } from "./SipProvider";
+import { TabContext, Tab } from "../Phone";
 import "./SipAccountPage.css";
 
 const SipAccountPage: FC = () => {
   const {registrationState, connectionState} = useContext(SipContext)!;
+  const { switchTab } = useContext(TabContext)!;
 
-  const isRegistered = (): boolean => {
-    return registrationState === RegistrationState.REGISTERED;
-  }
+  useEffect(() => { 
+    if (registrationState === RegistrationState.REGISTERED) {
+      switchTab(Tab.DIALPAD);
+    }
+  }, [registrationState])
 
   const isConnecting = (): boolean => {
     return connectionState === ConnectionState.CONNECTING;
@@ -25,7 +29,7 @@ const SipAccountPage: FC = () => {
             Please wait...
           </div>
         </div>)}
-      {!isConnecting() && !isRegistered() && (<SipAccountForm />)}
+      {!isConnecting() && (<SipAccountForm />)}
     </div>
   );
 };
