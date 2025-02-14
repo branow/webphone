@@ -1,4 +1,5 @@
 import { FC, createContext, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import NavBar from "./NavBar";
 import SipAccountPage from "./account/SipAccountPage";
 import SipProvider from "./account/SipProvider";
@@ -35,12 +36,14 @@ const Phone: FC = () => {
           <HistoryProvider>
             <CallProvider>
               <TabContext.Provider value={{ switchTab }}>
-                <div className="phone-tab">
-                  {tab === Tab.CALL && (<CallPage />)}
-                  {tab === Tab.DIALPAD && (<DialPadPage />)}
-                  {tab === Tab.HISTORY && (<HistoryPage />)}
-                  {tab === Tab.ACCOUNT && (<SipAccountPage />)}
-                </div>
+                <AnimatePresence initial={false} mode={'wait'}>
+                  <div key={tab} className="phone-tab">
+                    {tab === Tab.CALL && (<CallPage />)}
+                    {tab === Tab.DIALPAD && (<DialPadPage />)}
+                    {tab === Tab.HISTORY && (<HistoryPage />)}
+                    {tab === Tab.ACCOUNT && (<SipAccountPage />)}
+                  </div>
+                </AnimatePresence>
               </TabContext.Provider>
             </CallProvider>
           </HistoryProvider>

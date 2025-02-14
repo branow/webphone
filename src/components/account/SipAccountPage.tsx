@@ -1,4 +1,5 @@
 import { FC, useEffect, useContext } from "react";
+import { motion as m } from "framer-motion";
 import SipAccountForm from "./SipAccountForm"
 import { SipContext, RegistrationState, ConnectionState } from "./SipProvider";
 import { TabContext, Tab } from "../Phone";
@@ -19,7 +20,13 @@ const SipAccountPage: FC = () => {
   }
 
   return (
-    <div className="sip-account-page">
+    <m.div
+      className="sip-account-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25, easy: "easeOut" }}
+    >
       {isConnecting() && 
         (<div className="sip-account-page-connecting">
           <div className="sip-account-page-connecting-animation pending">
@@ -30,7 +37,7 @@ const SipAccountPage: FC = () => {
           </div>
         </div>)}
       {!isConnecting() && (<SipAccountForm />)}
-    </div>
+    </m.div>
   );
 };
 

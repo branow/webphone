@@ -1,4 +1,5 @@
 import { FC, useState, useContext, useEffect, ChangeEvent } from "react";
+import { motion as m } from "framer-motion";
 import Keypad, { Key } from "./Keypad";
 import Button from "../Button"
 import { ImPhone } from "react-icons/im";
@@ -47,7 +48,13 @@ const DialPadPage: FC = () => {
   const handleHistoryPage = () => switchTab(Tab.HISTORY);
 
   return (
-    <div className="dial-pad-page">
+    <m.div
+      className="dial-pad-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, easy: "easeOut" }}
+    >
       <div className="dial-pad-page-top">
         <Button
           className="transparent-btn history-btn"
@@ -80,7 +87,7 @@ const DialPadPage: FC = () => {
         onClick={handleCall}
         disabled={!number}
       />
-    </div>
+    </m.div>
   );
 };
 

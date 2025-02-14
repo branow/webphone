@@ -1,5 +1,6 @@
 import { FC, useContext, useEffect } from "react";
 import { ImPhone, ImPhoneHangUp } from "react-icons/im";
+import { motion as m } from "framer-motion";
 import { CallContext, CallAgent } from "./CallProvider";
 import Button from "../Button";
 import DTMFAudio from "../../util/dtmf.js";
@@ -23,7 +24,13 @@ const CallWaitPane: FC = () => {
   const handleAnswer = () => call!.answer();
 
   return (
-    <div className="call-wait-pane">
+    <m.div
+      className="call-wait-pane"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, easy: "easeOut" }}
+    >
       <div className="calling"></div>
       <div className="call-wait-pane-control">
         <Button
@@ -39,7 +46,7 @@ const CallWaitPane: FC = () => {
           />)
         }
       </div>
-    </div>
+    </m.div>
   );
 };
 

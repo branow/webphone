@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useContext } from "react";
 import { BsArrowLeftCircle, BsFillTrash3Fill } from "react-icons/bs";
+import { motion as m } from "framer-motion";
 import { SipContext, RegistrationState } from "../account/SipProvider";
 import HistoryNode from "./HistoryNode";
 import { HistoryContext, Node } from "./HistoryProvider";
@@ -26,7 +27,13 @@ const HistoryPage: FC = () => {
   const handleDialPadPage = () => switchTab(Tab.DIALPAD);
 
   return (
-    <div className="history-page">
+    <m.div
+      className="history-page"
+      initial={{ x: "-100%", opacity: 0 }}
+      animate={{ x: "0", opacity: 1 }}
+      exit={{ x: "-100%", opacity: 0 }}
+      transition={{ duration: 0.5, easy: "easeOut" }}
+    >
       <div className="history-page-header">
         <Button
           className="transparent-btn history-page-dial-page-pad-btn"
@@ -59,7 +66,7 @@ const HistoryPage: FC = () => {
           </div>
         ))}
       </div>
-    </div>
+    </m.div>
   );
 };
 

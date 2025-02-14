@@ -1,4 +1,5 @@
 import { FC, useContext, useEffect } from "react";
+import { motion as m } from "framer-motion";
 import { TabContext, Tab } from "../Phone";
 import { CallContext, CallState, Call, CallAgent } from "./CallProvider";
 import { HistoryContext, Node, CallStatus } from "../history/HistoryProvider";
@@ -59,7 +60,13 @@ const CallEndPane: FC = () => {
   }
 
   return (
-    <div className="call-end-pane">
+    <m.div
+      className="call-end-pane"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, easy: "easeOut" }}
+    >
       <div className="call-end-pane-message">
         <div className="call-end-pane-status">
           {isEndedByLocal() && (<div>You ended the call.</div>)}
@@ -78,7 +85,7 @@ const CallEndPane: FC = () => {
         text="BACK"
         onClick={handleBack}
       />
-    </div>
+    </m.div>
   );
 }
 

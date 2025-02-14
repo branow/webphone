@@ -7,6 +7,7 @@ import {
 } from "react-icons/bs";
 import { IoIosKeypad } from "react-icons/io";
 import { ImPhoneHangUp } from "react-icons/im";
+import { motion as m } from "framer-motion";
 import { CallContext } from "./CallProvider";
 import KeypadPane from "./KeypadPane";
 import Button from "../Button";
@@ -50,7 +51,13 @@ const CallActivePane: FC = () => {
   const handleSwitchKeypad = () => setShowKeypad(!showKeypad);
 
   return (
-    <div className="call-active-pane">
+    <m.div
+      className="call-active-pane"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, easy: "easeOut" }}
+    >
       <audio ref={audioRef} />
       <canvas ref={canvasRef} width="300" height="125" />
       {showKeypad && 
@@ -97,7 +104,7 @@ const CallActivePane: FC = () => {
         Icon={ImPhoneHangUp}
         onClick={handleTerminate}
       />
-    </div>
+    </m.div>
   )
 }
 
