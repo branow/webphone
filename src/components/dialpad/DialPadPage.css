@@ -2,13 +2,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
 .dial-pad-page-top {
+  position: relative;
   display: flex;
+  justify-content: center;
   gap: 10px;
   padding: 10px;
+  width: 100%;
 }
 
 .history-btn {
@@ -22,6 +25,8 @@
 }
 
 .backspace-btn {
+  position: absolute;
+  right: -5px;
   background-color: #0000;
   color: var(--c-red);
   border: none;
@@ -44,7 +49,7 @@
 .number-in {
   border: none;
   font-size: 24px;
-  width: 155px;
+  width: 180px;
 }
 
 .number-in:focus-visible {

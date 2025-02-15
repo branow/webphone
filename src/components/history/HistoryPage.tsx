@@ -1,10 +1,11 @@
 import { FC, useState, useEffect, useContext } from "react";
-import { BsArrowLeftCircle, BsFillTrash3Fill } from "react-icons/bs";
+import { BsFillTrash3Fill } from "react-icons/bs";
 import { motion as m } from "framer-motion";
 import { SipContext, RegistrationState } from "../account/SipProvider";
 import HistoryNode from "./HistoryNode";
 import { HistoryContext, Node } from "./HistoryProvider";
 import { TabContext, Tab } from "../Phone";
+import NavTabs from "../NavTabs";
 import Button from "../Button";
 import "./HistoryPage.css";
 
@@ -24,8 +25,6 @@ const HistoryPage: FC = () => {
     setSelectedNode(date);
   }
 
-  const handleDialPadPage = () => switchTab(Tab.DIALPAD);
-
   return (
     <m.div
       className="history-page"
@@ -35,11 +34,6 @@ const HistoryPage: FC = () => {
       transition={{ duration: 0.5, easy: "easeOut" }}
     >
       <div className="history-page-header">
-        <Button
-          className="transparent-btn history-page-dial-page-pad-btn"
-          Icon={BsArrowLeftCircle}
-          onClick={handleDialPadPage}
-        />
         <div className="history-page-title">HISTORY</div>
         <Button
           className="transparent-btn delete-btn history-page-delete-btn"
@@ -66,6 +60,7 @@ const HistoryPage: FC = () => {
           </div>
         ))}
       </div>
+      <NavTabs tabs={[Tab.CONTACTS, Tab.DIALPAD]} />
     </m.div>
   );
 };

@@ -3,12 +3,12 @@ import { motion as m } from "framer-motion";
 import Keypad, { Key } from "./Keypad";
 import Button from "../Button"
 import { ImPhone } from "react-icons/im";
-import { VscHistory } from "react-icons/vsc";
 import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
 import { SipContext, RegistrationState } from "../account/SipProvider";
 import { TabContext, Tab } from "../Phone";
 import { CallContext } from "../call/CallProvider";
 import Hover from "../Hover";
+import NavTabs from "../NavTabs";
 import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
 import "./DialPadPage.css";
 
@@ -44,9 +44,6 @@ const DialPadPage: FC = () => {
     setNumber(newNumber);
   }
 
-
-  const handleHistoryPage = () => switchTab(Tab.HISTORY);
-
   return (
     <m.div
       className="dial-pad-page"
@@ -56,11 +53,6 @@ const DialPadPage: FC = () => {
       transition={{ duration: 0.2, easy: "easeOut" }}
     >
       <div className="dial-pad-page-top">
-        <Button
-          className="transparent-btn history-btn"
-          Icon={VscHistory}
-          onClick={handleHistoryPage}
-        />
         <input
           id="phoneNumber"
           className="number-in"
@@ -87,6 +79,7 @@ const DialPadPage: FC = () => {
         onClick={handleCall}
         disabled={!number}
       />
+      <NavTabs tabs={[Tab.HISTORY, Tab.CONTACTS]} />
     </m.div>
   );
 };

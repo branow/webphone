@@ -1,0 +1,25 @@
+.tab-controller {
+  padding: 5px;
+  width: calc(100% - 10px);
+  display: flex;
+  justify-content: space-around;
+}
+
+.tab-btn {
+  font-size: 18px;
+  padding: 5px 10px;
+  border-radius: 10%;
+  color: var(--c-subtext);
+  background-color: #0000;
+  border: none;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+}
+
+.tab-btn:hover {
+  background-color: var(--c-hover);
+}
+
+.tab-btn:active {
+  background-color: var(--c-active);
+}
