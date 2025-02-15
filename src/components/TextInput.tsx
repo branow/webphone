@@ -7,10 +7,11 @@ interface Props {
   Icon?: IconType;
   name?: string;
   value?: string;
+  placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-const TextInput: FC<Props> = ({ className, Icon, label, name, value, onChange }) => {
+const TextInput: FC<Props> = ({ className, Icon, label, name, value, placeholder, onChange }) => {
   return (
     <div className={className}>
       {label && (<label htmlFor={name}>{label}</label>)}
@@ -22,6 +23,7 @@ const TextInput: FC<Props> = ({ className, Icon, label, name, value, onChange })
           name={name}
           value={value}
           onChange={onChange}
+          placeholder={placeholder}
         />
       </div>
     </div>

@@ -1,0 +1,15 @@
+.contact-numbers-number {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+}
+
+.contact-numbers-number-type {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.contact-numbers-number-type-icon {
+  display: flex;
+  align-items: center;
+}

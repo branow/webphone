@@ -5,6 +5,7 @@ import SipAccountPage from "./account/SipAccountPage";
 import SipProvider from "./account/SipProvider";
 import HistoryProvider from "./history/HistoryProvider";
 import HistoryPage from "./history/HistoryPage";
+import ContactsPage from "./contacts/ContactsPage";
 import DialPadPage from "./dialpad/DialPadPage";
 import CallProvider from "./call/CallProvider";
 import CallPage from "./call/CallPage";
@@ -14,7 +15,8 @@ export enum Tab {
   CALL = "call",
   DIALPAD = "dialpad",
   HISTORY = "history",
-  ACCOUNT = "account"
+  ACCOUNT = "account",
+  CONTACTS = "contacts",
 }
 
 export interface TabValue {
@@ -41,6 +43,7 @@ const Phone: FC = () => {
                     {tab === Tab.CALL && (<CallPage />)}
                     {tab === Tab.DIALPAD && (<DialPadPage />)}
                     {tab === Tab.HISTORY && (<HistoryPage />)}
+                    {tab === Tab.CONTACTS && (<ContactsPage />)}
                     {tab === Tab.ACCOUNT && (<SipAccountPage />)}
                   </div>
                 </AnimatePresence>
