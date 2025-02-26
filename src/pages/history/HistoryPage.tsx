@@ -1,28 +1,60 @@
-import { FC, useState, useEffect, useContext } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { BsFillTrash3Fill } from "react-icons/bs";
-import { SipContext, RegistrationState } from "../../providers/SipProvider";
-import { HistoryContext, Node } from "../../providers/HistoryProvider";
-import HistoryNode from "./HistoryNode";
+import { queryClient } from "../../lib/query.ts";
+import HistoryNodes from "./HistoryNodes";
+import ErrorMessage from "../../components/ErrorMessage";
+import PendingTab from "../../components/PendingTab";
 import NavTabs, { Tab } from "../../components/NavTabs";
 import Button from "../../components/Button";
+import HistoryApi, { Node } from "../../services/history.ts";
+import ContactsApi, { Contact } from "../../services/contacts.ts";
 import "./HistoryPage.css";
 
 const HistoryPage: FC = () => {
   const navigate = useNavigate();
-  const { registrationState } = useContext(SipContext)!;
-  const { nodes, clean } = useContext(HistoryContext)!;
-  const [selectedNode, setSelectedNode] = useState<Date | null>();
 
-  useEffect(() => {
-    if (registrationState !== RegistrationState.REGISTERED) {
-      navigate("/account");
+  const gettingAll = useQuery({
+    queryKey: [HistoryApi.QueryKeys.history],
+    queryFn: HistoryApi.getAll,
+  });
+
+  const gettingAllContacts = useQuery({
+    queryKey: [ContactsApi.QueryKeys.contacts],
+    queryFn: ContactsApi.getAll,
+  });
+
+  const removingAll = useMutation({
+    mutationFn: HistoryApi.removeAll,
+    onSuccess: () => {
+      navigate("/history");
+      queryClient.invalidateQueries({ queryKey: [HistoryApi.QueryKeys.history] });
     }
-  }, [registrationState]);
+  })
 
-  const handleOnUnrolled = (date: Date) => {
-    setSelectedNode(date);
+  if (gettingAll.isLoading || gettingAllContacts.isLoading) {
+    return <PendingTab text="LOADING" message="Please wait" />;
   }
+
+  if (gettingAll.isError) {
+    return <ErrorMessage error={gettingAll.error} />
+  }
+
+  if (gettingAllContacts.isError) {
+    return <ErrorMessage error={gettingAllContacts.error} />
+  }
+
+  if (removingAll.isPending) {
+    return <PendingTab text="CLEANING" message="Please wait" />;
+  }
+
+  if (removingAll.isError) {
+    return <ErrorMessage error={removingAll.error} />;
+  }
+
+  const nodes: Node[] = gettingAll.data!;
+  const contacts: Contact[] = gettingAllContacts.data!;
 
   return (
     <div className="history-page">
@@ -31,52 +63,15 @@ const HistoryPage: FC = () => {
         <Button
           className="transparent-btn delete-btn history-page-delete-btn"
           Icon={BsFillTrash3Fill}
-          onClick={clean}
+          onClick={() => removingAll.mutate()}
         />
       </div>
-      <div className="history-page-nodes">
-        {groupByDate(nodes).map(nodeGroup => (
-          <div key={nodeGroup[0].startDate.toDateString()}>
-            <div className="history-page-nodes-date">
-              {nodeGroup[0].startDate.toDateString()}
-            </div>
-            <div className="history-page-nodes-of-date">
-              {nodeGroup.map(node => (
-                <HistoryNode
-                  key={node.startDate.getTime()}
-                  unrolled={node.startDate === selectedNode}
-                  node={node}
-                  onUnroll={handleOnUnrolled}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="history-page-nodes-ctn">
+        <HistoryNodes nodes={nodes} contacts={contacts} />
       </div>
       <NavTabs tabs={[Tab.CONTACTS, Tab.DIALPAD]} />
     </div>
   );
 };
-
-function groupByDate(nodes: Node[]): Node[][] {
-  if (nodes.length === 0) return [];
-  nodes.sort((n1, n2) => n2.startDate.getTime() - n1.startDate.getTime());
-  const grouped: Node[][] = [[]];
-  
-  let curDate: string = nodes[0].startDate.toDateString();
-  grouped[0].push(nodes[0]);
-  for (let i = 1, j = 0; i < nodes.length; i++) {
-    const nextDate = nodes[i].startDate.toDateString();
-    if (curDate === nextDate) {
-      grouped[j].push(nodes[i]);
-    } else {
-      grouped.push([]);
-      grouped[++j].push(nodes[i]);
-      curDate = nextDate;
-    }
-  }
-  
-  return grouped;
-}
 
 export default HistoryPage;

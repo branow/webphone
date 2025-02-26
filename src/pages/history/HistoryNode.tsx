@@ -1,95 +1,28 @@
-import { FC, useContext } from "react";
-import { useNavigate } from "react-router";
-import { 
-  BsFillTelephoneInboundFill,
-  BsFillTelephoneOutboundFill,
-  BsFillTelephoneXFill,
-  BsBan,
-  BsFillTrash3Fill,
-} from "react-icons/bs";
-import { ImPhone } from "react-icons/im";
-import { HistoryContext, Node, CallStatus } from "../../providers/HistoryProvider";
-import DurationInMs from "../../components/DurationInMs";
-import Button from "../../components/Button";
-import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
+import { FC } from "react";
+import NodeUnrolled from "./NodeUnrolled";
+import NodeRolledUp from "./NodeRolledUp";
+import { Contact } from "../../services/contacts.ts";
+import { Node } from "../../services/history.ts";
 import "./HistoryNode.css";
 
 interface Props {
   node: Node;
+  contact?: Contact;
   unrolled?: boolean;
-  onUnroll: (date: Date) => void;
+  unroll: (id: string) => void;
+  rollUp: () => void;
 }
 
-const HistoryNode: FC<Props> = ({ node, unrolled, onUnroll }) => {
-  const navigate = useNavigate();
-  const { removeNode } = useContext(HistoryContext)!;
-
-  const handleRemove = () => removeNode(node);
-
-  const handleCall = () => {
-    navigate(`/call/${extractPhoneNumber(node.number)}`);
-  }
-
+const HistoryNode: FC<Props> = ({ node, contact, unrolled, unroll, rollUp }) => {
   return (
     <div className="history-node">
       {
-        unrolled ? 
-        (
-          <div className="history-node-unrolled">
-            <div className="history-node-unrolled-header">
-              <div>{formatPhoneNumber(node.number)}</div>
-              <Button
-                className="transparent-btn delete-btn history-node-delete-btn"
-                Icon={BsFillTrash3Fill}
-                onClick={handleRemove}
-              />
-            </div>
-            <div className="history-node-unrolled-status">
-              {node.status === CallStatus.INCOMING && 
-                (<span>Incoming,{' '}
-                  <DurationInMs date1={node.startDate} date2={node.endDate!} />
-                </span>)}
-              {node.status === CallStatus.OUTCOMING && 
-                (<span>Outcoming,{' '}
-                  <DurationInMs date1={node.startDate} date2={node.endDate!} />
-                </span>)}
-              {node.status === CallStatus.MISSED && (<span>Missed</span>)}
-              {node.status === CallStatus.FAILED && (<span>Failed</span>)}
-            </div>
-            <div className="history-node-unrolled-time">
-              {node.startDate.toTimeString().substring(0, 5)}
-            </div>
-            <div className="history-node-unrolled-call-btn-con">
-              <Button
-                className="call-btn"
-                Icon={ImPhone}
-                onClick={handleCall}
-              />
-            </div>
-          </div>
-        ) :
-        (
-          <div className="history-node-rolled-up" onClick={() => onUnroll(node.startDate)}>
-            <div>
-              {node.status === CallStatus.INCOMING && 
-                (<div className="icon-incoming"><BsFillTelephoneInboundFill /></div>)}
-              {node.status === CallStatus.OUTCOMING && 
-                (<div className="icon-outcoming"><BsFillTelephoneOutboundFill /></div>)}
-              {node.status === CallStatus.MISSED && 
-                (<div className="icon-missed"><BsFillTelephoneXFill /></div>)}
-              {node.status === CallStatus.FAILED && 
-                (<div className="icon-failed"><BsBan /></div>)}
-            </div>
-            <div>{formatPhoneNumber(node.number)}</div>
-            <div className="history-node-rolled-up-time">
-              {node.startDate.toTimeString().substring(0, 5)}
-            </div>
-          </div>
-        )
+        unrolled ?
+        (<NodeUnrolled node={node} contact={contact} rollUp={rollUp} />) :
+        (<NodeRolledUp node={node} contact={contact} unroll={unroll} />)
       }
     </div>
   );
 };
-
 
 export default HistoryNode;

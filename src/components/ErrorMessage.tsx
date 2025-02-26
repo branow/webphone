@@ -2,7 +2,7 @@ import { FC } from "react";
 
 interface Props {
   className?: string;
-  error: Error | string | undefined;
+  error: Error | string | undefined | null;
 }
 
 const ErrorMessage: FC<Props> = ({ className, error }) => {

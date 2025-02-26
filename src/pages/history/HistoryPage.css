@@ -34,25 +34,10 @@
   box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.025);
 }
 
-.history-page-nodes {
+.history-page-nodes-ctn {
   overflow: auto;
   box-sizing: border-box;
   width: 100%;
   height: calc(100% - 45px - 50px);
   padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.history-page-nodes-date {
-  color: var(--c-subtext);
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.history-page-nodes-of-date {
-  background-color: var(--c-hover);
-  padding: 5px;
-  border-radius: 10px;
 }

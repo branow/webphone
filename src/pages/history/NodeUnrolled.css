@@ -1,0 +1,53 @@
+.node-unrolled {
+  padding: 10px;
+  position: relative;
+}
+
+.node-unrolled-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.node-delete-btn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  padding: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.node-unrolled-name {
+  font-size: 16px;
+  color: var(--c-text);
+}
+
+.node-unrolled-number {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.node-unrolled-number svg {
+  color: var(--c-subtext);
+}
+
+.node-delete-btn:hover {
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.025);
+}
+
+.node-unrolled-status, .node-unrolled-time {
+  color: var(--c-subtext);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.node-unrolled-call-btn-con {
+  display: flex;
+  justify-content: center;
+}

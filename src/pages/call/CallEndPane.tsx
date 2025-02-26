@@ -1,26 +1,34 @@
 import { FC, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "../../lib/query.ts";
 import { CallContext, CallState, Call, CallAgent } from "../../providers/CallProvider";
-import { HistoryContext, Node, CallStatus } from "../../providers/HistoryProvider";
 import Button from "../../components/Button";
 import DurationInMs from "../../components/DurationInMs";
+import { Node, CallStatus, QueryKeys, create } from "../../services/history.ts";
 import DTMFAudio from "../../util/dtmf.js";
 import "./CallEndPane.css";
 
 const CallEndPane: FC = () => {
   const navigate = useNavigate();
-  const { addNode } = useContext(HistoryContext)!;
+  const creating = useMutation({
+    mutationFn: create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.history] });
+    }
+  });
   const { call } = useContext(CallContext)!;
   const status = getCallStatus(call!);
   
   useEffect(() => {
     const node: Node = {
+      id: "",
       number: call!.number,
       status: status,
       startDate: call!.startDate,
       endDate: call!.endDate,
     }
-    addNode(node);
+    creating.mutate(node);
 
     DTMFAudio.playCustom("howler");
     setTimeout(() => {

@@ -18,4 +18,5 @@ body {
   --c-subtext: #666; /* for sub labels or titles */
   --c-semi-transparent: #AAA2;
   --c-background: white;
+  --c-text: black;
 }

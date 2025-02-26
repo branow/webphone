@@ -88,5 +88,72 @@
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjKpUJF0fLvGSNY7k8eqx9MHehRkRf1NUm8g&s"
     }
+  ],
+  "history": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "number": "1234567890",
+      "status": "incoming",
+      "startDate": "2024-02-25T14:30:00Z",
+      "endDate": "2024-02-25T14:32:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "number": "2222333444",
+      "status": "outcoming",
+      "startDate": "2024-02-25T15:00:00Z",
+      "endDate": "2024-02-25T15:05:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "number": "1122334455",
+      "status": "missed",
+      "startDate": "2024-02-25T16:10:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "number": "1999000111",
+      "status": "failed",
+      "startDate": "2024-02-25T17:20:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440004",
+      "number": "1444555666",
+      "status": "incoming",
+      "startDate": "2024-02-25T18:45:00Z",
+      "endDate": "2024-02-25T18:50:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440005",
+      "number": "1666777888",
+      "status": "missed",
+      "startDate": "2024-02-25T19:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440006",
+      "number": "0987654321",
+      "status": "failed",
+      "startDate": "2024-02-25T20:15:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440007",
+      "number": "1888999000",
+      "status": "outcoming",
+      "startDate": "2024-02-25T21:30:00Z",
+      "endDate": "2024-02-25T21:35:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440008",
+      "number": "1999000111",
+      "status": "incoming",
+      "startDate": "2024-02-25T22:45:00Z",
+      "endDate": "2024-02-25T22:50:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440009",
+      "number": "1555666777",
+      "status": "missed",
+      "startDate": "2024-02-25T23:10:00Z"
+    }
   ]
 }

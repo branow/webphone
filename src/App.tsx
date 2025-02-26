@@ -4,7 +4,6 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import PhoneContainer from "./components/PhoneContainer";
 import NavBar from "./components/NavBar";
 import SipProvider from "./providers/SipProvider";
-import HistoryProvider from "./providers/HistoryProvider";
 import CallProvider from "./providers/CallProvider";
 import SipAccountPage from "./pages/account/SipAccountPage";
 import HistoryPage from "./pages/history/HistoryPage";
@@ -71,11 +70,9 @@ const App: FC = () => {
             </div>
             <div className="phone-body">
               <SipProvider>
-                <HistoryProvider>
-                  <CallProvider>
-                    <RouterProvider router={router} />
-                  </CallProvider>
-                </HistoryProvider>
+                <CallProvider>
+                  <RouterProvider router={router} />
+                </CallProvider>
               </SipProvider>
             </div>
           </div>
