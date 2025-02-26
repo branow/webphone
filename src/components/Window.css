@@ -1,0 +1,28 @@
+.window-background {
+  background-color: var(--c-semi-transparent);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.window {
+  background-color: var(--c-background);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.window-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 18px;
+  color: var(--c-subtext);
+}
