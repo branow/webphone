@@ -7,9 +7,10 @@ interface Trigger {
 interface Props {
   trigger: Trigger;
   onLoadFile: (file: File) => void;
+  accept?: string;
 }
 
-const FileChooser: FC<Props> = ({ trigger, onLoadFile }) => {
+const FileChooser: FC<Props> = ({ trigger, onLoadFile, accept }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   trigger.fire = () => {
@@ -29,6 +30,7 @@ const FileChooser: FC<Props> = ({ trigger, onLoadFile }) => {
     <>
       <input 
         type="file"
+        accept={accept}
         ref={inputRef}
         style={{ display: "none" }}
         onChange={handleFileChange}

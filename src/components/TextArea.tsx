@@ -1,9 +1,9 @@
-import { FC, useState, useEffect, HTMLAttributes, ChangeEvent } from "react";
+import { FC, useState, HTMLAttributes, ChangeEvent } from "react";
 import { IconType } from "react-icons";
 import ErrorMessage from "./ErrorMessage";
-import "./TextInput.css";
+import "./TextArea.css";
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
+interface Props extends HTMLAttributes<HTMLTextAreaElement> {
   className?: string;
   label?: string;
   Icon?: IconType;
@@ -13,24 +13,17 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   validate?: (value: string) => string;
 }
 
-const TextInput: FC<Props> = (props) => {
+const TextArea: FC<Props> = (props) => {
   const [error, setError] = useState<string>("");
 
-  useEffect(() => {
-    if (props.validate) {
-      const value = props.value === undefined ? "" : props.value
-      setError(props.validate(value))
-    }
-  }, [props.value])
-
-  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (props.onChange) props.onChange(event);
     if (props.validate) {
       setError(props.validate(event.target.value))
     }
   }
 
-  const className =  "text-input-upper-ctn" + (props.className ? " " + props.className : "");
+  const className =  "text-area-upper-ctn" + (props.className ? " " + props.className : "");
 
   return (
     <div className={className}>
@@ -43,10 +36,10 @@ const TextInput: FC<Props> = (props) => {
         </label>
       )}
       <ErrorMessage error={error} />
-      <div className="text-input-lower-ctn">
-        {props.Icon && (<props.Icon className="text-input-icon" />)}
-        <input
-          className="text-input"
+      <div className="text-area-lower-ctn">
+        {props.Icon && (<props.Icon className="text-area-icon" />)}
+        <textarea
+          className="text-area"
           name={props.name}
           value={props.value}
           onChange={handleOnChange}
@@ -57,4 +50,4 @@ const TextInput: FC<Props> = (props) => {
   );
 };
 
-export default TextInput;
+export default TextArea;
