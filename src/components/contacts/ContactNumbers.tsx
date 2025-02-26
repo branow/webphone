@@ -2,22 +2,27 @@ import { FC, ReactNode } from "react";
 import { IoHomeSharp } from "react-icons/io5";
 import { ImMobile } from "react-icons/im";
 import { MdOutlineWork } from "react-icons/md";
+import { ImPhone } from "react-icons/im";
+import Button from "../Button";
 import { Number, NumberType } from "../../services/contactApi";
+import { formatPhoneNumber } from "../../util/format";
 import "./ContactNumbers.css";
 
 interface Props {
-  iconSize: string;
   numbers: Number[];
+  call?: (number: String) => void; 
 }
 
-const ContactNumbers: FC<Props> = ({ iconSize, numbers }) => {
+const ContactNumbers: FC<Props> = ({ numbers, call }) => {
   const getNumberTypeIcon = (type: NumberType): ReactNode => {
     switch(type) {
-      case NumberType.HOME: return <IoHomeSharp size={iconSize} />;
-      case NumberType.WORK: return <MdOutlineWork size={iconSize} />;
-      case NumberType.MOBILE: return <ImMobile size={iconSize} />;
+      case NumberType.HOME: return <IoHomeSharp />;
+      case NumberType.WORK: return <MdOutlineWork />;
+      case NumberType.MOBILE: return <ImMobile />;
     }
   }
+
+  const handleCall = () => {};
 
   return (
     <div className="contact-numbers">
@@ -31,8 +36,18 @@ const ContactNumbers: FC<Props> = ({ iconSize, numbers }) => {
               {number.type}
             </div>
           </div>
-          <div className="contact-numbers-number-number">
-            {number.number}
+          <div className="contact-numbers-number-ctn">
+            <div className="contact-numbers-number-number">
+              {formatPhoneNumber(number.number)}
+            </div>
+            {call && (
+              <Button
+                className="call-btn small-btn"
+                Icon={ImPhone}
+                onClick={handleCall}
+                disabled={!number}
+              />
+            )}
           </div>
         </div>
       ))}

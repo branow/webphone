@@ -2,13 +2,15 @@ import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ContactPreview from "./ContactPreview";
 import SearchBar from "../SearchBar";
-import { Contact, fetchContacts } from "../../services/contactApi";
+import PendingTab from "../PendingTab";
+import ErrorMessage from "../ErrorMessage";
+import { Contact, ContactQueryKeys, fetchContacts } from "../../services/contactApi";
 import "./ContactList.css";
 
 const ContactList: FC = () => {
   const [query, setQuery] = useState<string>("");
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["contacts"],
+    queryKey: [ContactQueryKeys.CONTACTS],
     queryFn: fetchContacts,
   });
 
@@ -23,9 +25,13 @@ const ContactList: FC = () => {
     || (contact.bio !== undefined && contact.bio.toLowerCase().includes(searchQuery));
   }
 
-  if (isPending) return "Loading..."
+  if (isPending) {
+    return <PendingTab text="LOADING" />
+  }
 
-  if (isError) return error.message;
+  if (isError) {
+    return <ErrorMessage error={error ? error.message : ""} />
+  }
 
   return (
     <div className="contact-list">

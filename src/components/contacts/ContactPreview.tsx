@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { BsPersonFill } from "react-icons/bs";
+import { FC, useContext } from "react";
 import Photo from "../Photo";
+import { ContactContext } from "./ContactsPage";
 import { Contact } from "../../services/contactApi";
 import ContactNumbers from "./ContactNumbers";
 import "./ContactPreview.css";
@@ -10,21 +10,19 @@ interface Props {
 }
 
 const ContactPreview: FC<Props> = ({ contact }) => {
+  const { setContact } = useContext(ContactContext)!;
+
+  const handleOnClick = () => setContact(contact);
+
   return (
-    <div className="contact-preview">
+    <div className="contact-preview" onClick={handleOnClick}>
       <div className="contact-preview-photo">
-        {
-          contact.photo ? (
-            <Photo src={contact.photo} alt="photo" />
-          ) : (
-            <div><BsPersonFill size="50px"/></div>
-          )
-        }
+        <Photo src={contact.photo} size="50px" alt="photo" />
       </div>
       <div className="contact-preview-info">
         <div className="contact-preview-info-name">{contact.name}</div>
         <div className="contact-preview-info-numbers">
-          <ContactNumbers iconSize="13px" numbers={contact.numbers} />
+          <ContactNumbers numbers={contact.numbers} />
         </div>
       </div>
     </div>

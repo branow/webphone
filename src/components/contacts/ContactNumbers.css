@@ -13,3 +13,14 @@
   display: flex;
   align-items: center;
 }
+
+.contact-numbers-number-ctn {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 10px;
+}
+
+.contact-numbers-number-number {
+  text-align: right;
+}
