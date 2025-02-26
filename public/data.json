@@ -4,8 +4,8 @@
       "id": 1,
       "name": "John Doe",
       "numbers": [
-        { "type": "mobile", "number": "+1234567890" },
-        { "type": "work", "number": "+0987654321" }
+        { "id": "1", "type": "mobile", "number": "1234567890" },
+        { "id": "2", "type": "work", "number": "0987654321" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxlwePzPV9w4MeegEOjY46ZQKOGQIDTdC0QQ&s",
       "bio": "Software engineer with a love for coffee and coding."
@@ -14,7 +14,7 @@
       "id": 2,
       "name": "Jane Smith",
       "numbers": [
-        { "type": "home", "number": "+1122334455" }
+        { "id": "21", "type": "home", "number": "1122334455" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTivbsbyo8aPjn7FjlLmMFb8otwI7Zg4s1jgA&s",
       "bio": "Graphic designer passionate about typography and colors."
@@ -23,7 +23,7 @@
       "id": 3,
       "name": "Michael Johnson",
       "numbers": [
-        { "type": "mobile", "number": "+1222333444" }
+        { "id": "31", "type": "mobile", "number": "1222333444" }
       ],
       "bio": "Marketing specialist and social media enthusiast."
     },
@@ -31,7 +31,7 @@
       "id": 4,
       "name": "Emily Davis",
       "numbers": [
-        { "type": "work", "number": "+1445566778" }
+        { "id": "41", "type": "work", "number": "1445566778" }
       ],
       "photo": "https://img.freepik.com/free-photo/lifestyle-people-emotions-casual-concept-confident-nice-smiling-asian-woman-cross-arms-chest-confident-ready-help-listening-coworkers-taking-part-conversation_1258-59335.jpg",
       "bio": "Entrepreneur and startup advisor."
@@ -40,7 +40,7 @@
       "id": 5,
       "name": "Robert Wilson",
       "numbers": [
-        { "type": "mobile", "number": "+1555666777" }
+        { "id": "51", "type": "mobile", "number": "1555666777" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa4xjShh4ynJbrgYrW_aB4lhKSxeMzQ3cO_A&s",
       "bio": "Tech enthusiast and avid traveler."
@@ -49,8 +49,8 @@
       "id": 6,
       "name": "Sophia Martinez",
       "numbers": [
-        { "type": "home", "number": "+1666777888" },
-        { "type": "work", "number": "+1777888999" }
+        { "id": "61", "type": "home", "number": "1666777888" },
+        { "id": "62", "type": "work", "number": "1777888999" }
       ],
       "bio": "Baker and food blogger."
     },
@@ -58,7 +58,7 @@
       "id": 7,
       "name": "David Anderson",
       "numbers": [
-        { "type": "mobile", "number": "+1888999000" }
+        { "id": "71", "type": "mobile", "number": "1888999000" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa4xjShh4ynJbrgYrW_aB4lhKSxeMzQ3cO_A&s",
       "bio": "Fitness coach and personal trainer."
@@ -67,7 +67,7 @@
       "id": 8,
       "name": "Olivia Taylor",
       "numbers": [
-        { "type": "work", "number": "+1999000111" }
+        { "id": "81", "type": "work", "number": "1999000111" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjKpUJF0fLvGSNY7k8eqx9MHehRkRf1NUm8g&s"
     },
@@ -75,7 +75,7 @@
       "id": 9,
       "name": "William Brown",
       "numbers": [
-        { "type": "mobile", "number": "+2111222333" }
+        { "id": "91", "type": "mobile", "number": "2111222333" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjKpUJF0fLvGSNY7k8eqx9MHehRkRf1NUm8g&s",
       "bio": "Musician and songwriter."
@@ -84,7 +84,7 @@
       "id": 10,
       "name": "Emma Harris",
       "numbers": [
-        { "type": "home", "number": "+2222333444" }
+        { "id": "101", "type": "home", "number": "2222333444" }
       ],
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjKpUJF0fLvGSNY7k8eqx9MHehRkRf1NUm8g&s"
     }
