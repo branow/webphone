@@ -39,6 +39,37 @@
   color: var(--c-red-dark);
 }
 
+.green-btn {
+  background-color: var(--c-green);
+  color: var(--c-icon);
+  text-decoration: none;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all ease-in-out 0.25s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.green-btn:not(:disabled):hover {
+  background-color: var(--c-green-dark);
+  box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.05);
+}
+
+.green-btn:disabled {
+  background-color: var(--c-disabled);
+}
+
+.green-btn:active {
+  background-color: var(--c-green);
+}
+
+.circle {
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+}
+
 .transparent-btn {
   text-decoration: none;
   background-color: #0000;

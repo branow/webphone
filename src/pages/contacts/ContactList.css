@@ -1,9 +1,20 @@
-.contact-list {
+.contact-list-ctn {
   width: 100%;
   position: relative;
 }
 
-.contact-list-contacts-ctn {
+.contact-list-header {
+  display: flex;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.contact-list-add-btn {
+  padding: 10px;
+  font-size: 18px;
+}
+
+.contact-list-body {
   height: 430px;
   width: 100%;
   box-sizing: border-box;

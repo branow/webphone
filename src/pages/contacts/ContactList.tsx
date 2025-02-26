@@ -1,13 +1,17 @@
 import { FC, useState } from "react";
+import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { FaPlus } from "react-icons/fa";
 import ContactPreview from "./ContactPreview";
 import SearchBar from "../../components/SearchBar";
 import PendingTab from "../../components/PendingTab";
 import ErrorMessage from "../../components/ErrorMessage";
+import Button from "../../components/Button";
 import { Contact, QueryKeys, getAll } from "../../services/contacts";
 import "./ContactList.css";
 
 const ContactList: FC = () => {
+  const navigate = useNavigate();
   const [query, setQuery] = useState<string>("");
   const { data, isPending, isError, error } = useQuery({
     queryKey: [QueryKeys.contacts],
@@ -34,14 +38,21 @@ const ContactList: FC = () => {
   }
 
   return (
-    <div className="contact-list">
+    <div className="contact-list-ctn">
       {
         data.length === 0 ? (
           <div>You do not have any contact yet</div>
         ) : (
-          <div className="contact-list-contacts">
-            <SearchBar onQueryChange={handleQueryChange} />
-            <div className="contact-list-contacts-ctn">
+          <div className="contact-list">
+            <div className="contact-list-header">
+              <SearchBar onQueryChange={handleQueryChange} />
+              <Button
+                className="green-btn contact-list-add-btn"
+                Icon={FaPlus}
+                onClick={() => navigate("/contacts/create")}
+              />
+            </div>
+            <div className="contact-list-body">
               {data.filter(searchFilter).map(contact => (
                 <ContactPreview
                   key={contact.id}
