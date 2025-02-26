@@ -1,0 +1,67 @@
+.contact-info-ctn {
+  padding: 10px 25px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-info-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact-info-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-info-back-btn {
+  color: var(--c-subtext);
+  font-size: 30px;
+}
+
+.contact-info-edit-btn {
+  color: var(--c-blue);
+  font-size: 25px;
+  padding: 7px;
+}
+
+.contact-info-delete-btn {
+  font-size: 25px;
+  padding: 7.5px;
+}
+
+.contact-info {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.contact-info-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.contact-info-header-name {
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.contact-numbers-number {
+  margin: 7px 0;
+}
+
+.contact-numbers-number svg {
+  font-size: 18px;
+}
+
+.contact-numbers-number .call-btn {
+  padding: 7px;
+}

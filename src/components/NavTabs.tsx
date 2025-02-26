@@ -1,37 +1,43 @@
-import { FC, useContext } from "react";
-import { TabContext, Tab } from "./Phone";
-import Button from "./Button";
+import { FC } from "react";
+import { Link } from "react-router";
 import "./NavTabs.css";
 
-interface Props {
-  tabs: Tab[]
+export enum Tab {
+  DIALPAD = "dialpad",
+  HISTORY = "history",
+  ACCOUNT = "account",
+  CONTACTS = "contacts",
 }
 
-const TabController: FC<Props> = ({ tabs }) => {
-  const { switchTab } = useContext(TabContext)!;
+interface Props {
+  tabs: Tab[];
+}
 
-  const labels: Record<Tab, string> = {
-    [Tab.DIALPAD]: "DIALPAD",
-    [Tab.HISTORY]: "HISTORY",
-    [Tab.CONTACTS]: "CONTACTS",
-    // The following tabs should not be allowed to use by user
-    [Tab.CALL]: "CONTACTS",
-    [Tab.ACCOUNT]: "CONTACTS",
-  };
+const labels: Record<Tab, string> = {
+  [Tab.DIALPAD]: "DIALPAD",
+  [Tab.HISTORY]: "HISTORY",
+  [Tab.CONTACTS]: "CONTACTS",
+  [Tab.ACCOUNT]: "ACCOUNT",
+};
 
+const pathes: Record<Tab, string> = {
+  [Tab.DIALPAD]: "/dialpad",
+  [Tab.HISTORY]: "/history",
+  [Tab.CONTACTS]: "/contacts",
+  [Tab.ACCOUNT]: "/account",
+};
+
+const NavTabs: FC<Props> = ({ tabs }) => {
   return (
-    <div className="tab-controller">
+    <div className="nav-tabs">
       {tabs.map(tab =>
-        <Button
-          key={tab}
-          className="tab-btn"
-          text={labels[tab]}
-          onClick={() => switchTab(tab)}
-        />
+        <Link key={tab} className="nav-tab-btn" to={pathes[tab]}>
+          {labels[tab]}
+        </Link>
       )}
     </div>
   );
 }
 
-export default TabController;
+export default NavTabs;
 

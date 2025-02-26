@@ -1,7 +1,7 @@
 {
   "contacts": [
     {
-      "id": 1,
+      "id": "1",
       "name": "John Doe",
       "numbers": [
         { "id": "1", "type": "mobile", "number": "1234567890" },
@@ -11,7 +11,7 @@
       "bio": "Software engineer with a love for coffee and coding."
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Jane Smith",
       "numbers": [
         { "id": "21", "type": "home", "number": "1122334455" }
@@ -20,7 +20,7 @@
       "bio": "Graphic designer passionate about typography and colors."
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Michael Johnson",
       "numbers": [
         { "id": "31", "type": "mobile", "number": "1222333444" }
@@ -28,7 +28,7 @@
       "bio": "Marketing specialist and social media enthusiast."
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Emily Davis",
       "numbers": [
         { "id": "41", "type": "work", "number": "1445566778" }
@@ -37,7 +37,7 @@
       "bio": "Entrepreneur and startup advisor."
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Robert Wilson",
       "numbers": [
         { "id": "51", "type": "mobile", "number": "1555666777" }
@@ -46,7 +46,7 @@
       "bio": "Tech enthusiast and avid traveler."
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Sophia Martinez",
       "numbers": [
         { "id": "61", "type": "home", "number": "1666777888" },
@@ -55,7 +55,7 @@
       "bio": "Baker and food blogger."
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "David Anderson",
       "numbers": [
         { "id": "71", "type": "mobile", "number": "1888999000" }
@@ -64,7 +64,7 @@
       "bio": "Fitness coach and personal trainer."
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Olivia Taylor",
       "numbers": [
         { "id": "81", "type": "work", "number": "1999000111" }
@@ -72,7 +72,7 @@
       "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjKpUJF0fLvGSNY7k8eqx9MHehRkRf1NUm8g&s"
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "William Brown",
       "numbers": [
         { "id": "91", "type": "mobile", "number": "2111222333" }
@@ -81,7 +81,7 @@
       "bio": "Musician and songwriter."
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Emma Harris",
       "numbers": [
         { "id": "101", "type": "home", "number": "2222333444" }

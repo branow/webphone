@@ -1,0 +1,15 @@
+.contact-list {
+  width: 100%;
+  position: relative;
+}
+
+.contact-list-contacts-ctn {
+  height: 430px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

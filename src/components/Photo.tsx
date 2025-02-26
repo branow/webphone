@@ -3,7 +3,7 @@ import { BsPersonFill } from "react-icons/bs";
 import "./Photo.css";
 
 interface Props {
-  src: string;
+  src: string | undefined;
   size: string;
   alt?: string;
 }

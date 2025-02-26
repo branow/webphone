@@ -1,0 +1,58 @@
+.history-page {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.history-page-header {
+  position: relative;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.history-page-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--c-subtext);
+}
+
+.history-page-delete-btn {
+  position: absolute;
+  right: 0;
+  padding: 7px;
+  font-size: 24px;
+}
+
+.history-page-delete-btn:hover {
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.025);
+}
+
+.history-page-nodes {
+  overflow: auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100% - 45px - 50px);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-page-nodes-date {
+  color: var(--c-subtext);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.history-page-nodes-of-date {
+  background-color: var(--c-hover);
+  padding: 5px;
+  border-radius: 10px;
+}

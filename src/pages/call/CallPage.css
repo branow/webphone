@@ -1,0 +1,45 @@
+.call-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.call-page-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.call-page-person {
+  background-color: var(--c-disabled);
+  color: var(--c-gray);
+  padding: 30px;
+  font-size: 80px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.call-page-number {
+  font-size: 24px;
+}
+
+.control-btn {
+  font-size: 32px;
+  padding: 10px;
+  padding-left: 12px;
+  width: 55px;
+  box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.05);
+}
+
+.control-btn:hover {
+  width: 66px;
+  font-size: 38px;
+  padding: 12px;
+  padding-left: 13px;
+}

@@ -46,6 +46,7 @@ const TextInput: FC<Props> = (props) => {
       <div className="text-input-lower-ctn">
         {props.Icon && (<props.Icon className="text-input-icon" />)}
         <input
+          {...props}
           className="text-input"
           name={props.name}
           value={props.value}
