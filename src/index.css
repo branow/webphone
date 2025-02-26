@@ -16,4 +16,6 @@ body {
   --c-hover: #eee; /* for hovered buttons with transparent bg */
   --c-active: #ddd; /* for active buttons with transparent bg */
   --c-subtext: #666; /* for sub labels or titles */
+  --c-semi-transparent: #AAA2;
+  --c-background: white;
 }
