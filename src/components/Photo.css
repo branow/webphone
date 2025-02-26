@@ -1,4 +1,20 @@
-img.photo {
+.photo {
+  width: fit-content;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--c-hover);
+  border-radius: 50%;
+  color: var(--c-subtext);
+  text-align: center;
+}
+
+.photo svg {
+  color: var(--c-active);
+}
+
+img.photo-img {
   object-fit: cover;
   aspect-ratio: 1 / 1;
   border-radius: 50%;

@@ -6,9 +6,10 @@ interface Props {
 }
 
 const ErrorMessage: FC<Props> = ({ className, error }) => {
+  const curClassName =  "error-message" + (className ? " " + className : "");
   return (
     <>
-      {error && (<div className={className}>{error}</div>)}
+      {error && (<div className={curClassName}>{error}</div>)}
     </>
   );
 };
