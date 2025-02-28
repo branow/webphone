@@ -8,6 +8,8 @@
   display: flex;
   align-items: center;
   gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .contact-preview:hover {

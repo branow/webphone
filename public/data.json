@@ -155,5 +155,87 @@
       "status": "missed",
       "startDate": "2024-02-25T23:10:00Z"
     }
+  ],
+  "features": [
+    {
+      "id": "b3f1d5e7-2c4a-4e9b-bff1-9876a5d4c321",
+      "name": "Voicemail Access",
+      "numbers": [
+        { "id": "1a2b", "type": "mobile", "number": "5555" }
+      ],
+      "bio": "Dial this number to access your voicemail inbox and manage messages."
+    },
+    {
+      "id": "a7c3e1f9-5d2b-4d7e-8f4c-123abc987654",
+      "name": "Conference Bridge",
+      "numbers": [
+        { "id": "2b3c", "type": "mobile", "number": "4001" }
+      ],
+      "bio": "Join a virtual meeting room by dialing this number."
+    },
+    {
+      "id": "d9e4b2f5-6a3c-4b8d-9e7f-654321abcdef",
+      "name": "Call Recording",
+      "numbers": [
+        { "id": "3c4d", "type": "mobile", "number": "5566" }
+      ],
+      "bio": "Start or stop call recording when enabled by the system."
+    },
+    {
+      "id": "e1f3a5c7-9b2d-4e6f-8c3a-abcdef123456",
+      "name": "Call Forwarding Setup",
+      "numbers": [
+        { "id": "4d5e", "type": "mobile", "number": "7777" }
+      ],
+      "bio": "Configure call forwarding to redirect incoming calls to another number."
+    },
+    {
+      "id": "f5b7c3d9-1a2e-4f8d-9b6c-56789abcdef0",
+      "name": "Blacklist Management",
+      "numbers": [
+        { "id": "5e6f", "type": "mobile", "number": "3333" }
+      ],
+      "bio": "Block unwanted calls by adding numbers to the blacklist."
+    },
+    {
+      "id": "1c3e5a7f-9b2d-4d6f-8c3a-abcdef098765",
+      "name": "Echo Test",
+      "numbers": [
+        { "id": "6f7a", "type": "mobile", "number": "4444" }
+      ],
+      "bio": "Test audio latency and microphone functionality."
+    },
+    {
+      "id": "2b5d7f9c-1a3e-4d6f-8b3c-6543210fedcb",
+      "name": "Voicemail Drop",
+      "numbers": [
+        { "id": "7a8b", "type": "mobile", "number": "4002" }
+      ],
+      "bio": "Leave a voicemail for another user without ringing their phone."
+    },
+    {
+      "id": "3a7d5f9b-1c2e-4f6d-8b3c-abcdef567890",
+      "name": "Short Dial Assignment",
+      "numbers": [
+        { "id": "8b9c", "type": "mobile", "number": "6001" }
+      ],
+      "bio": "Assign short numbers to frequently dialed contacts."
+    },
+    {
+      "id": "4c9e7a5d-1b2f-4d6c-8a3b-fedcba098765",
+      "name": "System Announcements",
+      "numbers": [
+        { "id": "9c0d", "type": "mobile", "number": "5000" }
+      ],
+      "bio": "Listen to system-wide announcements or automated messages."
+    },
+    {
+      "id": "5d7f9b3a-1c2e-4f6d-8b3c-abcdef012345",
+      "name": "Operator Assistance",
+      "numbers": [
+        { "id": "0d1e", "type": "mobile", "number": "1000" }
+      ],
+      "bio": "Dial this number to reach the system operator for assistance."
+    }
   ]
 }

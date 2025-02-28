@@ -23,10 +23,12 @@ export interface Contact {
 export enum QueryKeys {
   contacts = "contacts",
   contact = "contact",
+  features = "features",
 }
 
 interface Data {
   contacts: Contact[];
+  features: Contact[];
 }
 
 let contacts: Contact[] | null = null;
@@ -97,10 +99,47 @@ export async function remove(id: string): Promise<boolean> {
   })
 }
 
+export async function getFeatureAll(): Promise<Contact[]> {
+  const response = await fetch('/data.json');
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`)
+  }
+
+  const data: Data = await response.json();
+  return data.features;
+}
+
+export async function importContacts(newContacts: Contact[]): Promise<boolean> {
+  fetchAll();
+
+  return new Promise((resolve, _reject) => {
+    setTimeout(() => {
+      newContacts = newContacts.map(c => { return {
+        id: uuid(),
+        name: c.name,
+        numbers: c.numbers,
+        bio: c.bio,
+      }})
+      contacts!.push(...newContacts);
+      resolve(true);
+    }, 1000)
+  });
+}
+
+export interface Contact {
+  id: string;
+  name: string;
+  numbers: Number[];
+  photo?: string;
+  bio?: string;
+}
+
 export default {
   QueryKeys,
   getAll,
   get,
   save,
   remove,
+  getFeatureAll,
 };

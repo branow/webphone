@@ -7,12 +7,19 @@ import "./ContactPreview.css";
 
 interface Props {
   contact: Contact,
+  onClick?: () => void,
 }
 
-const ContactPreview: FC<Props> = ({ contact }) => {
+const ContactPreview: FC<Props> = ({ contact, onClick }) => {
   const navigate = useNavigate();
 
-  const handleOnClick = () => navigate(`/contacts/${contact.id}`);
+  const handleOnClick = () => {
+    if (onClick) { 
+      onClick();
+    } else {
+      navigate(`/contacts/${contact.id}`);
+    }
+  }
 
   return (
     <div className="contact-preview" onClick={handleOnClick}>
