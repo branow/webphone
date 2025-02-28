@@ -1,8 +1,7 @@
 import { FC } from "react"
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
-import PhoneContainer from "./components/PhoneContainer";
-import NavBar from "./components/NavBar";
+import PageLayout from "./components/PageLayout";
 import SipProvider from "./providers/SipProvider";
 import CallProvider from "./providers/CallProvider";
 import SipAccountPage from "./pages/account/SipAccountPage";
@@ -11,8 +10,10 @@ import ContactsPage from "./pages/contacts/ContactsPage";
 import ContactInfoPage from "./pages/contacts/info/ContactInfoPage";
 import ContactCreatePage from "./pages/contacts/edit/ContactCreatePage";
 import ContactUpdatePage from "./pages/contacts/edit/ContactUpdatePage";
+import FeatureNumbersPage from "./pages/contacts/feature-numbers/FeatureNumbersPage";
 import DialPadPage from "./pages/dialpad/DialPadPage";
 import CallPage from "./pages/call/CallPage";
+import SettingsPage from "./pages/setting/SettingsPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 import HomePage from "./pages/HomePage";
 import { queryClient } from "./lib/query";
@@ -22,63 +23,68 @@ import "./App.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
-    errorElement: <NotFoundPage />
-  },
-  {
-    path: "/dialpad",
-    element: <DialPadPage />
-  },
-  {
-    path: "/contacts",
-    element: <ContactsPage />,
-  },
-  {
-    path: "/contacts/:id",
-    element: <ContactInfoPage />
-  },
-  {
-    path: "/contacts/create",
-    element: <ContactCreatePage />
-  },
-  {
-    path: "/contacts/update/:id",
-    element: <ContactUpdatePage />
-  },
-  {
-    path: "/history",
-    element: <HistoryPage />
-  },
-  {
-    path: "/call/:number",
-    element: <CallPage />
-  },
-  {
-    path: "/account",
-    element: <SipAccountPage />
-  },
+    element: <PageLayout />,
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/dialpad",
+        element: <DialPadPage />
+      },
+      {
+        path: "/contacts",
+        element: <ContactsPage />,
+      },
+      {
+        path: "/contacts/:id",
+        element: <ContactInfoPage />
+      },
+      {
+        path: "/contacts/create",
+        element: <ContactCreatePage />
+      },
+      {
+        path: "/contacts/update/:id",
+        element: <ContactUpdatePage />
+      },
+      {
+        path: "/contacts/import/feature-codes",
+        element: <FeatureNumbersPage />
+      },
+      {
+        path: "/history",
+        element: <HistoryPage />
+      },
+      {
+        path: "/call/:number",
+        element: <CallPage />
+      },
+      {
+        path: "/account",
+        element: <SipAccountPage />
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />
+      },
+    ]
+  }
 ]);
 
 const App: FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
       <div className="app">
-        <PhoneContainer>
-          <div className="phone">
-            <div className="phone-navbar">
-              <NavBar />
-            </div>
-            <div className="phone-body">
-              <SipProvider>
-                <CallProvider>
-                  <RouterProvider router={router} />
-                </CallProvider>
-              </SipProvider>
-            </div>
-          </div>
-        </PhoneContainer>
+        <QueryClientProvider client={queryClient}>
+          <SipProvider>
+            <CallProvider>
+              <RouterProvider router={router} />
+            </CallProvider>
+          </SipProvider>
+        </QueryClientProvider>
       </div>
-    </QueryClientProvider>
   );
 }
 
