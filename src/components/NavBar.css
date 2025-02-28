@@ -14,3 +14,15 @@
   background-image: radial-gradient(ellipse, #553c9a, #ee4b2b);
   -webkit-background-clip: text;
 }
+
+.nav-bar-setting-btn {
+  font-size: 23px;
+  position: absolute;
+  right: 5px;
+  color: var(--c-gray);
+  padding: 7px;
+}
+
+.nav-bar-setting-btn:active {
+  transform: rotate(90deg);
+}
