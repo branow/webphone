@@ -14,7 +14,9 @@ import Chapter from "./Chapter";
 import ChapterBar from "./ChapterBar";
 import DeleteContactWindow from "../DeleteContactWindow";
 import ContactNumbers from "../ContactNumbers";
-import { QueryKeys, Contact, get, remove } from "../../../services/contacts.ts";
+import HistoryNodes from "../../history/HistoryNodes";
+import ContactApi, { Contact } from "../../../services/contacts.ts";
+import HistoryApi, { Node } from "../../../services/history.ts";
 import "./ContactInfoPage.css";
 
 const ContactInfoPage: FC = () => {
@@ -26,23 +28,28 @@ const ContactInfoPage: FC = () => {
     return <NotFoundPage />
   }
 
-  const cachedContacts: Contact[] = queryClient.getQueryData([QueryKeys.contacts]) || [];
+  const cachedContacts: Contact[] = queryClient.getQueryData([ContactApi.QueryKeys.contacts]) || [];
   const cachedContact = cachedContacts.find(contact => contact.id === contactId);
   
   const fetchingContact = useQuery({
-    queryKey: [QueryKeys.contact, contactId],
-    queryFn: () => get(contactId),
+    queryKey: [ContactApi.QueryKeys.contact, contactId],
+    queryFn: () => ContactApi.get(contactId),
     enabled: !cachedContact,
     initialData: cachedContact,
   })
+
+  const fetchingHistory = useQuery({
+    queryKey: [HistoryApi.QueryKeys.history],
+    queryFn: HistoryApi.getAll,
+  });
   
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
   const deletingContact = useMutation({
-    mutationFn: () => remove(contactId),
+    mutationFn: () => ContactApi.remove(contactId),
     onSuccess: () => {
       navigate("/contacts");
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.contacts] });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.contact, contact.id] });
+      queryClient.invalidateQueries({ queryKey: [ContactApi.QueryKeys.contacts] });
+      queryClient.invalidateQueries({ queryKey: [ContactApi.QueryKeys.contact, contact.id] });
     }
   });
 
@@ -69,6 +76,13 @@ const ContactInfoPage: FC = () => {
   }
 
   const contact = fetchingContact.data!;
+
+  let history: Node[] | undefined;
+  if (fetchingHistory.isSuccess) { 
+    history = fetchingHistory.data!
+      .filter(node => contact.numbers
+        .find(number => number.number === node.number));
+  }
 
   return (
     <div className="contact-info-ctn">
@@ -100,6 +114,7 @@ const ContactInfoPage: FC = () => {
           />
         </div>
       </div>
+
       <div className="contact-info">
         <Chapter>
           <div className="contact-info-header">
@@ -107,14 +122,34 @@ const ContactInfoPage: FC = () => {
             <div className="contact-info-header-name">{contact.name}</div>
           </div>
         </Chapter>
+
         <ChapterBar />
+
         <Chapter title="Bio">
           <div>{contact.bio}</div>
         </Chapter>
+
         <ChapterBar />
+
         <Chapter title="Contact">
           <ContactNumbers numbers={contact.numbers} call={call} />
         </Chapter>
+            
+
+        <ChapterBar />
+
+        <Chapter title="History">
+          {fetchingHistory.isLoading && (
+            <PendingTab text="LOADING" message="Please wait" />
+          )}
+          <ErrorMessage error={fetchingHistory.error} />
+          {history && (
+            history.length === 0 ? 
+              (<div>There is no history with this contact yet.</div>) : 
+              (<HistoryNodes nodes={history!} contacts={[ contact ]} />)
+          )}
+        </Chapter>
+
       </div>
     </div>
   );
