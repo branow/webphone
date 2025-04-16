@@ -1,0 +1,100 @@
+package com.scisbo.webphone.mappers;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import com.scisbo.webphone.dtos.service.ContactDetailsDto;
+import com.scisbo.webphone.dtos.service.ContactDto;
+import com.scisbo.webphone.dtos.service.ContactSummaryDto;
+import com.scisbo.webphone.dtos.service.CreateContactDto;
+import com.scisbo.webphone.dtos.service.NumberDto;
+import com.scisbo.webphone.dtos.service.UpdateContactDto;
+import com.scisbo.webphone.models.Contact;
+import com.scisbo.webphone.models.Number;
+import com.scisbo.webphone.models.converters.NumberTypeConverter;
+
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor
+public class ContactMapper {
+
+    private final NumberTypeConverter numberTypeConverter;
+
+    public Contact mapContact(UpdateContactDto contact) {
+        return Contact.builder()
+            .id(contact.getId())
+            .name(contact.getName())
+            .photo(contact.getPhoto())
+            .bio(contact.getBio())
+            .numbers(mapNumber(contact.getNumbers()))
+            .build();
+    }
+
+    public Contact mapContact(CreateContactDto contact) {
+        return Contact.builder()
+            .user(contact.getUser())
+            .name(contact.getName())
+            .bio(contact.getBio())
+            .photo(contact.getPhotoUrl())
+            .numbers(mapNumber(contact.getNumbers()))
+            .build();
+    }
+
+    public ContactDetailsDto mapContactDetailsDto(Contact contact) {
+        return ContactDetailsDto.builder()
+            .id(contact.getId())
+            .name(contact.getName())
+            .photo(contact.getPhoto())
+            .bio(contact.getBio())
+            .numbers(mapNumberDto(contact.getNumbers()))
+            .build();
+    }
+
+    public ContactDto mapContactDto(Contact contact) {
+        return ContactDto.builder()
+            .id(contact.getId())
+            .name(contact.getName())
+            .photo(contact.getPhoto())
+            .numbers(mapNumberDto(contact.getNumbers()))
+            .build();
+    }
+
+    public ContactSummaryDto mapContactSummaryDto(Contact contact) {
+        return ContactSummaryDto.builder()
+            .id(contact.getId())
+            .name(contact.getName())
+            .photo(contact.getPhoto())
+            .build();
+    }
+
+    public List<Number> mapNumber(List<NumberDto> numbers) {
+        return Optional.ofNullable(numbers)
+            .map((nums) -> nums.stream().map(this::mapNumber).collect(Collectors.toList()))
+            .orElse(null);
+    }
+
+    public Number mapNumber(NumberDto number) {
+        return Number.builder()
+            .type(numberTypeConverter.read(number.getType(), null))
+            .number(number.getNumber())
+            .build();
+    }
+
+    public List<NumberDto> mapNumberDto(List<Number> numbers) {
+        return Optional.ofNullable(numbers)
+            .map((nums) -> nums.stream().map(this::mapNumberDto).collect(Collectors.toList()))
+            .orElse(null);
+    }
+
+    public NumberDto mapNumberDto(Number number) {
+        return NumberDto.builder()
+            .type(number.getType().getValue())
+            .number(number.getNumber())
+            .build();
+    }
+
+}
