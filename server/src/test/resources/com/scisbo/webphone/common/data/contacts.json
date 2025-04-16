@@ -1,0 +1,110 @@
+[
+  {
+    "_id": ObjectId("10f5b1486f1c2d4e2f3e8f9f"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "name": "John Doe",
+    "photo": "192479821423.png",
+    "bio": "Software engineer with a love for coffee and coding.",
+    "numbers": [
+      { "type": "mobile", "number": "1234567890" },
+      { "type": "work", "number": "0987654321" },
+      { "type": "home", "number": "0931341234" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b01"),
+    "user": "676f5f8a-4af6-4165-86b1-dd264bb68669",
+    "name": "Alice Johnson",
+    "photo": "alice_j_823.png",
+    "bio": "Graphic designer who enjoys painting and hiking.",
+    "numbers": [
+      { "type": "mobile", "number": "5551234567" },
+      { "type": "home", "number": "5557654321" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b02"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "name": "Marcus Lee",
+    "numbers": [
+      { "type": "work", "number": "5559876543" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b03"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "name": "Sophie Miller",
+    "photo": "sophie_m.png",
+    "bio": "Yoga instructor and wellness coach.",
+    "numbers": [
+      { "type": "mobile", "number": "5552223344" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b04"),
+    "user": "676f5f8a-4af6-4165-86b1-dd264bb68669",
+    "name": "Daniel Martinez",
+    "bio": "Aspiring writer and part-time barista.",
+    "numbers": [
+      { "type": "home", "number": "5551112233" },
+      { "type": "work", "number": "5554445566" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b05"),
+    "user": "2938c3e9-dad9-4258-9806-968a05fc3be5",
+    "name": "Emily Nguyen",
+    "photo": "emily_n_avatar.png",
+    "numbers": [
+      { "type": "mobile", "number": "5553332211" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b06"),
+    "user": "2938c3e9-dad9-4258-9806-968a05fc3be5",
+    "name": "Omar Al-Farouq",
+    "photo": "omar_af.png",
+    "bio": "Travel blogger and photographer.",
+    "numbers": [
+      { "type": "mobile", "number": "5556667788" },
+      { "type": "work", "number": "5558887766" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b07"),
+    "user": "2938c3e9-dad9-4258-9806-968a05fc3be5",
+    "name": "Rachel Kim",
+    "numbers": [
+      { "type": "home", "number": "5557778888" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b08"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "name": "Leonard Thompson",
+    "bio": "Retired teacher and chess enthusiast.",
+    "numbers": [
+      { "type": "work", "number": "5559990001" },
+      { "type": "home", "number": "5550009991" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b09"),
+    "user": "2938c3e9-dad9-4258-9806-968a05fc3be5",
+    "name": "Priya Sharma",
+    "photo": "priya_2025.png",
+    "numbers": [
+      { "type": "mobile", "number": "5554443322" }
+    ]
+  },
+  {
+    "_id": ObjectId("64a7c1a78b9c1a3a0f1e3b0a"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "name": "Jake Holloway",
+    "bio": "Cyclist, coder, and coffee addict.",
+    "numbers": [
+      { "type": "work", "number": "5551122334" },
+      { "type": "mobile", "number": "5552233445" }
+    ]
+  }
+]

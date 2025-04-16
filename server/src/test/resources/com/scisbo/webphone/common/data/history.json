@@ -1,0 +1,137 @@
+[
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8f9f"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "12345",
+    "status": "incoming",
+    "startDate": ISODate("2025-04-01T10:00:00Z"),
+    "endDate": ISODate("2025-04-01T10:30:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa0"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "67890",
+    "status": "outcoming",
+    "startDate": ISODate("2025-04-02T12:00:00Z"),
+    "endDate": ISODate("2025-04-02T12:45:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa1"),
+    "user": "02bc7a0b-eb45-4a86-aa6f-0979db7a6e64",
+    "number": "11223",
+    "status": "failed",
+    "startDate": ISODate("2025-04-03T14:00:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa2"),
+    "user": "2938c3e9-dad9-4258-9806-968a05fc3be5",
+    "number": "44556",
+    "status": "missed",
+    "startDate": ISODate("2025-04-04T09:15:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa3"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "78901",
+    "status": "incoming",
+    "startDate": ISODate("2025-04-05T08:45:00Z"),
+    "endDate": ISODate("2025-04-05T09:10:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa4"),
+    "user": "02bc7a0b-eb45-4a86-aa6f-0979db7a6e64",
+    "number": "23456",
+    "status": "outcoming",
+    "startDate": ISODate("2025-04-06T16:00:00Z"),
+    "endDate": ISODate("2025-04-06T16:30:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa5"),
+    "user": "2938c3e9-dad9-4258-9806-968a05fc3be5",
+    "number": "34567",
+    "status": "failed",
+    "startDate": ISODate("2025-04-07T13:00:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa6"),
+    "user": "02bc7a0b-eb45-4a86-aa6f-0979db7a6e64",
+    "number": "45678",
+    "status": "missed",
+    "startDate": ISODate("2025-04-08T11:00:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa7"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "56789",
+    "status": "incoming",
+    "startDate": ISODate("2025-04-09T10:00:00Z"),
+    "endDate": ISODate("2025-04-09T10:45:00Z")
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa8"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "67801",
+    "status": "outcoming",
+    "startDate": ISODate("2025-04-10T15:30:00Z")
+  },
+  {
+    "_id": ObjectId("11f5b6486f1c2d4e2f3e8fa0"),
+    "user": "676f5f8a-4af6-4165-86b1-dd264bb68669",
+    "number": "67890",
+    "status": "outcoming",
+    "startDate": ISODate("2025-04-10T12:00:00Z"),
+    "endDate": ISODate("2025-04-10T12:45:00Z")
+  },
+  {
+    "_id": ObjectId("80f5b6486f1c2d4e2f3e8fa1"),
+    "user": "676f5f8a-4af6-4165-86b1-dd264bb68669",
+    "number": "11223",
+    "status": "failed",
+    "startDate": ISODate("2025-04-10T14:00:00Z")
+  },
+  {
+    "_id": ObjectId("70f5b6486f1c2d4e2f3e8fa2"),
+    "user": "02bc7a0b-eb45-4a86-aa6f-0979db7a6e64",
+    "number": "44556",
+    "status": "missed",
+    "startDate": ISODate("2025-04-10T09:15:00Z")
+  },
+  {
+    "_id": ObjectId("50f5b6486f1c2d4e2f3e8fa3"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "78901",
+    "status": "incoming",
+    "startDate": ISODate("2025-04-11T08:45:00Z"),
+    "endDate": ISODate("2025-04-11T09:10:00Z")
+  },
+  {
+    "_id": ObjectId("40f5b6486f1c2d4e2f3e8fa4"),
+    "user": "02bc7a0b-eb45-4a86-aa6f-0979db7a6e64",
+    "number": "23456",
+    "status": "outcoming",
+    "startDate": ISODate("2025-04-11T16:00:00Z"),
+    "endDate": ISODate("2025-04-11T16:30:00Z")
+  },
+  {
+    "_id": ObjectId("30f5b6486f1c2d4e2f3e8fa5"),
+    "user": "676f5f8a-4af6-4165-86b1-dd264bb68669",
+    "number": "34567",
+    "status": "failed",
+    "startDate": ISODate("2025-04-11T13:00:00Z")
+  },
+  {
+    "_id": ObjectId("20f5b6486f1c2d4e2f3e8fa6"),
+    "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
+    "number": "45678",
+    "status": "missed",
+    "startDate": ISODate("2025-04-11T11:00:00Z")
+  },
+  {
+    "_id": ObjectId("10f5b6486f1c2d4e2f3e8fa7"),
+    "user": "02bc7a0b-eb45-4a86-aa6f-0979db7a6e64",
+    "number": "56789",
+    "status": "incoming",
+    "startDate": ISODate("2025-04-12T10:00:00Z"),
+    "endDate": ISODate("2025-04-12T10:45:00Z")
+  }
+]

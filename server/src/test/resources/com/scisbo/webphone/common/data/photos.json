@@ -1,0 +1,22 @@
+[
+  {
+    "_id": ObjectId("11f5b1486f1c2d4e2f3e8f9f"),
+    "path": "images/1.jpg"
+  },
+  {
+    "_id": ObjectId("12a7c1a78b9c1a3a0f1e3b01"),
+    "path": "images/2.jpg"
+  },
+  {
+    "_id": ObjectId("13a7c1a78b9c1a3a0f1e3b02"),
+    "path": "images/3.jpg"
+  },
+  {
+    "_id": ObjectId("14a7c1a78b9c1a3a0f1e3b03"),
+    "path": "images/4.jpg"
+  },
+  {
+    "_id": ObjectId("15a7c1a78b9c1a3a0f1e3b04"),
+    "path": "images/5.jpg"
+  }
+]
