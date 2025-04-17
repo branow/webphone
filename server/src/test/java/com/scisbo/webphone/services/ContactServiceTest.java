@@ -33,6 +33,7 @@ import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.mappers.ContactMapper;
+import com.scisbo.webphone.mappers.PageMapper;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.converters.NumberTypeConverter;
 import com.scisbo.webphone.repositories.ContactRepository;
@@ -40,7 +41,8 @@ import com.scisbo.webphone.repositories.ContactRepository;
 @SpringJUnitConfig({
     ContactService.class,
     ContactMapper.class,
-    NumberTypeConverter.class
+    PageMapper.class,
+    NumberTypeConverter.class,
 })
 @ExtendWith(MockitoExtension.class)
 public class ContactServiceTest {

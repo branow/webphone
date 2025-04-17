@@ -25,6 +25,7 @@ import com.scisbo.webphone.dtos.service.HistoryRecordSummaryDto;
 import com.scisbo.webphone.exceptions.InvalidValueException;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.HistoryMapper;
+import com.scisbo.webphone.mappers.PageMapper;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.HistoryRecord;
 import com.scisbo.webphone.models.Number;
@@ -38,8 +39,9 @@ import com.scisbo.webphone.repositories.HistoryRepository;
     HistoryService.class,
     HistoryMapper.class,
     ContactMapper.class,
+    PageMapper.class,
     CallStatusConverter.class,
-    NumberTypeConverter.class
+    NumberTypeConverter.class,
 })
 @ExtendWith(MockitoExtension.class)
 public class HistoryServiceTest {
