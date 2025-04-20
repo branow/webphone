@@ -23,6 +23,7 @@ import com.scisbo.webphone.dtos.service.HistoryRecordSummaryDto;
 import com.scisbo.webphone.mappers.HistoryMapper;
 import com.scisbo.webphone.services.HistoryService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -59,7 +60,7 @@ public class HistoryController {
     @PostMapping("/user/{userId}")
     public ResponseEntity<HistoryRecordResponse> create(
         @PathVariable("userId") String userId,
-        @RequestBody CreateHistoryRecordRequest request
+        @RequestBody @Valid CreateHistoryRecordRequest request
     ) {
         CreateHistoryRecordDto record = this.mapper.mapCreateHistoryRecordDto(request, userId);
         HistoryRecordDto createdRecord = this.service.create(record);

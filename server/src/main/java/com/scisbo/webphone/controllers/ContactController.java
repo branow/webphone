@@ -26,6 +26,7 @@ import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.services.ContactService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -59,7 +60,7 @@ public class ContactController {
     @PostMapping("/user/{userId}")
     public ResponseEntity<ContactDetailsResponse> create(
         @PathVariable("userId") String id,
-        @RequestBody CreateContactRequest request
+        @RequestBody @Valid CreateContactRequest request
     ) {
         CreateContactDto contact = this.mapper.mapCreateContactDto(request, id);
         ContactDetailsDto createdContact = this.service.create(contact);
@@ -70,7 +71,7 @@ public class ContactController {
     @PutMapping("/{id}")
     public ResponseEntity<ContactDetailsResponse> update(
         @PathVariable("id") String id,
-        @RequestBody UpdateContactRequest request
+        @RequestBody @Valid UpdateContactRequest request
     ) {
         UpdateContactDto contact = this.mapper.mapUpdateContactDto(request, id);
         ContactDetailsDto createdContact = this.service.update(contact);
