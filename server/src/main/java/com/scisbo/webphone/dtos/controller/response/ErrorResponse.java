@@ -1,6 +1,6 @@
 package com.scisbo.webphone.dtos.controller.response;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -18,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 @JsonInclude(Include.NON_NULL)
 public class ErrorResponse {
 
-    LocalDateTime timestamp;
+    OffsetDateTime timestamp;
     String type;
     String message;
     Object details;
@@ -32,7 +32,7 @@ public class ErrorResponse {
     }
 
     public ErrorResponse(String type, String message, Object details) {
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = OffsetDateTime.now();
         this.type = type;
         this.message = message;
         this.details = details;

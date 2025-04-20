@@ -1,6 +1,6 @@
 package com.scisbo.webphone.dtos.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,6 +14,6 @@ public class CreateHistoryRecordDto {
     String user;
     String number;
     String status;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
+    OffsetDateTime startDate;
+    OffsetDateTime endDate;
 }

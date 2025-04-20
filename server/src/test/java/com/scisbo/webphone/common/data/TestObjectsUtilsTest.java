@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.List;
@@ -178,8 +178,8 @@ public class TestObjectsUtilsTest {
                     .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
                     .number("67890")
                     .status(CallStatus.OUTCOMING)
-                    .startDate(LocalDateTime.ofInstant(Instant.parse("2025-04-02T12:00:00Z"), ZoneId.systemDefault()))
-                    .endDate(LocalDateTime.ofInstant(Instant.parse("2025-04-02T12:45:00Z"), ZoneId.systemDefault()))
+                    .startDate(OffsetDateTime.ofInstant(Instant.parse("2025-04-02T12:00:00Z"), ZoneId.systemDefault()))
+                    .endDate(OffsetDateTime.ofInstant(Instant.parse("2025-04-02T12:45:00Z"), ZoneId.systemDefault()))
                     .build()
             ),
             Arguments.of(
@@ -200,7 +200,7 @@ public class TestObjectsUtilsTest {
                     .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
                     .number("67890")
                     .status(CallStatus.OUTCOMING)
-                    .startDate(LocalDateTime.ofInstant(Instant.parse("2025-04-02T12:00:00Z"), ZoneId.systemDefault()))
+                    .startDate(OffsetDateTime.ofInstant(Instant.parse("2025-04-02T12:00:00Z"), ZoneId.systemDefault()))
                     .build()
             )
         );

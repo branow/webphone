@@ -1,6 +1,6 @@
 package com.scisbo.webphone.common.data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
@@ -72,14 +72,14 @@ public class TestObjectsUtils {
             .user(doc.getString("user"))
             .number(doc.getString("number"))
             .status(status)
-            .startDate(mapLocalDateTime(doc.getDate("startDate")))
-            .endDate(mapLocalDateTime(doc.getDate("endDate")))
+            .startDate(mapOffsetDateTime(doc.getDate("startDate")))
+            .endDate(mapOffsetDateTime(doc.getDate("endDate")))
             .build();
     }
 
-    private static LocalDateTime mapLocalDateTime(Date date) {
+    private static OffsetDateTime mapOffsetDateTime(Date date) {
         return Optional.ofNullable(date)
-            .map(d -> LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()))
+            .map(d -> OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()))
             .orElse(null);
     }
 

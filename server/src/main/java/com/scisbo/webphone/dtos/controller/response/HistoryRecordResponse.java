@@ -1,6 +1,6 @@
 package com.scisbo.webphone.dtos.controller.response;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +14,7 @@ public class HistoryRecordResponse {
     String id;
     String number;
     String status;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
+    OffsetDateTime startDate;
+    OffsetDateTime endDate;
     ContactSummaryResponse contact;
 }

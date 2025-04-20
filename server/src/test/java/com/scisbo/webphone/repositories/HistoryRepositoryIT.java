@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -130,7 +130,7 @@ public class HistoryRepositoryIT extends EmbeddedMongoDbAbstractIT {
             .number("123421")
             .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
             .status(CallStatus.OUTCOMING)
-            .startDate(LocalDateTime.now())
+            .startDate(OffsetDateTime.now())
             .build();
         HistoryRecord savedRecord = this.repository.insert(record);
         assertNotNull(savedRecord.getId());

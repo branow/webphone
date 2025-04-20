@@ -10,7 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -183,8 +184,8 @@ public class HistoryControllerTest {
         var createRecordRequest = CreateHistoryRecordRequest.builder()
             .number("1111")
             .status("incoming")
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.UTC))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.UTC))
             .build();
 
         var createRecordDto = this.historyMapper.mapCreateHistoryRecordDto(createRecordRequest, user);

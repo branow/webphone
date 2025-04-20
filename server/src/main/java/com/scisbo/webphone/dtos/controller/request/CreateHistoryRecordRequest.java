@@ -1,6 +1,6 @@
 package com.scisbo.webphone.dtos.controller.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,8 +25,8 @@ public class CreateHistoryRecordRequest {
     String status;
 
     @NotNull(message = "{call.start-date.mandatory}")
-    LocalDateTime startDate;
+    OffsetDateTime startDate;
 
-    LocalDateTime endDate;
+    OffsetDateTime endDate;
 
 }

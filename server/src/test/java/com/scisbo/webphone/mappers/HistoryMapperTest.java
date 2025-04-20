@@ -2,7 +2,8 @@ package com.scisbo.webphone.mappers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +41,16 @@ public class HistoryMapperTest {
         var req = CreateHistoryRecordRequest.builder()
             .number("number")
             .status("incoming")
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         var expected = CreateHistoryRecordDto.builder()
             .user(user)
             .number("number")
             .status("incoming")
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         var actual = this.mapper.mapCreateHistoryRecordDto(req, user);
@@ -62,16 +63,16 @@ public class HistoryMapperTest {
             .id("id")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         var expected = HistoryRecordSummaryResponse.builder()
             .id("id")
             .number("number")
             .status("incoming")
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         var actual = this.mapper.mapHistoryRecordSummaryResponse(dto);
@@ -84,8 +85,8 @@ public class HistoryMapperTest {
             .id("id")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .contact(ContactSummaryDto.builder()
                 .id("id")
                 .name("name")
@@ -97,8 +98,8 @@ public class HistoryMapperTest {
             .id("id")
             .number("number")
             .status("incoming")
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .contact(ContactSummaryResponse.builder()
                 .id("id")
                 .name("name")
@@ -117,16 +118,16 @@ public class HistoryMapperTest {
             .user("user")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         HistoryRecordSummaryDto expected = HistoryRecordSummaryDto.builder()
             .id("id")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         HistoryRecordSummaryDto actual = this.mapper.mapHistoryRecordSummaryDto(record);
@@ -139,16 +140,16 @@ public class HistoryMapperTest {
             .user("user")
             .number("number")
             .status("incoming")
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         HistoryRecord expected = HistoryRecord.builder()
             .user("user")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         HistoryRecord actual = this.mapper.mapHistoryRecord(dto);
@@ -162,8 +163,8 @@ public class HistoryMapperTest {
             .user("user")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .build();
 
         ContactSummaryDto contact = ContactSummaryDto.builder().build();
@@ -172,8 +173,8 @@ public class HistoryMapperTest {
             .id("id")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(LocalDateTime.of(2025, 1, 1, 1, 1))
-            .endDate(LocalDateTime.of(2025, 1, 1, 1, 5))
+            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
+            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
             .contact(contact)
             .build();
 

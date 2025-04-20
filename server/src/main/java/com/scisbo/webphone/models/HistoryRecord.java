@@ -1,6 +1,6 @@
 package com.scisbo.webphone.models;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.convert.ValueConverter;
@@ -29,8 +29,8 @@ public class HistoryRecord {
     @ValueConverter(CallStatusConverter.class)
     CallStatus status;
 
-    LocalDateTime startDate;
+    OffsetDateTime startDate;
 
-    LocalDateTime endDate;
+    OffsetDateTime endDate;
 
 }

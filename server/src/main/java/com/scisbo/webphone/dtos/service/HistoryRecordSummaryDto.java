@@ -1,6 +1,6 @@
 package com.scisbo.webphone.dtos.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.scisbo.webphone.models.CallStatus;
 
@@ -16,6 +16,6 @@ public class HistoryRecordSummaryDto {
     String id;
     String number;
     CallStatus status;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
+    OffsetDateTime startDate;
+    OffsetDateTime endDate;
 }

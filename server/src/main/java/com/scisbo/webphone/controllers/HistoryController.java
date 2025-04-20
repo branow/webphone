@@ -62,6 +62,7 @@ public class HistoryController {
         @PathVariable("userId") String userId,
         @RequestBody @Valid CreateHistoryRecordRequest request
     ) {
+        System.out.println(request);
         CreateHistoryRecordDto record = this.mapper.mapCreateHistoryRecordDto(request, userId);
         HistoryRecordDto createdRecord = this.service.create(record);
         HistoryRecordResponse res = this.mapper.mapHistoryRecordResponse(createdRecord);
