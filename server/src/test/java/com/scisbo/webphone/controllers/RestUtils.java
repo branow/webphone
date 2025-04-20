@@ -13,6 +13,14 @@ public class RestUtils {
        mapper.findAndRegisterModules();
     }
 
+    public static <T> T fromJson(String json, Class<T> clazz) {
+        try {
+            return mapper.readValue(json, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static String toJson(Object obj) {
         try {
             StringWriter writer = new StringWriter();
