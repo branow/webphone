@@ -1,5 +1,6 @@
 package com.scisbo.webphone.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +31,8 @@ import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.PageMapper;
 import com.scisbo.webphone.models.converters.NumberTypeConverter;
 import com.scisbo.webphone.services.ContactService;
+
+import jakarta.validation.Valid;
 
 @SpringJUnitConfig({
     ContactController.class,
@@ -156,6 +160,12 @@ public class ContactControllerTest {
     }
 
     @Test
+    public void testCreate_hasValidation() throws Exception {
+        Method method = controller.getClass().getMethod("create", String.class, CreateContactRequest.class);
+        assertNotNull(method.getParameters()[1].getDeclaredAnnotation(Valid.class));
+    }
+
+    @Test
     public void testUpdate() throws Exception {
         var id = "contactId";
         var updateContactRequest = UpdateContactRequest.builder()
@@ -185,6 +195,12 @@ public class ContactControllerTest {
             )
             .andExpect(status().isOk())
             .andExpect(content().string(response));
+    }
+
+    @Test
+    public void testUpdate_hasValidation() throws Exception {
+        Method method = controller.getClass().getMethod("update", String.class, UpdateContactRequest.class);
+        assertNotNull(method.getParameters()[1].getDeclaredAnnotation(Valid.class));
     }
 
     @Test

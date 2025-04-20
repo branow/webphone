@@ -1,5 +1,6 @@
 package com.scisbo.webphone.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -30,6 +32,8 @@ import com.scisbo.webphone.mappers.PageMapper;
 import com.scisbo.webphone.models.converters.CallStatusConverter;
 import com.scisbo.webphone.models.converters.NumberTypeConverter;
 import com.scisbo.webphone.services.HistoryService;
+
+import jakarta.validation.Valid;
 
 @SpringJUnitConfig({
     HistoryController.class,
@@ -201,6 +205,13 @@ public class HistoryControllerTest {
             )
             .andExpect(status().isCreated())
             .andExpect(content().string(response));
+    }
+
+    @Test
+    public void testCreate_hasValidation() throws Exception {
+        Method method = historyController.getClass()
+            .getMethod("create", String.class, CreateHistoryRecordRequest.class);
+        assertNotNull(method.getParameters()[1].getDeclaredAnnotation(Valid.class));
     }
 
     @Test
