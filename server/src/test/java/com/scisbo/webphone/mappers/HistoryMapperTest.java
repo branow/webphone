@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,16 +119,16 @@ public class HistoryMapperTest {
             .user("user")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
-            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
+            .startDate(Date.from(OffsetDateTime.parse("2025-01-01T01:00Z").toInstant()))
+            .endDate(Date.from(OffsetDateTime.parse("2025-01-01T01:05Z").toInstant()))
             .build();
 
         HistoryRecordSummaryDto expected = HistoryRecordSummaryDto.builder()
             .id("id")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
-            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
+            .startDate(OffsetDateTime.parse("2025-01-01T01:00Z"))
+            .endDate(OffsetDateTime.parse("2025-01-01T01:05Z"))
             .build();
 
         HistoryRecordSummaryDto actual = this.mapper.mapHistoryRecordSummaryDto(record);
@@ -140,16 +141,16 @@ public class HistoryMapperTest {
             .user("user")
             .number("number")
             .status("incoming")
-            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
-            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
+            .startDate(OffsetDateTime.parse("2025-01-01T01:00Z"))
+            .endDate(OffsetDateTime.parse("2025-01-01T01:05Z"))
             .build();
 
         HistoryRecord expected = HistoryRecord.builder()
             .user("user")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
-            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
+            .startDate(Date.from(OffsetDateTime.parse("2025-01-01T01:00Z").toInstant()))
+            .endDate(Date.from(OffsetDateTime.parse("2025-01-01T01:05Z").toInstant()))
             .build();
 
         HistoryRecord actual = this.mapper.mapHistoryRecord(dto);
@@ -157,14 +158,14 @@ public class HistoryMapperTest {
     }
 
     @Test
-    public void mapHistoryRecordDto() {
+    public void testMapHistoryRecordDto() {
         HistoryRecord record = HistoryRecord.builder()
             .id("id")
             .user("user")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
-            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
+            .startDate(Date.from(OffsetDateTime.parse("2025-01-01T01:00Z").toInstant()))
+            .endDate(Date.from(OffsetDateTime.parse("2025-01-01T01:05Z").toInstant()))
             .build();
 
         ContactSummaryDto contact = ContactSummaryDto.builder().build();
@@ -173,8 +174,8 @@ public class HistoryMapperTest {
             .id("id")
             .number("number")
             .status(CallStatus.INCOMING)
-            .startDate(OffsetDateTime.of(2025, 1, 1, 1, 1, 0, 0, ZoneOffset.ofHours(1)))
-            .endDate(OffsetDateTime.of(2025, 1, 1, 1, 5, 0, 0, ZoneOffset.ofHours(1)))
+            .startDate(OffsetDateTime.parse("2025-01-01T01:00Z"))
+            .endDate(OffsetDateTime.parse("2025-01-01T01:05Z"))
             .contact(contact)
             .build();
 

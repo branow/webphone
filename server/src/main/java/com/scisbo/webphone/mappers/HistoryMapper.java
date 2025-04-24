@@ -1,6 +1,9 @@
 package com.scisbo.webphone.mappers;
 
+import java.time.ZoneOffset;
+import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.Date;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -76,8 +79,8 @@ public class HistoryMapper {
             .id(record.getId())
             .number(record.getNumber())
             .status(record.getStatus())
-            .startDate(record.getStartDate())
-            .endDate(record.getEndDate())
+            .startDate(mapOffsetDateTime(record.getStartDate()))
+            .endDate(mapOffsetDateTime(record.getEndDate()))
             .build();
     }
 
@@ -86,8 +89,8 @@ public class HistoryMapper {
             .user(dto.getUser())
             .number(dto.getNumber())
             .status(callStatusConverter.read(dto.getStatus(), null))
-            .startDate(dto.getStartDate())
-            .endDate(dto.getEndDate())
+            .startDate(mapDate(dto.getStartDate()))
+            .endDate(mapDate(dto.getEndDate()))
             .build();
     }
 
@@ -96,10 +99,22 @@ public class HistoryMapper {
             .id(record.getId())
             .number(record.getNumber())
             .status(record.getStatus())
-            .startDate(record.getStartDate())
-            .endDate(record.getEndDate())
+            .startDate(mapOffsetDateTime(record.getStartDate()))
+            .endDate(mapOffsetDateTime(record.getEndDate()))
             .contact(contact)
             .build();
+    }
+
+    private OffsetDateTime mapOffsetDateTime(Date date) {
+        return Optional.ofNullable(date)
+            .map(d -> d.toInstant().atOffset(ZoneOffset.UTC))
+            .orElse(null);
+    }
+
+    private Date mapDate(OffsetDateTime offsetDateTime) {
+        return Optional.ofNullable(offsetDateTime)
+            .map(date -> Date.from(date.withOffsetSameInstant(ZoneOffset.UTC).toInstant()))
+            .orElse(null);
     }
 
 }

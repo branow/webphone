@@ -24,7 +24,6 @@ public class TestDataUtilsTest {
         assertEquals(11, contacts.size());
     }
 
-
     @Test
     void testHistory() {
         List<Document> history = TestDataUtils.history();

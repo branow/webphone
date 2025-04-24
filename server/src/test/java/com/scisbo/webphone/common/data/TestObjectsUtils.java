@@ -72,15 +72,9 @@ public class TestObjectsUtils {
             .user(doc.getString("user"))
             .number(doc.getString("number"))
             .status(status)
-            .startDate(mapOffsetDateTime(doc.getDate("startDate")))
-            .endDate(mapOffsetDateTime(doc.getDate("endDate")))
+            .startDate(doc.getDate("startDate"))
+            .endDate(doc.getDate("endDate"))
             .build();
-    }
-
-    private static OffsetDateTime mapOffsetDateTime(Date date) {
-        return Optional.ofNullable(date)
-            .map(d -> OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()))
-            .orElse(null);
     }
 
 }
