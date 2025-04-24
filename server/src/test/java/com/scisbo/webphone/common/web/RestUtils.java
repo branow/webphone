@@ -1,4 +1,4 @@
-package com.scisbo.webphone.controllers;
+package com.scisbo.webphone.common.web;
 
 import java.io.IOException;
 import java.io.StringWriter;

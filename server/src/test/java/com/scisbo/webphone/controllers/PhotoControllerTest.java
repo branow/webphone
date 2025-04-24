@@ -48,7 +48,7 @@ public class PhotoControllerTest {
 
         this.mockMvc
             .perform(
-                get("/api/photo/{id}", id)
+                get("/api/photos/{id}", id)
             )
             .andExpect(status().isOk())
             .andExpect(content().bytes(image));

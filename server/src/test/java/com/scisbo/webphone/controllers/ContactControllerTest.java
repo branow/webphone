@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.scisbo.webphone.common.data.TestObjectsUtils;
+import com.scisbo.webphone.common.web.RestUtils;
 import com.scisbo.webphone.dtos.controller.request.CreateContactRequest;
 import com.scisbo.webphone.dtos.controller.request.NumberRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;

@@ -21,6 +21,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.scisbo.webphone.common.web.RestUtils;
 import com.scisbo.webphone.dtos.controller.response.ErrorResponse;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
@@ -213,6 +215,14 @@ public class GlobalExceptionHandlerTest {
                     .type("error.validation")
                     .message("Invalid email format; Too short name")
                     .details(List.of())
+                    .build()
+            ),
+            Arguments.of(
+                new AccessDeniedException("AccessDeniedException message"),
+                HttpStatus.FORBIDDEN,
+                ErrorResponse.builder()
+                    .type("error.access.denied")
+                    .message("AccessDeniedException message")
                     .build()
             ),
             Arguments.of(
