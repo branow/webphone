@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -110,6 +111,14 @@ public class GlobalExceptionHandler {
             .collect(Collectors.joining("; "));
         Object details = validationResultFormatter.formatFieldErrors(result.getFieldErrors());
         return new ErrorResponse("error.validation", message, details);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorResponse handleAccessDeniedException(
+        AccessDeniedException e
+    ) {
+        return new ErrorResponse("error.access.denied", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

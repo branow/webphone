@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class ContactController {
     private final ContactMapper mapper;
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("#userId == authentication.name")
     public ResponseEntity<PageResponse<ContactResponse>> getPageByUser(
         @PathVariable("userId") String userId,
         @RequestParam(name = "number", required = false, defaultValue = "0") int number,
@@ -49,6 +51,7 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authService.canGetContact(authentication.name, #id)")
     public ResponseEntity<ContactDetailsResponse> getById(
         @PathVariable("id") String id
     ) {
@@ -58,17 +61,19 @@ public class ContactController {
     }
 
     @PostMapping("/user/{userId}")
+    @PreAuthorize("#userId == authentication.name")
     public ResponseEntity<ContactDetailsResponse> create(
-        @PathVariable("userId") String id,
+        @PathVariable("userId") String userId,
         @RequestBody @Valid CreateContactRequest request
     ) {
-        CreateContactDto contact = this.mapper.mapCreateContactDto(request, id);
+        CreateContactDto contact = this.mapper.mapCreateContactDto(request, userId);
         ContactDetailsDto createdContact = this.service.create(contact);
         ContactDetailsResponse res = this.mapper.mapContactDetailsResponse(createdContact);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@authService.canUpdateContact(authentication.name, #id)")
     public ResponseEntity<ContactDetailsResponse> update(
         @PathVariable("id") String id,
         @RequestBody @Valid UpdateContactRequest request
@@ -80,6 +85,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@authService.canDeleteContact(authentication.name, #id)")
     public ResponseEntity<?> deleteById(
         @PathVariable("id") String id
     ) {

@@ -12,7 +12,7 @@ import com.scisbo.webphone.services.PhotoService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/photo")
+@RequestMapping("/api/photos")
 @RequiredArgsConstructor
 public class PhotoController {
 
