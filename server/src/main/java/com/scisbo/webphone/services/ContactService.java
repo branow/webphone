@@ -14,7 +14,6 @@ import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
-import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.Number;
@@ -51,9 +50,7 @@ public class ContactService {
      * @throws EntityNotFoundException if no contact is found by the given identifier
      * */
     public ContactDetailsDto getDetailsById(String id) {
-        return this.repository.findById(id)
-            .map(this.mapper::mapContactDetailsDto)
-            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "id", id));
+        return this.mapper.mapContactDetailsDto(this.repository.getById(id));
     }
 
     /**
@@ -88,8 +85,7 @@ public class ContactService {
      * @see PhotoService#download(String)
      * */
     public ContactDetailsDto update(UpdateContactDto updateDto) {
-        Contact oldContact = this.repository.findById(updateDto.getId())
-            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "id", updateDto.getId()));
+        Contact oldContact = this.repository.getById(updateDto.getId());
         Contact newContact = this.mapper.mapContact(updateDto);
         
         if (!Objects.equals(oldContact.getPhoto(), newContact.getPhoto())) {

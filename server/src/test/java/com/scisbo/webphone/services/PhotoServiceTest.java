@@ -1,13 +1,11 @@
 package com.scisbo.webphone.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.bson.types.Binary;
@@ -17,7 +15,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.scisbo.webphone.dtos.service.PhotoDto;
-import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.mappers.PhotoMapper;
 import com.scisbo.webphone.models.Photo;
 import com.scisbo.webphone.repositories.PhotoRepository;
@@ -47,19 +44,12 @@ public class PhotoServiceTest {
             .image(new Binary("bytes".getBytes()))
             .build();
 
-        when(this.repository.findById(id)).thenReturn(Optional.of(photo));
+        when(this.repository.getById(id)).thenReturn(photo);
 
         PhotoDto expected = this.mapper.mapPhotoDto(photo);
         PhotoDto actual = this.service.getById(id);
 
         assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testGetById_isAbsent_throwException() {
-        String id = UUID.randomUUID().toString();
-        when(this.repository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> this.service.getById(id));
     }
 
     @Test

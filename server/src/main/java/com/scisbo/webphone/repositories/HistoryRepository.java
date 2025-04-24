@@ -6,11 +6,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.HistoryRecord;
 
 public interface HistoryRepository extends MongoRepository<HistoryRecord, String> {
 
     public static final String ENTITY_NAME = "history record";
+
+    /**
+     * Retrieves the history record by its identifier.
+     *
+     * @param id the record's identifier
+     * @returns a {@link HistoryRecord} object
+     * @throws EntityNotFoundException if no record is found by the given identifier
+     * */
+    default HistoryRecord getById(String id) {
+        return findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "id", id));
+    }
 
     /**
      * Retrieves a paginated list of history records for the specified user, 

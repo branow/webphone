@@ -1,6 +1,7 @@
 package com.scisbo.webphone.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -24,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.scisbo.webphone.common.data.TestDataUtils;
 import com.scisbo.webphone.common.data.TestObjectsUtils;
 import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbAbstractIT;
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.Number;
 import com.scisbo.webphone.models.NumberType;
@@ -38,6 +40,24 @@ public class ContactRepositoryIT extends EmbeddedMongoDbAbstractIT {
     private MongoTemplate template;
     @Autowired
     private ContactRepository repository;
+
+
+    @Test
+    public void testGetById() {
+        Collection<Document> contacts = this.template.insert(TestDataUtils.contacts(), COLLECTION);
+        Contact expected = contacts.stream()
+            .map(TestObjectsUtils::mapContact)
+            .findAny()
+            .orElseThrow();
+        
+        Contact actual = this.repository.getById(expected.getId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetById_isAbsent_throwsException() {
+        assertThrows(EntityNotFoundException.class, () -> this.repository.getById("123"));
+    }
 
     @Test
     public void testFindAll() {

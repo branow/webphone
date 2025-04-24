@@ -17,7 +17,6 @@ import com.scisbo.webphone.models.Number;
 import com.scisbo.webphone.models.HistoryRecord;
 import com.scisbo.webphone.repositories.ContactRepository;
 import com.scisbo.webphone.repositories.HistoryRepository;
-import com.scisbo.webphone.exceptions.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -63,9 +62,7 @@ public class HistoryService {
     public Page<HistoryRecordSummaryDto> getPageSummaryByContactId(
         String user, String contactId, Pageable pageable
     ) {
-        List<String> numbers = this.contactRepository.findById(contactId)
-            .orElseThrow(() -> new EntityNotFoundException(
-                ContactRepository.ENTITY_NAME, "id", contactId))
+        List<String> numbers = this.contactRepository.getById(contactId)
             .getNumbers()
             .stream()
             .map(Number::getNumber)

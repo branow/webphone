@@ -1,7 +1,5 @@
 package com.scisbo.webphone.services;
 
-import static com.scisbo.webphone.repositories.PhotoRepository.ENTITY_NAME;
-
 import org.springframework.stereotype.Service;
 
 import com.scisbo.webphone.dtos.service.PhotoDto;
@@ -30,9 +28,7 @@ public class PhotoService {
      * @throws EntityNotFoundException if photo is not found by the given identifier
      * */
     public PhotoDto getById(String id) {
-        return this.repository.findById(id)
-            .map(this.mapper::mapPhotoDto)
-            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "id", id));
+        return this.mapper.mapPhotoDto(this.repository.getById(id));
     }
 
     /**

@@ -3,6 +3,7 @@ package com.scisbo.webphone.repositories;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.scisbo.webphone.common.data.TestDataUtils;
 import com.scisbo.webphone.common.data.TestObjectsUtils;
 import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbIT;
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Photo;
 
 @EnableMongoRepositories
@@ -31,6 +33,23 @@ public class PhotoRepositoryIT extends EmbeddedMongoDbIT {
 
     @Autowired
     private PhotoRepository repository;
+
+    @Test
+    public void testGetById() {
+        Collection<Document> photos = this.template.insert(TestDataUtils.photos(), COLLECTION);
+        Photo expected = photos.stream()
+            .map(TestObjectsUtils::mapPhoto)
+            .findAny()
+            .orElseThrow();
+        
+        Photo actual = this.repository.getById(expected.getId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetById_isAbsent_throwsException() {
+        assertThrows(EntityNotFoundException.class, () -> this.repository.getById("123"));
+    }
 
     @Test
     public void testFindById() {

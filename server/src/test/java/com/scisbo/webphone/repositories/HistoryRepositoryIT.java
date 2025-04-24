@@ -2,10 +2,11 @@ package com.scisbo.webphone.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -25,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.scisbo.webphone.common.data.TestDataUtils;
 import com.scisbo.webphone.common.data.TestObjectsUtils;
 import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbAbstractIT;
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.CallStatus;
 import com.scisbo.webphone.models.HistoryRecord;
 
@@ -38,6 +40,24 @@ public class HistoryRepositoryIT extends EmbeddedMongoDbAbstractIT {
     private MongoTemplate template;
     @Autowired
     private HistoryRepository repository;
+
+
+    @Test
+    public void testGetById() {
+        Collection<Document> records = this.template.insert(TestDataUtils.history(), COLLECTION);
+        HistoryRecord expected = records.stream()
+            .map(TestObjectsUtils::mapHistoryRecord)
+            .findAny()
+            .orElseThrow();
+        
+        HistoryRecord actual = this.repository.getById(expected.getId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetById_isAbsent_throwsException() {
+        assertThrows(EntityNotFoundException.class, () -> this.repository.getById("123"));
+    }
 
     @Test
     public void testFindAll() {
@@ -130,7 +150,7 @@ public class HistoryRepositoryIT extends EmbeddedMongoDbAbstractIT {
             .number("123421")
             .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
             .status(CallStatus.OUTCOMING)
-            .startDate(OffsetDateTime.now())
+            .startDate(new Date())
             .build();
         HistoryRecord savedRecord = this.repository.insert(record);
         assertNotNull(savedRecord.getId());

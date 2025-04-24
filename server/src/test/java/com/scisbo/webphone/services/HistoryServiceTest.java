@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -134,7 +133,7 @@ public class HistoryServiceTest {
             HistoryRecord.builder().number("2222").build()
         );
 
-        when(this.contactRepository.findById(contact.getId())).thenReturn(Optional.of(contact));
+        when(this.contactRepository.getById(contact.getId())).thenReturn(contact);
         when(this.historyRepository.findByUserAndNumberInOrderByStartDateDesc(user, numbers, pageable))
             .thenReturn(new PageImpl<>(records, pageable, totalPages));
 

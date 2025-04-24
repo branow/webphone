@@ -31,7 +31,6 @@ import com.scisbo.webphone.dtos.service.NumberDto;
 import com.scisbo.webphone.dtos.service.PhotoDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
-import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.PageMapper;
 import com.scisbo.webphone.models.Contact;
@@ -94,19 +93,12 @@ public class ContactServiceTest {
             .user("user123")
             .build();
 
-        when(this.repository.findById(id)).thenReturn(Optional.of(contact));
+        when(this.repository.getById(id)).thenReturn(contact);
 
         ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
         ContactDetailsDto actual = this.service.getDetailsById(id);
 
         assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testGetDetailsById_isAbsent_throwException() {
-        String id = UUID.randomUUID().toString();
-        when(this.repository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> this.service.getDetailsById(id));
     }
 
     @Test
@@ -232,7 +224,7 @@ public class ContactServiceTest {
 
         Contact contact = this.mapper.mapContact(updateContact);
 
-        when(this.repository.findById(oldContact.getId())).thenReturn(Optional.of(oldContact));
+        when(this.repository.getById(oldContact.getId())).thenReturn(oldContact);
         when(this.repository.findByUser(oldContact.getUser())).thenReturn(contacts);
         when(this.photoService.download("photoUrl")).thenReturn(photo);
 
@@ -255,26 +247,6 @@ public class ContactServiceTest {
     }
 
     @Test
-    public void testUpdate_withNotExistingId_throwException() {
-        List<Contact> contacts = TestObjectsUtils.contacts();
-
-        Contact oldContact = contacts.get(0);
-        UpdateContactDto updateContact = UpdateContactDto.builder()
-            .id("not-existing-id")
-            .name("contact123")
-            .numbers(List.of(
-                NumberDto.builder().type("work").number("1111").build(),
-                NumberDto.builder().type("home").number("2222").build()
-            ))
-            .build();
-
-        when(this.repository.findById(oldContact.getId())).thenReturn(Optional.of(oldContact));
-        when(this.repository.findByUser(oldContact.getUser())).thenReturn(contacts);
-
-        assertThrows(EntityNotFoundException.class, () -> this.service.update(updateContact));
-    }
-
-    @Test
     public void testUpdate_withExistingName_throwException() {
         List<Contact> contacts = TestObjectsUtils.contacts();
 
@@ -288,7 +260,7 @@ public class ContactServiceTest {
             ))
             .build();
 
-        when(this.repository.findById(oldContact.getId())).thenReturn(Optional.of(oldContact));
+        when(this.repository.getById(oldContact.getId())).thenReturn(oldContact);
         when(this.repository.findByUser(oldContact.getUser())).thenReturn(contacts);
 
         assertThrows(EntityAlreadyExistsException.class, () -> this.service.update(updateContact));
@@ -311,7 +283,7 @@ public class ContactServiceTest {
             ))
             .build();
 
-        when(this.repository.findById(oldContact.getId())).thenReturn(Optional.of(oldContact));
+        when(this.repository.getById(oldContact.getId())).thenReturn(oldContact);
         when(this.repository.findByUser(oldContact.getUser())).thenReturn(contacts);
 
         assertThrows(EntityAlreadyExistsException.class, () -> this.service.update(updateContact));

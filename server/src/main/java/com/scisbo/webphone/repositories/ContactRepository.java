@@ -6,11 +6,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Contact;
 
 public interface ContactRepository extends MongoRepository<Contact, String> {
 
     public static final String ENTITY_NAME = "contact";
+
+    /**
+     * Retrieves the contact by its identifier.
+     *
+     * @param id the contact's identifier
+     * @returns a {@link Contact} object
+     * @throws EntityNotFoundException if no contact is found by the given identifier
+     * */
+    default Contact getById(String id) {
+        return findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "id", id));
+    }
 
     /**
      * Retrieves a paginated list of contacts for the specified user, 
