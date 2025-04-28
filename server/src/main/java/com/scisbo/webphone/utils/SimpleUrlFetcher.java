@@ -7,10 +7,17 @@ import java.net.URLConnection;
 
 import org.springframework.stereotype.Component;
 
+import com.scisbo.webphone.log.annotation.LogAfter;
+import com.scisbo.webphone.log.annotation.LogBefore;
+import com.scisbo.webphone.log.annotation.LogError;
+
 @Component
 public class SimpleUrlFetcher implements UrlFetcher {
 
     @Override
+    @LogBefore("Fetching bytes from URL=#{#url}")
+    @LogAfter("Fetched #{#result.length} bytes")
+    @LogError("Failed to fetch bytes [#{#error}]")
     public byte[] fetchBytes(String url) throws IOException {
         URLConnection connection = URI.create(url).toURL().openConnection();
         connection.connect();

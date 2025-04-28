@@ -14,6 +14,9 @@ import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
+import com.scisbo.webphone.log.annotation.LogAfter;
+import com.scisbo.webphone.log.annotation.LogBefore;
+import com.scisbo.webphone.log.annotation.LogError;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.Number;
@@ -37,6 +40,9 @@ public class ContactService {
      * @param pageable  the pagination information
      * @returns a page of {@link ContactDto}
      * */
+    @LogBefore("Retrieving contacts for user=#{#user}, page=#{#pageable}")
+    @LogAfter("Retrieved contacts: #{#result}")
+    @LogError("Failed to retrieve contacts [#{#error}]")
     public Page<ContactDto> getPageByUser(String user, Pageable pageable) {
         return this.repository.findByUserOrderByName(user, pageable)
             .map(this.mapper::mapContactDto);
@@ -49,6 +55,9 @@ public class ContactService {
      * @returns a {@link ContactDetailsDto} object
      * @throws EntityNotFoundException if no contact is found by the given identifier
      * */
+    @LogBefore("Retrieving contact with ID=#{#id}")
+    @LogAfter("Retrieved contacts with ID=#{#result.getId()}")
+    @LogError("Failed to retrieve contact [#{#error}]")
     public ContactDetailsDto getDetailsById(String id) {
         return this.mapper.mapContactDetailsDto(this.repository.getById(id));
     }
@@ -63,6 +72,9 @@ public class ContactService {
      *         or number already exists.
      * @see PhotoService#download(String)
      * */
+    @LogBefore("Creating contact for user=#{#createDto.getUser()}")
+    @LogAfter("Created contact with ID=#{#result.getId()}")
+    @LogError("Failed to create contact [#{#error}]")
     public ContactDetailsDto create(CreateContactDto createDto) {
         Contact contact = this.mapper.mapContact(createDto);
         validateNewContact(contact);
@@ -84,6 +96,9 @@ public class ContactService {
      *         or number exists
      * @see PhotoService#download(String)
      * */
+    @LogBefore("Updating contact for ID=#{#updateDto.getId()}")
+    @LogAfter("Updated contact with ID=#{#result.getId()}")
+    @LogError("Failed to udpate contact [#{#error}]")
     public ContactDetailsDto update(UpdateContactDto updateDto) {
         Contact oldContact = this.repository.getById(updateDto.getId());
         Contact newContact = this.mapper.mapContact(updateDto);
@@ -106,6 +121,9 @@ public class ContactService {
      *
      * @param id the contact's identifier
      * */
+    @LogBefore("Deleting contact for ID=#{#id}")
+    @LogAfter("Deleted contact with ID=#{#id}")
+    @LogError("Failed to delete contact [#{#error}]")
     public void deleteById(String id) {
         this.repository.findById(id).ifPresent(contact -> {
             deletePhotoIfPresent(contact);

@@ -10,6 +10,10 @@ import com.scisbo.webphone.models.Photo;
 import com.scisbo.webphone.repositories.PhotoRepository;
 import com.scisbo.webphone.utils.UrlFetcher;
 
+import com.scisbo.webphone.log.annotation.LogBefore;
+import com.scisbo.webphone.log.annotation.LogError;
+import com.scisbo.webphone.log.annotation.LogAfter;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,6 +31,9 @@ public class PhotoService {
      * @returns a {@link PhotoDto} object
      * @throws EntityNotFoundException if photo is not found by the given identifier
      * */
+    @LogBefore("Retrieving photo with ID=#{#id}")
+    @LogAfter("Retrieved photo with ID=#{#result.getId()}")
+    @LogError("Failed to retrieve photo [#{#error}]")
     public PhotoDto getById(String id) {
         return this.mapper.mapPhotoDto(this.repository.getById(id));
     }
@@ -39,6 +46,9 @@ public class PhotoService {
      * @throws PhotoUploadException if an error occurs during download.
      * @see UrlFetcher
      * */
+    @LogBefore("Downloading photo from URL=#{#url}")
+    @LogAfter("Downloaded photo with ID=#{#result.getId()}")
+    @LogError("Failed to download photo [#{#error}]")
     public PhotoDto download(String url) {
         byte[] image = null;
         try {
@@ -56,6 +66,9 @@ public class PhotoService {
      *
      * @param id the photo's identifier
      * */
+    @LogBefore("Deleting photo with ID=#{#id}")
+    @LogAfter("Deleted photo with ID=#{#id}")
+    @LogError("Failed to delete photo [error=#{#error}]")
     public void deleteById(String id) {
         this.repository.deleteById(id);
     }

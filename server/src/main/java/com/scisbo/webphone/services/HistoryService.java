@@ -10,6 +10,9 @@ import com.scisbo.webphone.dtos.service.ContactSummaryDto;
 import com.scisbo.webphone.dtos.service.CreateHistoryRecordDto;
 import com.scisbo.webphone.dtos.service.HistoryRecordDto;
 import com.scisbo.webphone.dtos.service.HistoryRecordSummaryDto;
+import com.scisbo.webphone.log.annotation.LogBefore;
+import com.scisbo.webphone.log.annotation.LogAfter;
+import com.scisbo.webphone.log.annotation.LogError;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.HistoryMapper;
 import com.scisbo.webphone.models.Contact;
@@ -37,6 +40,9 @@ public class HistoryService {
      * @param pageable  the pagination information
      * @returns a page of {@link HistoryRecordDto} objects
      * */
+    @LogBefore("Retrieving history records for user=#{#user}, page=#{#pageable}")
+    @LogAfter("Retrieved history records page: #{#result}")
+    @LogError("Failed to retrieve history records [#{#error}]")
     public Page<HistoryRecordDto> getPageByUser(String user, Pageable pageable) {
         Page<HistoryRecord> history = this.repository.findByUserOrderByStartDateDesc(user, pageable);
         List<Contact> contacts = this.contactRepository.findByUser(user);
@@ -59,10 +65,13 @@ public class HistoryService {
      * @param pageable  the pagination information
      * @returns a page of {@link HistoryRecordSummaryDto} objects
      * */
+    @LogBefore("Retrieving history summary for user=#{#user}, contact=#{#contact}, page=#{#pageable}")
+    @LogAfter("Retrieved history summary page: #{#result}")
+    @LogError("Failed to retrieve history summary [#{#error}]")
     public Page<HistoryRecordSummaryDto> getPageSummaryByContactId(
-        String user, String contactId, Pageable pageable
+        String user, String contact, Pageable pageable
     ) {
-        List<String> numbers = this.contactRepository.getById(contactId)
+        List<String> numbers = this.contactRepository.getById(contact)
             .getNumbers()
             .stream()
             .map(Number::getNumber)
@@ -77,6 +86,9 @@ public class HistoryService {
      * @param createDto the data for the new history record
      * @return the created {@link HistoryRecordDto}
      * */
+    @LogBefore("Creating history record for user=#{#createDto.getUser()}")
+    @LogAfter("Created history record with ID=#{#result.getId()}")
+    @LogError("Failed to create history record [#{#error}]")
     public HistoryRecordDto create(CreateHistoryRecordDto createDto) {
         HistoryRecord record = this.repository.save(this.mapper.mapHistoryRecord(createDto));
         ContactSummaryDto contact = findContactSummaryByNumber(
@@ -91,6 +103,9 @@ public class HistoryService {
      *
      * @param user the user's identifier
      * */
+    @LogBefore("Deleting history records for user=#{#user}")
+    @LogAfter("Deleted history records for user=#{#user}")
+    @LogError("Failed to delete History records [#{#error}]")
     public void deleteByUser(String user) {
         this.repository.deleteByUser(user);
     }
@@ -100,6 +115,9 @@ public class HistoryService {
      *
      * @param id the history record's identifier
      * */
+    @LogBefore("Deleting history record by ID=#{#id}")
+    @LogAfter("Deleted history record with ID=#{#id}")
+    @LogError("Failed to delete history record [#{#error}]")
     public void deleteById(String id) {
         this.repository.deleteById(id);
     }
