@@ -177,9 +177,10 @@ public class ContactService {
     }
 
     private void uploadPhotoIfPresent(Contact contact) {
-        if (contact.getPhoto() == null) return;
-        String url = contact.getPhoto();
-        String photoId = this.photoService.download(url).getId();
+        String photoUrl = contact.getPhoto();
+        if (photoUrl == null) return;
+        String photoId = this.photoService.download(photoUrl).getId();
+        this.photoService.optimize(photoId);
         contact.setPhoto(photoId);
     }
 

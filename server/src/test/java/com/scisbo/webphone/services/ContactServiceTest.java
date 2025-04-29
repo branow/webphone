@@ -157,7 +157,9 @@ public class ContactServiceTest {
 
         assertEquals(expected, actual);
         contact.setPhoto(expected.getPhoto());
+
         verify(this.repository).insert(contact);
+        verify(this.photoService).optimize(photo.getId());
     }
 
     @Test
@@ -244,6 +246,7 @@ public class ContactServiceTest {
             .build();
 
         verify(this.repository).save(toSaveContact);
+        verify(this.photoService).optimize(photo.getId());
     }
 
     @Test
