@@ -1,5 +1,7 @@
 package com.scisbo.webphone.log.web;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scisbo.webphone.log.core.SpelLogger;
 import com.scisbo.webphone.log.core.SpelLoggerFactory;
+import com.scisbo.webphone.log.id.DefaultLogIdProvider;
 
 @SpringJUnitConfig({
     LoggingFilterTest.Controller.class,
@@ -44,7 +47,7 @@ public class LoggingFilterTest {
 
     @BeforeEach
     public void setUp() {
-        when(this.loggerFactory.getLogger(LoggingFilter.class))
+        when(this.loggerFactory.getLogger(eq(LoggingFilter.class), any(DefaultLogIdProvider.class)))
             .thenReturn(this.logger);
         this.mockMvc = MockMvcBuilders
             .standaloneSetup(this.controller)

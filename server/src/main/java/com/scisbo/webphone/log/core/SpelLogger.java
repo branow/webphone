@@ -10,7 +10,7 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
-import com.scisbo.webphone.log.config.LoggingConfiguration;
+import com.scisbo.webphone.log.id.LogIdProvider;
 
 /**
  * A logger that evaluates SpEL expressions for dynamic log messages.
@@ -18,20 +18,20 @@ import com.scisbo.webphone.log.config.LoggingConfiguration;
 public class SpelLogger {
 
     private final Logger logger;
+    private final LogIdProvider provider;
     private final EvaluationContext context;
-    private final LoggingConfiguration configuration;
     private final SpelExpressionParser parser;
 
 
     public SpelLogger(
         Class<?> clazz,
+        LogIdProvider provider,
         EvaluationContext context,
-        LoggingConfiguration configuration,
         SpelExpressionParser parser
     ) {
         this.logger = LoggerFactory.getLogger(clazz);
+        this.provider = provider;
         this.context = context;
-        this.configuration = configuration;
         this.parser = parser;
     }
 
@@ -48,7 +48,7 @@ public class SpelLogger {
     }
 
     private String format(String message) {
-        String id = this.configuration.getLogIdProvider().getId();
+        String id = this.provider.getId();
         return Optional.of(id)
             .filter(id0 -> !id0.isEmpty())
             .map(id0 -> String.format("[%s] %s", id, message))

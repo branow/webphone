@@ -19,6 +19,8 @@ import com.scisbo.webphone.log.core.SimpleSpelLoggerContext;
 import com.scisbo.webphone.log.core.SpelLogger;
 import com.scisbo.webphone.log.core.SpelLoggerContext;
 import com.scisbo.webphone.log.core.SpelLoggerFactory;
+import com.scisbo.webphone.log.id.LogIdProvider;
+import com.scisbo.webphone.log.id.LogIdProviders;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class LoggingAspect {
 
     private final SpelLoggerFactory factory;
+    private final LogIdProviders providers;
 
 
     @Around("@annotation(log)")
@@ -58,7 +61,8 @@ public class LoggingAspect {
         Class<?> targetClass = point.getTarget().getClass();
         SpelLoggerContext ctx = new SimpleSpelLoggerContext();
         ctx.setArguments(parseArguments(point));
-        SpelLogger logger = factory.getLogger(targetClass, ctx);
+        LogIdProvider idProvider = providers.getProvider(log.getIdProviderClass());
+        SpelLogger logger = factory.getLogger(targetClass, ctx, idProvider);
 
         if (log.isTriggered(LogTrigger.BEFORE)) {
             logger.log(log.getLevel(), log.getMessage());

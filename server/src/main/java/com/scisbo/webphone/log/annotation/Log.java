@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import org.slf4j.event.Level;
 import org.springframework.core.annotation.AliasFor;
 
+import com.scisbo.webphone.log.id.DefaultLogIdProvider;
+import com.scisbo.webphone.log.id.LogIdProvider;
+
 /**
  * Core annotation for declarative logging at different method lifecycle points.
  *
@@ -58,5 +61,12 @@ public @interface Log {
      * Triggers that defines when the log should be recorded.
      */
     LogTrigger[] triggers() default { LogTrigger.BEFORE, LogTrigger.AFTER, LogTrigger.ERROR };
+
+    /**
+     * Specified the {@link LogIdProvider} to use for generating a log identifier.
+     * If set to {@link DefaultLogIdProvider}, the provider configured in the logging
+     * configuration will be used.
+     */
+    Class<? extends LogIdProvider> id() default DefaultLogIdProvider.class;
 
 }

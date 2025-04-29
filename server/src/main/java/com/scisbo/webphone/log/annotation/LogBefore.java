@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import org.slf4j.event.Level;
 import org.springframework.core.annotation.AliasFor;
 
+import com.scisbo.webphone.log.id.DefaultLogIdProvider;
+import com.scisbo.webphone.log.id.LogIdProvider;
+
 /**
  * Shortcut annotation for logging a message before method execution.
  */
@@ -35,5 +38,12 @@ public @interface LogBefore {
      * Log level at which the message should be written.
      */
     Level level() default Level.INFO;
+
+    /**
+     * Specified the {@link LogIdProvider} to use for generating a log identifier.
+     * If set to {@link DefaultLogIdProvider}, the provider configured in the logging
+     * configuration will be used.
+     */
+    Class<? extends LogIdProvider> id() default DefaultLogIdProvider.class;
 
 }

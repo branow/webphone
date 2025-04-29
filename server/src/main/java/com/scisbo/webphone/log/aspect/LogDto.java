@@ -10,6 +10,7 @@ import com.scisbo.webphone.log.annotation.LogAfter;
 import com.scisbo.webphone.log.annotation.LogBefore;
 import com.scisbo.webphone.log.annotation.LogError;
 import com.scisbo.webphone.log.annotation.LogTrigger;
+import com.scisbo.webphone.log.id.LogIdProvider;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class LogDto {
             .message(resolveMessage(log.value(), log.message()))
             .level(log.level())
             .triggers(Arrays.asList(log.triggers()))
+            .idProviderClass(log.id())
             .build();
     }
 
@@ -34,6 +36,7 @@ public class LogDto {
             .message(resolveMessage(log.value(), log.message()))
             .level(log.level())
             .triggers(List.of(LogTrigger.BEFORE))
+            .idProviderClass(log.id())
             .build();
     }
 
@@ -42,6 +45,7 @@ public class LogDto {
             .message(resolveMessage(log.value(), log.message()))
             .level(log.level())
             .triggers(List.of(LogTrigger.AFTER))
+            .idProviderClass(log.id())
             .build();
     }
 
@@ -50,6 +54,7 @@ public class LogDto {
             .message(resolveMessage(log.value(), log.message()))
             .level(log.level())
             .triggers(List.of(LogTrigger.ERROR))
+            .idProviderClass(log.id())
             .build();
     }
 
@@ -60,6 +65,7 @@ public class LogDto {
     String message;
     Level level;
     List<LogTrigger> triggers;
+    Class<? extends LogIdProvider> idProviderClass;
 
     public boolean isTriggered(LogTrigger trigger) {
         return this.triggers.contains(trigger);

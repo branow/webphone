@@ -8,6 +8,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import com.scisbo.webphone.log.core.SpelLogger;
 import com.scisbo.webphone.log.core.SpelLoggerFactory;
+import com.scisbo.webphone.log.id.DefaultLogIdProvider;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -49,7 +50,7 @@ public class LoggingFilter implements Filter {
 
     private void ensureLoggerInitialized() {
         this.logger = Optional.ofNullable(this.logger)
-            .orElseGet(() -> this.factory.getLogger(getClass()));
+            .orElseGet(() -> this.factory.getLogger(getClass(), new DefaultLogIdProvider()));
     }
 
     private void logRequest(HttpServletRequest request) {

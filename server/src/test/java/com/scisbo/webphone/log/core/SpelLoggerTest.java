@@ -20,7 +20,6 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import com.scisbo.webphone.log.config.LoggingConfiguration;
 import com.scisbo.webphone.log.id.LogIdProvider;
 
 
@@ -31,7 +30,7 @@ public class SpelLoggerTest {
     private EvaluationContext context;
 
     @MockitoBean
-    private LoggingConfiguration config;
+    private LogIdProvider idProvider;
 
     @MockitoBean
     private SpelExpressionParser parser;
@@ -50,9 +49,7 @@ public class SpelLoggerTest {
             .thenReturn(expression);
         when(expression.getValue(this.context, String.class)).thenReturn(message);
 
-        LogIdProvider idProvider = mock(LogIdProvider.class);
-        when(this.config.getLogIdProvider()).thenReturn(idProvider);
-        when(idProvider.getId()).thenReturn(id);
+        when(this.idProvider.getId()).thenReturn(id);
 
         try (MockedStatic<LoggerFactory> factory = mockStatic(LoggerFactory.class)) {
             Logger logger = mock(Logger.class);
@@ -62,7 +59,7 @@ public class SpelLoggerTest {
             LoggingEventBuilder builder = mock(LoggingEventBuilder.class);
             when(logger.atLevel(level)).thenReturn(builder);
 
-            new SpelLogger(getClass(), context, config, parser).log(level, spel);
+            new SpelLogger(getClass(), this.idProvider, this.context, this.parser).log(level, spel);
 
             verify(builder).log("[123] " + message);
         }
@@ -82,9 +79,7 @@ public class SpelLoggerTest {
             .thenReturn(expression);
         when(expression.getValue(this.context, String.class)).thenReturn(message);
 
-        LogIdProvider idProvider = mock(LogIdProvider.class);
-        when(this.config.getLogIdProvider()).thenReturn(idProvider);
-        when(idProvider.getId()).thenReturn(id);
+        when(this.idProvider.getId()).thenReturn(id);
 
         try (MockedStatic<LoggerFactory> factory = mockStatic(LoggerFactory.class)) {
             Logger logger = mock(Logger.class);
@@ -94,7 +89,7 @@ public class SpelLoggerTest {
             LoggingEventBuilder builder = mock(LoggingEventBuilder.class);
             when(logger.atLevel(level)).thenReturn(builder);
 
-            new SpelLogger(getClass(), context, config, parser).log(level, spel);
+            new SpelLogger(getClass(), this.idProvider, this.context, this.parser).log(level, spel);
 
             verify(builder).log(message);
         }

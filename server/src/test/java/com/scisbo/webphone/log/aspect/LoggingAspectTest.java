@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.slf4j.spi.LoggingEventBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -30,6 +30,9 @@ import com.scisbo.webphone.log.annotation.LogError;
 import com.scisbo.webphone.log.annotation.LogTrigger;
 import com.scisbo.webphone.log.config.DefaultLoggingAutoConfiguration;
 import com.scisbo.webphone.log.core.SpelLoggerFactory;
+import com.scisbo.webphone.log.id.DefaultLogIdProvider;
+import com.scisbo.webphone.log.id.LogIdProvider;
+import com.scisbo.webphone.log.id.LogIdProviders;
 import com.scisbo.webphone.log.id.NoneLogIdProvider;
 
 @SpringJUnitConfig({
@@ -37,11 +40,16 @@ import com.scisbo.webphone.log.id.NoneLogIdProvider;
     LoggingAspectTest.Config.class,
     DefaultLoggingAutoConfiguration.class,
     SpelLoggerFactory.class,
+    LogIdProviders.class,
+    DefaultLogIdProvider.class,
 })
 public class LoggingAspectTest {
 
     @MockitoBean
     private NoneLogIdProvider idProvider;
+
+    @MockitoBean
+    private CustomLogIdProvider customIdProvider;
 
     @Autowired
     private Math math;
@@ -93,10 +101,10 @@ public class LoggingAspectTest {
     @Test
     public void test_divide4() {
         when(this.logger.atLevel(Level.INFO)).thenReturn(this.builder);
-        when(this.idProvider.getId()).thenReturn("");
+        when(this.customIdProvider.getId()).thenReturn("321");
 
         assertEquals(3, this.math.divide4(6, 2));
-        verify(this.builder).log("dividing 6 / 2 = 3");
+        verify(this.builder).log("[321] dividing 6 / 2 = 3");
     }
 
     @Test
@@ -108,7 +116,7 @@ public class LoggingAspectTest {
         verify(this.builder).log("[123] dividing 6 / 0: [java.lang.ArithmeticException: / by zero]");
     }
 
-    @Configuration
+    @TestConfiguration
     @EnableAspectJAutoProxy
     public static class Config {
         @Bean
@@ -134,7 +142,7 @@ public class LoggingAspectTest {
             return a / b;
         }
 
-        @LogAfter("dividing #{#a} / #{#b} = #{#result}")
+        @LogAfter(message = "dividing #{#a} / #{#b} = #{#result}", id = CustomLogIdProvider.class)
         public int divide4(int a, int b) {
             return a / b;
         }
@@ -146,5 +154,6 @@ public class LoggingAspectTest {
 
     }
 
+    public interface CustomLogIdProvider extends LogIdProvider {}
 
 }

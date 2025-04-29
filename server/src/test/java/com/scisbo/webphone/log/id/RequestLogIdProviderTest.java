@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,24 +25,24 @@ import lombok.RequiredArgsConstructor;
 
 @SpringJUnitConfig({
     RequestLogIdProvider.class,
-    RequestLogIdProviderTest.TestController.class,
-    RequestLogIdProviderTest.TestFilter.class,
+    RequestLogIdProviderTest.Config.class,
 })
 public class RequestLogIdProviderTest {
 
     @Autowired
-    private TestController controller;
+    private Config.TestController controller;
 
     @Autowired
-    private TestFilter filter;
+    private Config.TestFilter filter;
 
     private MockMvc mvc;
+
 
     @BeforeEach
     public void setUp() {
         this.mvc = MockMvcBuilders
-            .standaloneSetup(controller)
-            .addFilter(filter)
+            .standaloneSetup(this.controller)
+            .addFilter(this.filter)
             .build();
     }
 
@@ -52,40 +53,46 @@ public class RequestLogIdProviderTest {
         assertEquals(this.filter.idBefore, this.controller.id);
     }
 
-    @RestController
-    @RequiredArgsConstructor
-    public static class TestController {
+    @TestConfiguration
+    public static class Config {
 
-        private final LogIdProvider provider;
+        @RestController
+        @RequiredArgsConstructor
+        public static class TestController {
 
-        public String id;
+            private final LogIdProvider provider;
 
-        @GetMapping("/home")
-        public String home() {
-            this.id = this.provider.getId();
-            return "home";
+            public String id;
+
+            @GetMapping("/home")
+            public String home() {
+                System.out.println("################### Controller ");
+                this.id = this.provider.getId();
+                return "home";
+            }
+
         }
 
-    }
+        @Component
+        @RequiredArgsConstructor
+        public static class TestFilter implements Filter {
 
-    @Component
-    @RequiredArgsConstructor
-    public static class TestFilter implements Filter {
+            private final LogIdProvider provider;
 
-        private final LogIdProvider provider;
+            public String idBefore;
+            public String idAfter;
 
-        public String idBefore;
-        public String idAfter;
+            @Override
+            public void doFilter(
+                ServletRequest request,
+                ServletResponse response,
+                FilterChain chain
+            ) throws IOException, ServletException {
+                this.idBefore = this.provider.getId();
+                chain.doFilter(request, response);
+                this.idAfter = this.provider.getId();
+            }
 
-        @Override
-        public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain
-        ) throws IOException, ServletException {
-            this.idBefore = this.provider.getId();
-            chain.doFilter(request, response);
-            this.idAfter = this.provider.getId();
         }
 
     }
