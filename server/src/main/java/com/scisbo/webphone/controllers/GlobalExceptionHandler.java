@@ -43,13 +43,11 @@ public class GlobalExceptionHandler {
         MissingServletRequestParameterException.class,
         MissingServletRequestPartException.class,
         ServletRequestBindingException.class,
-        IllegalArgumentException.class,
         HttpMessageNotReadableException.class,
     })
     public ErrorResponse handleBadRequest(Exception e) {
         return new ErrorResponse("error.bad.request", e.getMessage());
     }
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidValueException.class)

@@ -148,14 +148,6 @@ public class GlobalExceptionHandlerTest {
                     .build()
             ),
             Arguments.of(
-                new IllegalArgumentException("Invalid Argument"),
-                HttpStatus.BAD_REQUEST,
-                ErrorResponse.builder()
-                    .type("error.bad.request")
-                    .message("Invalid Argument")
-                    .build()
-            ),
-            Arguments.of(
                 new HttpMessageNotReadableException("message", (HttpInputMessage) null),
                 HttpStatus.BAD_REQUEST,
                 ErrorResponse.builder()
