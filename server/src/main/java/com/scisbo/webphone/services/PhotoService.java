@@ -41,7 +41,7 @@ public class PhotoService {
      * */
     @LogBefore("Retrieving photo with ID=#{#id}")
     @LogAfter("Retrieved photo with ID=#{#result.getId()}")
-    @LogError("Failed to retrieve photo [#{#error}]")
+    @LogError("Failed to retrieve photo [#{#error.toString()}]")
     public PhotoDto getById(String id) {
         return this.mapper.mapPhotoDto(this.repository.getById(id));
     }
@@ -56,7 +56,7 @@ public class PhotoService {
      * */
     @LogBefore("Downloading photo from URL=#{#url}")
     @LogAfter("Downloaded photo with ID=#{#result.getId()}")
-    @LogError("Failed to download photo [#{#error}]")
+    @LogError("Failed to download photo [#{#error.toString()}]")
     public PhotoDto download(String url) {
         byte[] image = null;
         try {
@@ -76,7 +76,7 @@ public class PhotoService {
      * */
     @LogBefore("Deleting photo with ID=#{#id}")
     @LogAfter("Deleted photo with ID=#{#id}")
-    @LogError("Failed to delete photo [error=#{#error}]")
+    @LogError("Failed to delete photo [error=#{#error.toString()}]")
     public void deleteById(String id) {
         this.repository.deleteById(id);
     }
@@ -96,7 +96,7 @@ public class PhotoService {
     @Async("imageOptimizationExecutor")
     @LogBefore(message = "Optimizing photo with ID=#{#id}", id = ThreadLogIdProvider.class)
     @LogAfter(message = "Optimized photo with ID=#{#id}", id = ThreadLogIdProvider.class)
-    @LogError(message = "Failed to optimize photo [error=#{#error}]", level = Level.WARN, id = ThreadLogIdProvider.class)
+    @LogError(message = "Failed to optimize photo [error=#{#error.toString()}]", level = Level.WARN, id = ThreadLogIdProvider.class)
     public void optimize(String id) {
         byte[] input = this.repository.findById(id)
             .map(photo -> photo.getImage().getData())

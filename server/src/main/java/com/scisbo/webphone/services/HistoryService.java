@@ -42,7 +42,7 @@ public class HistoryService {
      * */
     @LogBefore("Retrieving history records for user=#{#user}, page=#{#pageable}")
     @LogAfter("Retrieved history records page: #{#result}")
-    @LogError("Failed to retrieve history records [#{#error}]")
+    @LogError("Failed to retrieve history records [#{#error.toString()}]")
     public Page<HistoryRecordDto> getPageByUser(String user, Pageable pageable) {
         Page<HistoryRecord> history = this.repository.findByUserOrderByStartDateDesc(user, pageable);
         List<Contact> contacts = this.contactRepository.findByUser(user);
@@ -67,7 +67,7 @@ public class HistoryService {
      * */
     @LogBefore("Retrieving history summary for user=#{#user}, contact=#{#contact}, page=#{#pageable}")
     @LogAfter("Retrieved history summary page: #{#result}")
-    @LogError("Failed to retrieve history summary [#{#error}]")
+    @LogError("Failed to retrieve history summary [#{#error.toString()}]")
     public Page<HistoryRecordSummaryDto> getPageSummaryByContactId(
         String user, String contact, Pageable pageable
     ) {
@@ -88,7 +88,7 @@ public class HistoryService {
      * */
     @LogBefore("Creating history record for user=#{#createDto.getUser()}")
     @LogAfter("Created history record with ID=#{#result.getId()}")
-    @LogError("Failed to create history record [#{#error}]")
+    @LogError("Failed to create history record [#{#error.toString()}]")
     public HistoryRecordDto create(CreateHistoryRecordDto createDto) {
         HistoryRecord record = this.repository.save(this.mapper.mapHistoryRecord(createDto));
         ContactSummaryDto contact = findContactSummaryByNumber(
@@ -105,7 +105,7 @@ public class HistoryService {
      * */
     @LogBefore("Deleting history records for user=#{#user}")
     @LogAfter("Deleted history records for user=#{#user}")
-    @LogError("Failed to delete History records [#{#error}]")
+    @LogError("Failed to delete History records [#{#error.toString()}]")
     public void deleteByUser(String user) {
         this.repository.deleteByUser(user);
     }
@@ -117,7 +117,7 @@ public class HistoryService {
      * */
     @LogBefore("Deleting history record by ID=#{#id}")
     @LogAfter("Deleted history record with ID=#{#id}")
-    @LogError("Failed to delete history record [#{#error}]")
+    @LogError("Failed to delete history record [#{#error.toString()}]")
     public void deleteById(String id) {
         this.repository.deleteById(id);
     }

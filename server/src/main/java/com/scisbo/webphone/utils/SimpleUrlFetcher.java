@@ -17,7 +17,7 @@ public class SimpleUrlFetcher implements UrlFetcher {
     @Override
     @LogBefore("Fetching bytes from URL=#{#url}")
     @LogAfter("Fetched #{#result.length} bytes")
-    @LogError("Failed to fetch bytes [#{#error}]")
+    @LogError("Failed to fetch bytes [#{#error.toString()}]")
     public byte[] fetchBytes(String url) throws IOException {
         URLConnection connection = URI.create(url).toURL().openConnection();
         connection.connect();

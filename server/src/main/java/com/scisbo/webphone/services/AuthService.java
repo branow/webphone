@@ -21,25 +21,25 @@ public class AuthService {
     private final HistoryRepository historyRepository;
 
     @LogAfter("Checked delete permission: user=#{#userId}, record=#{#recordId}, result=#{#result}")
-    @LogError("Failed to check delete permission [#{#error}")
+    @LogError("Failed to check delete permission [#{#error.toString()}")
     public boolean canDeleteRecord(String userId, String recordId) {
         return isRecordOwner(userId, recordId);
     }
 
-    @LogAfter("Checked retrieve permission: user=#{#userId}, contact=#{#recordId}, result=#{#result}")
-    @LogError("Failed to check retrieve permission [#{#error}")
+    @LogAfter("Checked retrieve permission: user=#{#userId}, contact=#{#contactId}, result=#{#result}")
+    @LogError("Failed to check retrieve permission [#{#error.toString()}")
     public boolean canGetContact(String userId, String contactId) {
         return isContactOwner(userId, contactId);
     }
 
-    @LogAfter("Checked update permission: user=#{#userId}, contact=#{#recordId}, result=#{#result}")
-    @LogError("Failed to check udpate permission [#{#error}")
+    @LogAfter("Checked update permission: user=#{#userId}, contact=#{#contactId}, result=#{#result}")
+    @LogError("Failed to check udpate permission [#{#error.toString()}")
     public boolean canUpdateContact(String userId, String contactId) {
         return isContactOwner(userId, contactId);
     }
 
-    @LogAfter("Checked create permission: user=#{#userId}, contact=#{#recordId}, result=#{#result}")
-    @LogError("Failed to check create permission [#{#error}")
+    @LogAfter("Checked create permission: user=#{#userId}, contact=#{#contactId}, result=#{#result}")
+    @LogError("Failed to check create permission [#{#error.toString()}")
     public boolean canDeleteContact(String userId, String contactId) {
         return isContactOwner(userId, contactId);
     }

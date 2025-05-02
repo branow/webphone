@@ -64,7 +64,7 @@ public class ImageResizer implements ImageOptimizer {
      */
     @Override
     @LogAfter(message = "Optimized image: #{#input.length} to #{#result.length}", id = ThreadLogIdProvider.class)
-    @LogError(message = "Failed to optimized image: [#{#error}]", id = ThreadLogIdProvider.class)
+    @LogError(message = "Failed to optimized image: [#{#error.toString()}]", id = ThreadLogIdProvider.class)
     public byte[] optimize(byte[] input, String format) {
         try (var bais = new ByteArrayInputStream(input);
              var baos = new ByteArrayOutputStream()) {
