@@ -24,6 +24,10 @@ public class SpelLoggerFactory {
     private final ConversionService conversionService;
 
 
+    public SpelLogger getLogger(Class<?> clazz) {
+        return getLogger(clazz, new SimpleSpelLoggerContext(), new DefaultLogIdProvider());
+    }
+
     public SpelLogger getLogger(Class<?> clazz, LogIdProvider idProvider) {
         return getLogger(clazz, new SimpleSpelLoggerContext(), idProvider);
     }

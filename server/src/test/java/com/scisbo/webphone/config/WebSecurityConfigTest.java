@@ -33,6 +33,7 @@ import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;
 import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.HistoryRecordDto;
 import com.scisbo.webphone.dtos.service.PhotoDto;
+import com.scisbo.webphone.log.core.SpelLoggerFactory;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.HistoryMapper;
 import com.scisbo.webphone.mappers.PageMapper;
@@ -71,6 +72,9 @@ public class WebSecurityConfigTest {
 
     @MockitoBean("authService")
     private AuthService authService;
+
+    @MockitoBean
+    private SpelLoggerFactory spelLoggerFactory;
 
     @ParameterizedTest
     @MethodSource("provideTestRequest_withoutJwt_responseUnauthorized")

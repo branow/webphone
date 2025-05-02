@@ -1,8 +1,11 @@
 package com.scisbo.webphone.controllers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.event.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,6 +30,7 @@ import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.exceptions.InvalidValueException;
 import com.scisbo.webphone.exceptions.PhotoUploadException;
+import com.scisbo.webphone.log.core.SpelLoggerFactory;
 import com.scisbo.webphone.utils.validation.ValidationResultFormatter;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class GlobalExceptionHandler {
 
     private final ValidationResultFormatter validationResultFormatter;
+    private final SpelLoggerFactory loggerFactory;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
@@ -155,7 +160,9 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorResponse handle(Exception e) {
-        System.err.println(e);
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer));
+        this.loggerFactory.getLogger(getClass()).log(Level.ERROR, writer.toString());
         return new ErrorResponse("error.server", "An unexpected error occurred");
     }
 

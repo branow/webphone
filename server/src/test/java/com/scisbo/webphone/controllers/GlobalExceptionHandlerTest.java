@@ -42,6 +42,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.scisbo.webphone.common.web.RestUtils;
+import com.scisbo.webphone.TestLoggingConfig;
 import com.scisbo.webphone.dtos.controller.response.ErrorResponse;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
@@ -52,6 +53,7 @@ import com.scisbo.webphone.utils.validation.ValidationResultFormatter;
 @SpringJUnitConfig({
     GlobalExceptionHandler.class,
     GlobalExceptionHandlerTest.TestController.class,
+    TestLoggingConfig.class,
 })
 public class GlobalExceptionHandlerTest {
 
