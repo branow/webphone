@@ -69,14 +69,6 @@ public class UpdateContactRequestTest {
                 Map.of()
             ),
             Arguments.of(
-                "photo",
-                List.of(
-                    UpdateContactRequest.builder().photo("a".repeat(513)).build()
-                ),
-                List.of("contact.photoUrl.size"),
-                Map.of("min", 0, "max", 512)
-            ),
-            Arguments.of(
                 "bio",
                 List.of(
                     UpdateContactRequest.builder().bio("a".repeat(500)).build()

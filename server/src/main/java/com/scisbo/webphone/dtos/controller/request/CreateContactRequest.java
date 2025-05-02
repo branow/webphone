@@ -20,8 +20,7 @@ public class CreateContactRequest {
     @Size(min = 3, max = 100, message = "{contact.name.size}")
     String name;
 
-    @Size(max = 512, message = "{contact.photoUrl.size}")
-    String photoUrl;
+    String photo;
 
     @Size(max = 500, message = "{contact.bio.size}")
     String bio;

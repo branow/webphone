@@ -14,6 +14,6 @@ public class CreateContactDto {
     String user;
     String name;
     String bio;
-    String photoUrl;
+    String photo;
     List<NumberDto> numbers;
 }

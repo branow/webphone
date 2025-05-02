@@ -37,6 +37,7 @@ import com.scisbo.webphone.log.core.SpelLoggerFactory;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.HistoryMapper;
 import com.scisbo.webphone.mappers.PageMapper;
+import com.scisbo.webphone.mappers.PhotoMapper;
 import com.scisbo.webphone.models.CallStatus;
 import com.scisbo.webphone.models.converters.CallStatusConverter;
 import com.scisbo.webphone.models.converters.NumberTypeConverter;
@@ -51,6 +52,7 @@ import com.scisbo.webphone.utils.validation.SimpleValidationResultFormatter;
     WebSecurityConfig.class,
     ContactMapper.class,
     HistoryMapper.class,
+    PhotoMapper.class,
     PageMapper.class,
     NumberTypeConverter.class,
     CallStatusConverter.class,

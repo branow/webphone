@@ -57,7 +57,7 @@ public class ContactMapper {
             .user(user)
             .name(contact.getName())
             .bio(contact.getBio())
-            .photoUrl(contact.getPhotoUrl())
+            .photo(contact.getPhoto())
             .numbers(numbers)
             .build();
     }
@@ -130,7 +130,7 @@ public class ContactMapper {
             .user(contact.getUser())
             .name(contact.getName())
             .bio(contact.getBio())
-            .photo(contact.getPhotoUrl())
+            .photo(contact.getPhoto())
             .numbers(mapNumber(contact.getNumbers()))
             .build();
     }

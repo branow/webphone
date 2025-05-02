@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.scisbo.webphone.dtos.service.PhotoDto;
+import com.scisbo.webphone.dtos.controller.response.PhotoResponse;
 import com.scisbo.webphone.models.Photo;
 
 @SpringJUnitConfig(PhotoMapper.class)
@@ -16,6 +17,20 @@ public class PhotoMapperTest {
 
     @Autowired
     private PhotoMapper mapper;
+
+
+    @Test
+    public void testMapPhotoResponse() {
+        var photo = PhotoDto.builder()
+            .id("photoId")
+            .image("bytes".getBytes())
+            .build();
+        var expected = PhotoResponse.builder()
+            .id("photoId")
+            .build();
+        var actual = this.mapper.mapPhotoResponse(photo);
+        assertEquals(expected, actual);
+    }
 
     @Test
     public void testMapPhoto() {

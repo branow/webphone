@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(
             "error.photo.upload",
             e.getMessage(),
-            Map.of("url", e.getUrl())
+            Map.of("name", e.getName())
         );
     }
 

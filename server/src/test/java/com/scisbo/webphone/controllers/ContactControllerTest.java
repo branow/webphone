@@ -133,7 +133,7 @@ public class ContactControllerTest {
         var user = "userId";
         var createContactRequest = CreateContactRequest.builder()
             .name("name")
-            .photoUrl("photoUrl")
+            .photo("photo123")
             .bio("bio")
             .numbers(List.of(
                 NumberRequest.builder().type("work").number("1111").build(),
@@ -171,7 +171,7 @@ public class ContactControllerTest {
         var id = "contactId";
         var updateContactRequest = UpdateContactRequest.builder()
             .name("name")
-            .photo("photoUrl")
+            .photo("photo123")
             .bio("bio")
             .numbers(List.of(
                 NumberRequest.builder().type("work").number("1111").build(),

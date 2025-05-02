@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.scisbo.webphone.dtos.service.PhotoDto;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.exceptions.ImageOptimizationException;
-import com.scisbo.webphone.exceptions.PhotoUploadException;
 import com.scisbo.webphone.log.annotation.LogAfter;
 import com.scisbo.webphone.log.annotation.LogBefore;
 import com.scisbo.webphone.log.annotation.LogError;
@@ -17,7 +16,6 @@ import com.scisbo.webphone.mappers.PhotoMapper;
 import com.scisbo.webphone.models.Photo;
 import com.scisbo.webphone.repositories.PhotoRepository;
 import com.scisbo.webphone.utils.ImageOptimizer;
-import com.scisbo.webphone.utils.UrlFetcher;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,8 +27,8 @@ public class PhotoService {
 
     private final PhotoRepository repository;
     private final PhotoMapper mapper;
-    private final UrlFetcher fetcher;
     private final ImageOptimizer imageOptimizer;
+
 
     /**
      * Retrieves a photo by its identifier.
@@ -47,26 +45,15 @@ public class PhotoService {
     }
 
     /**
-     * Downloads an image from the specified URL and saves it to the database.
+     * Uploads a photo to the database.
      *
-     * @param url the URL to download image from
-     * @returns a {@link PhotoDto} object representing the saved photo
-     * @throws PhotoUploadException if an error occurs during download.
-     * @see UrlFetcher
-     * */
-    @LogBefore("Downloading photo from URL=#{#url}")
-    @LogAfter("Downloaded photo with ID=#{#result.getId()}")
-    @LogError("Failed to download photo [#{#error.toString()}]")
-    public PhotoDto download(String url) {
-        byte[] image = null;
-        try {
-            image = fetcher.fetchBytes(url);
-        } catch (Exception e) {
-            throw new PhotoUploadException(url, e);
-        }
+     * @param image the photo as a byte array
+     * @return a {@link PhotoDto} representing the saved photo
+     */
+    public PhotoDto upload(byte[] image) {
         Photo photo = this.mapper.mapPhoto(image);
-        repository.insert(photo);
-        return mapper.mapPhotoDto(photo);
+        this.repository.insert(photo);
+        return this.mapper.mapPhotoDto(photo);
     }
 
     /**

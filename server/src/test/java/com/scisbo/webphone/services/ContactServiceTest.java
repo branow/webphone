@@ -28,14 +28,15 @@ import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.NumberDto;
-import com.scisbo.webphone.dtos.service.PhotoDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
 import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.mappers.PageMapper;
 import com.scisbo.webphone.models.Contact;
+import com.scisbo.webphone.models.Photo;
 import com.scisbo.webphone.models.converters.NumberTypeConverter;
 import com.scisbo.webphone.repositories.ContactRepository;
+import com.scisbo.webphone.repositories.PhotoRepository;
 
 @SpringJUnitConfig({
     ContactService.class,
@@ -56,7 +57,7 @@ public class ContactServiceTest {
     private ContactRepository repository;
 
     @MockitoBean
-    private PhotoService photoService;
+    private PhotoRepository photoRepository;
 
     @Test
     public void testGetPageByUser() {
@@ -134,32 +135,27 @@ public class ContactServiceTest {
         CreateContactDto createContact = CreateContactDto.builder()
             .user(user)
             .name("contact123")
-            .photoUrl("photoUrl")
+            .photo("photot123")
             .numbers(List.of(
                 NumberDto.builder().type("work").number("1111").build(),
                 NumberDto.builder().type("home").number("2222").build()
             ))
             .build();
 
-        PhotoDto photo = PhotoDto.builder()
-            .id("photoId")
-            .image("image".getBytes())
-            .build();
+        Photo photo = Photo.builder().id(createContact.getPhoto()).build();
 
         Contact contact = this.mapper.mapContact(createContact);
 
         when(this.repository.findByUser(user)).thenReturn(contacts);
-        when(this.photoService.download("photoUrl")).thenReturn(photo);
+        when(this.photoRepository.getById(photo.getId())).thenReturn(photo);
 
         ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
-        expected.setPhoto(photo.getId());
         ContactDetailsDto actual = this.service.create(createContact);
 
         assertEquals(expected, actual);
         contact.setPhoto(expected.getPhoto());
 
         verify(this.repository).insert(contact);
-        verify(this.photoService).optimize(photo.getId());
     }
 
     @Test
@@ -210,7 +206,7 @@ public class ContactServiceTest {
         Contact oldContact = contacts.get(0);
         UpdateContactDto updateContact = UpdateContactDto.builder()
             .id(oldContact.getId())
-            .photo("photoUrl")
+            .photo("photo123")
             .name("contact123")
             .bio("bio")
             .numbers(List.of(
@@ -219,19 +215,16 @@ public class ContactServiceTest {
             ))
             .build();
 
-        PhotoDto photo = PhotoDto.builder()
-            .id("photoId")
-            .image("image".getBytes())
-            .build();
+        String oldPhotoId = oldContact.getPhoto();
+        Photo photo = Photo.builder().id(updateContact.getPhoto()).build();
 
         Contact contact = this.mapper.mapContact(updateContact);
 
         when(this.repository.getById(oldContact.getId())).thenReturn(oldContact);
         when(this.repository.findByUser(oldContact.getUser())).thenReturn(contacts);
-        when(this.photoService.download("photoUrl")).thenReturn(photo);
+        when(this.photoRepository.getById(photo.getId())).thenReturn(photo);
 
         ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
-        expected.setPhoto(photo.getId());
         ContactDetailsDto actual = this.service.update(updateContact);
 
         assertEquals(expected, actual);
@@ -246,7 +239,7 @@ public class ContactServiceTest {
             .build();
 
         verify(this.repository).save(toSaveContact);
-        verify(this.photoService).optimize(photo.getId());
+        verify(this.photoRepository).deleteById(oldPhotoId);
     }
 
     @Test
@@ -304,7 +297,7 @@ public class ContactServiceTest {
         this.service.deleteById(id);
 
         verify(this.repository).deleteById(id);
-        verify(this.photoService).deleteById("photoId");
+        verify(this.photoRepository).deleteById("photoId");
     }
 
     @Test
@@ -313,7 +306,7 @@ public class ContactServiceTest {
         when(this.repository.findById(id)).thenReturn(Optional.empty());
         this.service.deleteById(id);
         verify(this.repository, never()).deleteById(id);
-        verify(this.photoService, never()).deleteById(any(String.class));
+        verify(this.photoRepository, never()).deleteById(any(String.class));
     }
 
 }

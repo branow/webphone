@@ -69,7 +69,7 @@ public class ContactMapperTest {
 
         var req = CreateContactRequest.builder()
             .name("name")
-            .photoUrl("photo")
+            .photo("photo")
             .bio("bio")
             .numbers(
                 List.of(NumberRequest.builder().type("work").number("1111").build())
@@ -79,7 +79,7 @@ public class ContactMapperTest {
         var expected = CreateContactDto.builder()
             .user(user)
             .name("name")
-            .photoUrl("photo")
+            .photo("photo")
             .bio("bio")
             .numbers(
                 List.of(NumberDto.builder().type("work").number("1111").build())

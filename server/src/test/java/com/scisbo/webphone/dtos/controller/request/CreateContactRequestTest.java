@@ -61,22 +61,6 @@ public class CreateContactRequestTest {
                 Map.of("min", 3, "max", 100)
             ),
             Arguments.of(
-                "photoUrl",
-                List.of(
-                    CreateContactRequest.builder().photoUrl("a".repeat(512)).build()
-                ),
-                List.of(),
-                Map.of()
-            ),
-            Arguments.of(
-                "photoUrl",
-                List.of(
-                    CreateContactRequest.builder().photoUrl("a".repeat(513)).build()
-                ),
-                List.of("contact.photoUrl.size"),
-                Map.of("min", 0, "max", 512)
-            ),
-            Arguments.of(
                 "bio",
                 List.of(
                     CreateContactRequest.builder().bio("a".repeat(500)).build()

@@ -21,6 +21,7 @@ import com.scisbo.webphone.mappers.ContactMapper;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.Number;
 import com.scisbo.webphone.repositories.ContactRepository;
+import com.scisbo.webphone.repositories.PhotoRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,7 @@ public class ContactService {
 
     private final ContactRepository repository;
     private final ContactMapper mapper;
-    private final PhotoService photoService;
+    private final PhotoRepository photoRepository;
 
     /**
      * Retrieves a paginated list of contacts for the specified user,
@@ -78,7 +79,6 @@ public class ContactService {
     public ContactDetailsDto create(CreateContactDto createDto) {
         Contact contact = this.mapper.mapContact(createDto);
         validateNewContact(contact);
-        uploadPhotoIfPresent(contact);
         this.repository.insert(contact);
         return this.mapper.mapContactDetailsDto(contact);
     }
@@ -104,8 +104,7 @@ public class ContactService {
         Contact newContact = this.mapper.mapContact(updateDto);
         
         if (!Objects.equals(oldContact.getPhoto(), newContact.getPhoto())) {
-            uploadPhotoIfPresent(newContact);
-            deletePhotoIfPresent(oldContact);
+            deletePhotoIfPresent(oldContact.getPhoto());
         }
 
         mergeContactData(oldContact, newContact);
@@ -126,7 +125,7 @@ public class ContactService {
     @LogError("Failed to delete contact [#{#error.toString()}]")
     public void deleteById(String id) {
         this.repository.findById(id).ifPresent(contact -> {
-            deletePhotoIfPresent(contact);
+            deletePhotoIfPresent(contact.getPhoto());
             this.repository.deleteById(id);
         });
     }
@@ -135,6 +134,7 @@ public class ContactService {
         List<Contact> contacts = this.repository.findByUser(contact.getUser());
         checkNameUniqueness(contact, contacts);
         checkNumberUniqueness(contact, contacts);
+        checkPhotoExisting(contact.getPhoto());
     }
 
     private void validateUpdatedContact(Contact contact) {
@@ -145,6 +145,7 @@ public class ContactService {
 
         checkNameUniqueness(contact, contacts);
         checkNumberUniqueness(contact, contacts);
+        checkPhotoExisting(contact.getPhoto());
     }
 
     private void checkNameUniqueness(Contact contact, List<Contact> contacts) {
@@ -170,18 +171,16 @@ public class ContactService {
         }
     }
 
-    private void deletePhotoIfPresent(Contact contact) {
-        if (contact.getPhoto() == null) return;
-        String photoId = contact.getPhoto();
-        this.photoService.deleteById(photoId);
+    private void checkPhotoExisting(String photo) {
+        if (photo != null) {
+            this.photoRepository.getById(photo);
+        }
     }
 
-    private void uploadPhotoIfPresent(Contact contact) {
-        String photoUrl = contact.getPhoto();
-        if (photoUrl == null) return;
-        String photoId = this.photoService.download(photoUrl).getId();
-        this.photoService.optimize(photoId);
-        contact.setPhoto(photoId);
+    private void deletePhotoIfPresent(String photo) {
+        if (photo != null) {
+            this.photoRepository.deleteById(photo);
+        }
     }
 
     private void mergeContactData(Contact oldContact, Contact newContact) {

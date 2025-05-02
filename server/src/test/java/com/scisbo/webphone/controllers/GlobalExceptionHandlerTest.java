@@ -167,12 +167,12 @@ public class GlobalExceptionHandlerTest {
                     .build()
             ),
             Arguments.of(
-                new PhotoUploadException("url", null),
+                new PhotoUploadException("filename", null),
                 HttpStatus.BAD_REQUEST,
                 ErrorResponse.builder()
                     .type("error.photo.upload")
-                    .message("Failed to upload photo at url")
-                    .details(Map.of("url", "url"))
+                    .message("Failed to upload photo: filename")
+                    .details(Map.of("name", "filename"))
                     .build()
             ),
             Arguments.of(

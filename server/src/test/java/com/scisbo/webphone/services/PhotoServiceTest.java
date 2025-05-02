@@ -2,13 +2,11 @@ package com.scisbo.webphone.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,7 +30,6 @@ import com.scisbo.webphone.mappers.PhotoMapper;
 import com.scisbo.webphone.models.Photo;
 import com.scisbo.webphone.repositories.PhotoRepository;
 import com.scisbo.webphone.utils.ImageOptimizer;
-import com.scisbo.webphone.utils.UrlFetcher;
 
 @EnableAsync
 @EnableAspectJAutoProxy
@@ -52,9 +49,6 @@ public class PhotoServiceTest {
 
     @MockitoBean
     private PhotoRepository repository;
-
-    @MockitoBean
-    private UrlFetcher urlFetcher;
 
     @MockitoBean
     private RequestLogIdProvider requestLogIdProvider;
@@ -92,15 +86,12 @@ public class PhotoServiceTest {
     }
 
     @Test
-    public void testDownload() throws IOException {
-        String url = "https://some-url";
+    public void testUpload() {
         byte[] image = "image".getBytes();
         Photo photo = this.mapper.mapPhoto(image);
 
-        doReturn(image).when(this.urlFetcher).fetchBytes(url);
-
         PhotoDto expected = this.mapper.mapPhotoDto(photo);
-        PhotoDto actual = this.service.download(url);
+        PhotoDto actual = this.service.upload(image);
 
         assertEquals(expected, actual);
         verify(this.repository).insert(photo);
