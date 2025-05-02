@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.scisbo.webphone.log.annotation.LogAfter;
 import com.scisbo.webphone.log.annotation.LogError;
+import com.scisbo.webphone.models.Contact;
+import com.scisbo.webphone.models.HistoryRecord;
 import com.scisbo.webphone.repositories.ContactRepository;
 import com.scisbo.webphone.repositories.HistoryRepository;
 
@@ -43,12 +45,14 @@ public class AuthService {
     }
 
     private boolean isContactOwner(String userId, String contactId) {
-        String contactUserId = this.contactRepository.getById(contactId).getUser();
+        String contactUserId = this.contactRepository.findById(contactId)
+            .map(Contact::getUser).orElse(null);
         return Objects.equals(userId, contactUserId);
     }
 
     private boolean isRecordOwner(String userId, String recordId) {
-        String recordUserId = this.historyRepository.getById(recordId).getUser();
+        String recordUserId = this.historyRepository.findById(recordId)
+            .map(HistoryRecord::getUser).orElse(null);
         return Objects.equals(userId, recordUserId);
     }
 

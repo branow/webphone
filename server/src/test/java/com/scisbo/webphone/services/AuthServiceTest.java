@@ -1,5 +1,7 @@
 package com.scisbo.webphone.services;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -54,23 +56,23 @@ public class AuthServiceTest {
 
     private void testIsContactOwner(Check check) {
         String userId = "user1", contactId = "contact1";
-        when(this.contactRepository.getById(contactId))
-            .thenReturn(Contact.builder().user("unknown").build());
+        when(this.contactRepository.findById(contactId))
+            .thenReturn(Optional.of(Contact.builder().user("unknown").build()));
         assertFalse(check.canDo(userId, contactId));
 
-        when(this.contactRepository.getById(contactId))
-            .thenReturn(Contact.builder().user(userId).build());
+        when(this.contactRepository.findById(contactId))
+            .thenReturn(Optional.of(Contact.builder().user(userId).build()));
         assertTrue(check.canDo(userId, contactId));
     }
 
     private void testIsRecordOwner(Check check) {
         String userId = "user1", recordId = "record1";
-        when(this.historyRepository.getById(recordId))
-            .thenReturn(HistoryRecord.builder().user("unknown").build());
+        when(this.historyRepository.findById(recordId))
+            .thenReturn(Optional.of(HistoryRecord.builder().user("unknown").build()));
         assertFalse(check.canDo(userId, recordId));
 
-        when(this.historyRepository.getById(recordId))
-            .thenReturn(HistoryRecord.builder().user(userId).build());
+        when(this.historyRepository.findById(recordId))
+            .thenReturn(Optional.of(HistoryRecord.builder().user(userId).build()));
         assertTrue(check.canDo(userId, recordId));
     }
 
