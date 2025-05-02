@@ -1,11 +1,7 @@
 package com.scisbo.webphone.common.data;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
