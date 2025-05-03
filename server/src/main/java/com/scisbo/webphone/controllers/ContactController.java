@@ -38,14 +38,16 @@ public class ContactController {
     private final ContactService service;
     private final ContactMapper mapper;
 
+
     @GetMapping("/user/{userId}")
     @PreAuthorize("#userId == authentication.name")
-    public ResponseEntity<PageResponse<ContactResponse>> getPageByUser(
+    public ResponseEntity<PageResponse<ContactResponse>> getByUser(
         @PathVariable("userId") String userId,
+        @RequestParam(name = "search", required = false) String search,
         @RequestParam(name = "number", required = false, defaultValue = "0") int number,
         @RequestParam(name = "size", required = false, defaultValue = "50") int size
     ) {
-        Page<ContactDto> page = this.service.getPageByUser(userId, PageRequest.of(number, size));
+        Page<ContactDto> page = this.service.getByUser(userId, search, PageRequest.of(number, size));
         PageResponse<ContactResponse> res = this.mapper.mapContactResponse(page);
         return ResponseEntity.ok(res);
     }

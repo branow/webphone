@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.function.Predicate;
 
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
@@ -29,15 +30,20 @@ import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.Number;
 import com.scisbo.webphone.models.NumberType;
+import com.scisbo.webphone.repositories.impl.CustomContactRepositoryImpl;
 
 @EnableMongoRepositories
-@SpringJUnitConfig(ContactRepository.class)
+@SpringJUnitConfig({
+    ContactRepository.class,
+    CustomContactRepositoryImpl.class,
+})
 public class ContactRepositoryIT extends EmbeddedMongoDbAbstractIT {
 
     private static final String COLLECTION = "contacts";
 
     @Autowired
     private MongoTemplate template;
+
     @Autowired
     private ContactRepository repository;
 
@@ -104,6 +110,49 @@ public class ContactRepositoryIT extends EmbeddedMongoDbAbstractIT {
             Arguments.of("2938c3e9-dad9-4258-9806-968a05fc3be5", 5, 4)
         );
     }
+
+
+    @ParameterizedTest
+    @MethodSource("provideTestFindByUserSearchOrderByName")
+    public void testFindByUserSearchOrderByName(String user, String query, int page, int size) {
+        Collection<Document> history = this.template.insert(TestDataUtils.contacts(), COLLECTION);
+
+        Predicate<Contact> search = c ->
+            c.getName().contains(query) ||
+            (c.getBio() != null && c.getBio().contains(query)) ||
+            c.getNumbers().stream().anyMatch(n -> n.getNumber().contains(query));
+
+        List<Contact> contacts = history.stream()
+            .map(TestObjectsUtils::mapContact)
+            .filter(c -> c.getUser().equals(user))
+            .filter(search)
+            .sorted((c1, c2) -> c1.getName().compareTo(c2.getName()))
+            .toList();
+
+        List<Contact> pageContacts = contacts.stream()
+            .skip(page * size)
+            .limit(size)
+            .toList();
+        
+        Page<Contact> expected = new PageImpl<>(pageContacts, PageRequest.of(page, size), contacts.size());
+        Page<Contact> actual = this.repository.findByUserAndKeywordOrderByName(user, query, PageRequest.of(page, size));
+
+        assertEquals(expected.getSize(), actual.getSize());
+        assertEquals(expected.getTotalPages(), actual.getTotalPages());
+        assertEquals(expected.getNumber(), actual.getNumber());
+        assertEquals(expected.toList(), actual.toList());
+    }
+
+    private static Stream<Arguments> provideTestFindByUserSearchOrderByName() {
+        return Stream.of(
+            Arguments.of("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0", "", 1, 2),
+            Arguments.of("676f5f8a-4af6-4165-86b1-dd264bb68669", "a", 0, 5),
+            Arguments.of("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0", "e ", 1, 1),
+            Arguments.of("676f5f8a-4af6-4165-86b1-dd264bb68669", "4", 0, 3),
+            Arguments.of("2938c3e9-dad9-4258-9806-968a05fc3be5", ".", 0, 2)
+        );
+    }
+
 
     @ParameterizedTest
     @MethodSource("provideTestFindByUser")

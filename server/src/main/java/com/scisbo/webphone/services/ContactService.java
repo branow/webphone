@@ -33,19 +33,25 @@ public class ContactService {
     private final ContactMapper mapper;
     private final PhotoRepository photoRepository;
 
+
     /**
-     * Retrieves a paginated list of contacts for the specified user,
+     * Retrieves a paginated list of contacts for the specified user and keyword
      * ordered by name.
      *
      * @param user      the user's identifier
+     * @param keyword   the keyword to search
      * @param pageable  the pagination information
-     * @returns a page of {@link ContactDto}
+     * @return a page of {@link ContactDto}
      * */
     @LogBefore("Retrieving contacts for user=#{#user}, page=#{#pageable}")
     @LogAfter("Retrieved contacts: #{#result}")
     @LogError("Failed to retrieve contacts [#{#error.toString()}]")
-    public Page<ContactDto> getPageByUser(String user, Pageable pageable) {
-        return this.repository.findByUserOrderByName(user, pageable)
+    public Page<ContactDto> getByUser(String user, String keyword, Pageable pageable) {
+        if (keyword == null || keyword.isEmpty()) {
+            return this.repository.findByUserOrderByName(user, pageable)
+                .map(this.mapper::mapContactDto);
+        }
+        return this.repository.findByUserAndKeywordOrderByName(user, keyword, pageable)
             .map(this.mapper::mapContactDto);
     }
 

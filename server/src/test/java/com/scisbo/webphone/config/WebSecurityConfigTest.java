@@ -278,7 +278,7 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(get("/api/contacts/user/user1"), "user1"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.contactService.getPageByUser(any(), any()))
+                    when(map.contactService.getByUser(any(), any(), any()))
                         .thenReturn(new PageImpl<>(List.of()));
                 }
             ),

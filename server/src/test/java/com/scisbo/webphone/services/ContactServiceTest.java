@@ -60,7 +60,34 @@ public class ContactServiceTest {
     private PhotoRepository photoRepository;
 
     @Test
-    public void testGetPageByUser() {
+    public void testGetByUser_withKeyword() {
+        String user = "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0";
+        String keyword = "keyword";
+        int totalPages = 1;
+        Pageable pageable = PageRequest.of(0, 10);
+
+        List<Contact> contacts = Stream
+            .generate(() -> Contact.builder()
+                .id(UUID.randomUUID().toString())
+                .build())
+            .limit(10)
+            .toList();
+
+        when(this.repository.findByUserAndKeywordOrderByName(user, keyword, pageable))
+                .thenReturn(new PageImpl<>(contacts, pageable, totalPages));
+
+        List<ContactDto> expected = contacts.stream()
+            .map(this.mapper::mapContactDto)
+            .toList();
+
+        Page<ContactDto> actual = this.service.getByUser(user, keyword, pageable);
+
+        assertEquals(totalPages, actual.getTotalPages());
+        assertEquals(expected, actual.toList());
+    }
+
+    @Test
+    public void testGetByUser_withoutKeyword() {
         String user = "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0";
         int totalPages = 1;
         Pageable pageable = PageRequest.of(0, 10);
@@ -79,7 +106,7 @@ public class ContactServiceTest {
             .map(this.mapper::mapContactDto)
             .toList();
 
-        Page<ContactDto> actual = this.service.getPageByUser(user, pageable);
+        Page<ContactDto> actual = this.service.getByUser(user, "", pageable);
 
         assertEquals(totalPages, actual.getTotalPages());
         assertEquals(expected, actual.toList());

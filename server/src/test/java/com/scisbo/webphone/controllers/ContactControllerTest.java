@@ -62,8 +62,9 @@ public class ContactControllerTest {
     }
 
     @Test
-    public void testGetPageByUser() throws Exception {
+    public void testGetByUser() throws Exception {
         var user = "userId";
+        var search = "search";
         int number = 0, size = 10, totalPages = 4;
         var pageable = PageRequest.of(number, size);
         var contacts = TestObjectsUtils.contacts().stream()
@@ -71,7 +72,7 @@ public class ContactControllerTest {
             .toList();
         var pageOfContacts = new PageImpl<>(contacts, pageable, totalPages);
 
-        when(this.service.getPageByUser(user, pageable)).thenReturn(pageOfContacts);
+        when(this.service.getByUser(user, search, pageable)).thenReturn(pageOfContacts);
 
         var response = RestUtils.toJson(this.mapper.mapContactResponse(pageOfContacts));
 
@@ -80,6 +81,7 @@ public class ContactControllerTest {
                 get("/api/contacts/user/{user}", user)
                     .queryParam("number", String.valueOf(number))
                     .queryParam("size", String.valueOf(size))
+                    .queryParam("search", search)
             )
             .andExpect(status().isOk())
             .andExpect(content().string(response));
@@ -95,15 +97,13 @@ public class ContactControllerTest {
             .toList();
         var pageOfContacts = new PageImpl<>(contacts, pageable, totalPages);
 
-        when(this.service.getPageByUser(user, pageable)).thenReturn(pageOfContacts);
+        when(this.service.getByUser(user, null, pageable)).thenReturn(pageOfContacts);
 
         var response = RestUtils.toJson(this.mapper.mapContactResponse(pageOfContacts));
 
         this.mockMvc
             .perform(
                 get("/api/contacts/user/{user}", user)
-                    .queryParam("number", String.valueOf(number))
-                    .queryParam("size", String.valueOf(size))
             )
             .andExpect(status().isOk())
             .andExpect(content().string(response));

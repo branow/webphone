@@ -28,7 +28,7 @@ public class EmbeddedMongoDb {
 
     private static final String CONNECTING_STRING = "mongodb://%s:%d";
 
-    private static int port = 27017;
+    private static int port = 27018;
     
     private synchronized static int nextPort() {
         return port++;

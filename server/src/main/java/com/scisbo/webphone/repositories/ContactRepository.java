@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Contact;
 
-public interface ContactRepository extends MongoRepository<Contact, String> {
+public interface ContactRepository extends MongoRepository<Contact, String>, CustomContactRepository {
 
     public static final String ENTITY_NAME = "contact";
 
