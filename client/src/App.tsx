@@ -1,7 +1,8 @@
 import { FC } from "react"
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import PageLayout from "./components/PageLayout";
+import AuthProvider from "./providers/AuthProvider";
 import SipProvider from "./providers/SipProvider";
 import CallProvider from "./providers/CallProvider";
 import SipAccountPage from "./pages/account/SipAccountPage";
@@ -10,15 +11,22 @@ import ContactsPage from "./pages/contacts/ContactsPage";
 import ContactInfoPage from "./pages/contacts/info/ContactInfoPage";
 import ContactCreatePage from "./pages/contacts/edit/ContactCreatePage";
 import ContactUpdatePage from "./pages/contacts/edit/ContactUpdatePage";
-import FeatureNumbersPage from "./pages/contacts/feature-numbers/FeatureNumbersPage";
+import FeatureCodesPage from "./pages/contacts/feature-codes/FeatureCodesPage";
 import DialPadPage from "./pages/dialpad/DialPadPage";
 import CallPage from "./pages/call/CallPage";
 import SettingsPage from "./pages/setting/SettingsPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 import HomePage from "./pages/HomePage";
-import { queryClient } from "./lib/query";
+import TestDataPage from "./pages/dev/TestDataPage";
 import "./App.css";
 
+
+const devRoutes = import.meta.env.WEBPHONE_PROFILE === "dev" ? [
+  {
+    path: "/dev/test-data",
+    element: <TestDataPage />,
+  }
+] : [];
 
 const router = createBrowserRouter([
   {
@@ -52,7 +60,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/contacts/import/feature-codes",
-        element: <FeatureNumbersPage />
+        element: <FeatureCodesPage />
       },
       {
         path: "/history",
@@ -70,19 +78,24 @@ const router = createBrowserRouter([
         path: "/settings",
         element: <SettingsPage />
       },
+      ...devRoutes
     ]
   }
 ]);
+
+const queryClient = new QueryClient();
 
 const App: FC = () => {
   return (
       <div className="app">
         <QueryClientProvider client={queryClient}>
-          <SipProvider>
-            <CallProvider>
-              <RouterProvider router={router} />
-            </CallProvider>
-          </SipProvider>
+          <AuthProvider>
+            <SipProvider>
+              <CallProvider>
+                <RouterProvider router={router} />
+              </CallProvider>
+            </SipProvider>
+          </AuthProvider>
         </QueryClientProvider>
       </div>
   );
