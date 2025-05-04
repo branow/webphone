@@ -1,4 +1,6 @@
-import { uuid } from "../util/identifier.ts";
+import { Query } from "@tanstack/react-query";
+import { RequestBuilder, Page, QueryPageOptions, BACKEND_ORIGIN, logRequestResponse, handleApiError } from "./backend.ts";
+import { ensureAuthentication } from "./keycloak.ts";
 
 export enum NumberType {
   WORK = "work",
@@ -6,140 +8,144 @@ export enum NumberType {
   MOBILE = "mobile",
 }
 
-export interface Number {
-  id: string;
+export type Number = {
   type: NumberType;
   number: string;
 }
 
-export interface Contact {
+type ContactBase = {
   id: string;
   name: string;
-  numbers: Number[];
   photo?: string;
-  bio?: string;
+  numbers: Number[];
 }
 
-export enum QueryKeys {
-  contacts = "contacts",
-  contact = "contact",
-  features = "features",
-}
+export type Contact = ContactBase;
+export type ContactDetails = ContactBase & { bio?: string };
 
-interface Data {
-  contacts: Contact[];
-  features: Contact[];
-}
-
-let contacts: Contact[] | null = null;
-
-
-export async function get(id: string): Promise<Contact> {
-  console.log(`Fetching contact ${id}`)
-  return fetchAll().then(contacts => {
-    const contact = contacts.find(contact => contact.id === id)
-    if (!contact) {
-      throw new Error("Contact not found");
-    }
-    return contact;
-  });
-}
-
-export async function getAll(): Promise<Contact[]> {
-  console.log('Fetching contacts');
-  return fetchAll();
-}
-
-async function fetchAll(): Promise<Contact[]> {
-  if (contacts) {
-    return contacts;
-  }
-
-  const response = await fetch('/data.json');
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch contacts: ${response.status} ${response.statusText}`)
-  }
-
-  const data: Data = await response.json();
-  contacts = data.contacts;
-  return data.contacts;
-}
-
-export async function save(contact: Contact): Promise<Contact> {
-  console.log("Save contact", contact.id);
-
-  await fetchAll()
-
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      const oldContact = contacts!.find(c => c.id === contact.id)
-      if (oldContact) {
-        oldContact.name = contact.name;
-        oldContact.numbers = contact.numbers;
-        oldContact.photo = contact.photo;
-        oldContact.bio = contact.bio;
-      } else {
-        contact.id = uuid();
-        contacts!.push(contact);
-      }
-      resolve(contact);
-    });
-  });
-}
-
-export async function remove(id: string): Promise<boolean> {
-  console.log("Deleting contact");
-
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      contacts = contacts!.filter(contact => contact.id !== id);
-      resolve(true);
-    }, 1000);
-  })
-}
-
-export async function getFeatureAll(): Promise<Contact[]> {
-  const response = await fetch('/data.json');
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`)
-  }
-
-  const data: Data = await response.json();
-  return data.features;
-}
-
-export async function importContacts(newContacts: Contact[]): Promise<boolean> {
-  fetchAll();
-
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      newContacts = newContacts.map(c => { return {
-        id: uuid(),
-        name: c.name,
-        numbers: c.numbers,
-        bio: c.bio,
-      }})
-      contacts!.push(...newContacts);
-      resolve(true);
-    }, 1000)
-  });
-}
-
-export interface Contact {
-  id: string;
+type ContactSave = {
   name: string;
-  numbers: Number[];
-  photo?: string;
+  photoUrl?: string;
   bio?: string;
+  numbers: Number[];
+}
+
+export type CreateContact = ContactSave;
+export type UpdateContact = ContactSave & { id: string };
+
+export const QueryKeys = {
+  contacts: (query: string, size = 25): string[] => ["contact", query, `${size}`],
+  contact: (id: string): string[] => ["contact", id],
+  featureCodes: (query: string): string[] => ["contact", "feature-codes", query],
+  predicate: (query: Query) => {
+    return query.queryKey.includes("contact");
+  }
+}
+
+export async function get(id: string): Promise<ContactDetails> {
+  const { token } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/${id}`))
+    .get().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<ContactDetails>())
+}
+
+export async function getAll({ query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/user/${subject}`)
+      .param("search", query)
+      .param("number", number)
+      .param("size", size))
+    .get().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Page<Contact>>())
+}
+
+export async function create(contact: CreateContact): Promise<ContactDetails> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/user/${subject}`))
+    .post().bearer(token).bodyJson(contact).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<ContactDetails>())
+}
+
+export async function update(contact: UpdateContact): Promise<ContactDetails> {
+  const { token } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/${contact.id}`))
+    .put().bearer(token).bodyJson(contact).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<ContactDetails>())
+}
+
+export async function remove(id: string): Promise<void> {
+  const { token } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/${id}`))
+    .delete().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .process();
+}
+
+export async function getFeatureCodes({ query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/user/${subject}/feature-codes`)
+      .param("search", query)
+      .param("number", number)
+      .param("size", size))
+    .get().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Page<Contact>>())
+}
+
+export async function createBatch(contacts: CreateContact[]): Promise<Page<Contact>> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/user/${subject}/batch`))
+    .post().bearer(token).bodyJson(contacts).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Page<Contact>>())
 }
 
 export default {
   QueryKeys,
-  getAll,
   get,
-  save,
+  getAll,
+  create,
+  update,
   remove,
-  getFeatureAll,
+  getFeatureCodes,
+  createBatch,
 };

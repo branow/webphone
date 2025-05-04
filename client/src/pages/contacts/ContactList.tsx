@@ -1,68 +1,50 @@
-import { FC, useState } from "react";
-import { useNavigate } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { FaPlus } from "react-icons/fa";
+import { FC, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import ContactPreview from "./ContactPreview";
-import SearchBar from "../../components/SearchBar";
 import PendingTab from "../../components/PendingTab";
 import ErrorMessage from "../../components/ErrorMessage";
-import Button from "../../components/Button";
-import { Contact, QueryKeys, getAll } from "../../services/contacts";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll.ts";
+import { Page } from "../../services/backend.ts";
+import { Contact } from "../../services/contacts.ts";
 import "./ContactList.css";
 
-const ContactList: FC = () => {
-  const navigate = useNavigate();
-  const [query, setQuery] = useState<string>("");
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: [QueryKeys.contacts],
-    queryFn: getAll,
+interface Props {
+  queryKey: string[]
+  queryFunc: (page: number) => Promise<Page<Contact>>
+}
+
+const ContactList: FC<Props> = ({ queryKey, queryFunc }) => {
+  const fetching = useInfiniteQuery({
+    queryKey: queryKey,
+    queryFn: ({ pageParam }) => queryFunc(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.number < lastPage.totalPages ? lastPage.number + 1 : null,
   });
 
-  const handleQueryChange = (query: string) => {
-    setQuery(query);
-  }
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const searchFilter = (contact: Contact): boolean => {
-    const searchQuery = query.toLowerCase();
-    return contact.name.toLowerCase().includes(searchQuery)
-    || contact.numbers.filter(number => number.number.includes(searchQuery)).length !== 0
-    || (contact.bio !== undefined && contact.bio.toLowerCase().includes(searchQuery));
-  }
+  useInfiniteScroll({
+    scrollRef: scrollRef,
+    loadFactor: 0.9,
+    move: fetching.fetchNextPage
+  });
 
-  if (isPending) {
-    return <PendingTab text="LOADING" />
-  }
-
-  if (isError) {
-    return <ErrorMessage error={error ? error.message : ""} />
-  }
+  const data = fetching.data;
 
   return (
-    <div className="contact-list-ctn">
-      {
-        data.length === 0 ? (
-          <div>You do not have any contact yet</div>
-        ) : (
-          <div className="contact-list">
-            <div className="contact-list-header">
-              <SearchBar onQueryChange={handleQueryChange} />
-              <Button
-                className="green-btn contact-list-add-btn"
-                Icon={FaPlus}
-                onClick={() => navigate("/contacts/create")}
-              />
-            </div>
-            <div className="contact-list-body">
-              {data.filter(searchFilter).map(contact => (
-                <ContactPreview
-                  key={contact.id}
-                  contact={contact}
-                />
-              ))}
-            </div>
-          </div>
-        )
-      }
+    <div className="contact-list-body" ref={scrollRef}>
+      {data && data.pages.map(page => (
+        <div key={page.number}>
+          {page.items.map(contact => (
+            <ContactPreview
+              key={contact.id}
+              contact={contact}
+            />
+          ))}
+        </div>
+      ))}
+      {fetching.isError && <ErrorMessage error={fetching.error} />}
+      {fetching.isLoading && <PendingTab text="LOADING" />}
     </div>
   );
 }

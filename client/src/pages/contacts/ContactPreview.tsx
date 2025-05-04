@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
 import Photo from "../../components/Photo";
-import { Contact } from "../../services/contacts";
 import ContactNumbers from "./ContactNumbers";
+import { Contact } from "../../services/contacts";
 import "./ContactPreview.css";
 
 interface Props {
@@ -24,7 +24,7 @@ const ContactPreview: FC<Props> = ({ contact, onClick }) => {
   return (
     <div className="contact-preview" onClick={handleOnClick}>
       <div className="contact-preview-photo">
-        <Photo src={contact.photo} size="50px" alt="photo" />
+        <Photo photo={contact.photo} size={60} alt="photo" />
       </div>
       <div className="contact-preview-info">
         <div className="contact-preview-info-name">{contact.name}</div>

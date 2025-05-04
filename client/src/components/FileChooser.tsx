@@ -1,17 +1,17 @@
-import { FC, useRef, ChangeEventHandler } from "react";
+import { FC, ChangeEventHandler, RefObject } from "react";
 
 interface Trigger {
   fire: () => void;
 }
 
 interface Props {
+  inputRef: RefObject<HTMLInputElement>;
   trigger: Trigger;
   onLoadFile: (file: File) => void;
   accept?: string;
 }
 
-const FileChooser: FC<Props> = ({ trigger, onLoadFile, accept }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+const FileChooser: FC<Props> = ({ inputRef, trigger, onLoadFile, accept }) => {
 
   trigger.fire = () => {
     if (inputRef.current) {
@@ -27,15 +27,13 @@ const FileChooser: FC<Props> = ({ trigger, onLoadFile, accept }) => {
   };
 
   return (
-    <>
-      <input 
-        type="file"
-        accept={accept}
-        ref={inputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
-    </>
+    <input
+      ref={inputRef}
+      type="file"
+      accept={accept}
+      style={{ display: "none" }}
+      onChange={handleFileChange}
+    />
   );
 };
 

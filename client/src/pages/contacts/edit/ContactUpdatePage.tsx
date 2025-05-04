@@ -5,8 +5,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import PendingTab from "../../../components/PendingTab";
 import NotFoundPage from "../../errors/NotFoundPage";
 import ContactEditForm from "./ContactEditForm";
-import { queryClient } from "../../../lib/query.ts";
-import { QueryKeys, Contact, get } from "../../../services/contacts.ts";
+import ContactApi from "../../../services/contacts.ts";
 
 const ContactEditPage: FC = () => {
   const params = useParams<{ id: string }>();
@@ -16,27 +15,27 @@ const ContactEditPage: FC = () => {
     return <NotFoundPage />
   }
 
-  const cachedContacts: Contact[] = queryClient.getQueryData([QueryKeys.contacts]) || [];
-  const cachedContact = cachedContacts.find(contact => contact.id === contactId);
-  
   const fetchingContact = useQuery({
-    queryKey: [QueryKeys.contact, contactId],
-    queryFn: () => get(contactId),
-    enabled: !cachedContact,
-    initialData: cachedContact,
+    queryKey: ContactApi.QueryKeys.contact(contactId),
+    queryFn: () => ContactApi.get(contactId),
   });
 
   if (fetchingContact.isError) {
     return (<ErrorMessage error={fetchingContact.error}/>);
   }
 
-  if (fetchingContact.isLoading) {
+  if (fetchingContact.isPending) {
     return (<PendingTab text="FETCHING" message="Please wait" />);
   }
 
-  const contact = fetchingContact.data!;
+  const contact = fetchingContact.data;
 
-  return (<ContactEditForm contact={contact} />);
+  return (
+    <ContactEditForm
+      contact={contact}
+      mutationFunc={(contact) => ContactApi.update({ ...contact })}
+    />
+  );
 }
 
 export default ContactEditPage;

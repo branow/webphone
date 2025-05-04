@@ -1,23 +1,24 @@
 import { FC, useState, ChangeEvent } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
-import Button from "../../../components/Button";
 import TextInput from "../../../components/TextInput";
-import { Number, NumberType } from "../../../services/contacts.ts";
+import Button from "../../../components/Button";
+import { EditableNumber } from "./ContactEditForm";
+import { NumberType } from "../../../services/contacts.ts";
 import { formatPhoneNumber, extractPhoneNumber } from "../../../util/format.ts";
 import "./NumberEditForm.css";
 
 interface Props {
-  number: Number;
-  setNumber: (numbers: Number) => void;
-  deleteNumber: () => void;
+  number: EditableNumber;
+  updateNumber: (number: EditableNumber) => void;
+  deleteNumber: (number: EditableNumber) => void;
 }
 
 const getNumberTypes = () => {
   return [NumberType.HOME, NumberType.WORK, NumberType.MOBILE];
 }
 
-const NumberEditForm: FC<Props> = ({ number, setNumber, deleteNumber }) => {
-  const [localNumber, setLocalNumber] = useState<Number>(number);
+const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber }) => {
+  const [localNumber, setLocalNumber] = useState<EditableNumber>(number);
 
   const validateNumber = (number: string): string => {
     if (!number) return "Number is mandatory";
@@ -27,15 +28,14 @@ const NumberEditForm: FC<Props> = ({ number, setNumber, deleteNumber }) => {
   const handleDelete = deleteNumber;
 
   const handleNumberUnfocus = () => {
-    console.log('handel unfocus');
-    setNumber({ ...localNumber });
+    updateNumber({ ...localNumber });
   };
 
   const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const typeIndex = event.target.selectedIndex;
     const newType = getNumberTypes()[typeIndex];
     setLocalNumber({ ...localNumber, type: newType });
-    setNumber({ ...localNumber, type: newType });
+    updateNumber({ ...localNumber, type: newType });
   }
 
   const handleNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +67,7 @@ const NumberEditForm: FC<Props> = ({ number, setNumber, deleteNumber }) => {
         <Button
           className="transparent-btn delete-btn number-edit-form-delete-btn"
           Icon={BsFillTrash3Fill}
-          onClick={handleDelete}
+          onClick={() => handleDelete(number)}
         />
     </div>
   );

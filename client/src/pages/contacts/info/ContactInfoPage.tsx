@@ -1,10 +1,9 @@
-import { FC, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { FC, useState, useRef } from "react";
+import { useNavigate, useParams} from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoIosArrowBack } from "react-icons/io";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
-import { queryClient } from "../../../lib/query";
 import Photo from "../../../components/Photo";
 import Button from "../../../components/Button";
 import PendingTab from "../../../components/PendingTab";
@@ -15,12 +14,11 @@ import ChapterBar from "./ChapterBar";
 import DeleteContactWindow from "../DeleteContactWindow";
 import ContactNumbers from "../ContactNumbers";
 import HistoryNodes from "../../history/HistoryNodes";
-import ContactApi, { Contact } from "../../../services/contacts.ts";
-import HistoryApi, { Node } from "../../../services/history.ts";
+import ContactApi from "../../../services/contacts.ts";
+import HistoryApi from "../../../services/history.ts";
 import "./ContactInfoPage.css";
 
 const ContactInfoPage: FC = () => {
-  const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const contactId: string = params.id || "";
 
@@ -28,36 +26,29 @@ const ContactInfoPage: FC = () => {
     return <NotFoundPage />
   }
 
-  const cachedContacts: Contact[] = queryClient.getQueryData([ContactApi.QueryKeys.contacts]) || [];
-  const cachedContact = cachedContacts.find(contact => contact.id === contactId);
-  
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const fetchingContact = useQuery({
-    queryKey: [ContactApi.QueryKeys.contact, contactId],
+    queryKey: ContactApi.QueryKeys.contact(contactId),
     queryFn: () => ContactApi.get(contactId),
-    enabled: !cachedContact,
-    initialData: cachedContact,
   })
 
-  const fetchingHistory = useQuery({
-    queryKey: [HistoryApi.QueryKeys.history],
-    queryFn: HistoryApi.getAll,
-  });
-  
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
-  const deletingContact = useMutation({
+
+  const removingContact = useMutation({
     mutationFn: () => ContactApi.remove(contactId),
     onSuccess: () => {
+      queryClient.invalidateQueries({ predicate: ContactApi.QueryKeys.predicate });
+      queryClient.invalidateQueries({ predicate: HistoryApi.QueryKeys.predicate });
       navigate("/contacts");
-      queryClient.invalidateQueries({ queryKey: [ContactApi.QueryKeys.contacts] });
-      queryClient.invalidateQueries({ queryKey: [ContactApi.QueryKeys.contact, contact.id] });
     }
   });
 
   const call = (number: string) => navigate(`/call/${number}`);
 
-  const handleDelete = () => {
-    deletingContact.mutate();
-  }
+  const handleDelete = () => removingContact.mutate()
 
   const handleDeleteIntend = () => setIsConfirmingDelete(true);
 
@@ -67,22 +58,15 @@ const ContactInfoPage: FC = () => {
     return (<ErrorMessage error={fetchingContact.error}/>);
   }
 
-  if (fetchingContact.isLoading) {
+  if (fetchingContact.isPending) {
     return (<PendingTab text="FETCHING" message="Please wait" />);
   }
 
-  if (deletingContact.isPending) {
+  if (removingContact.isPending) {
     return (<PendingTab text="DELETING" message="Please wait" />);
   }
 
   const contact = fetchingContact.data!;
-
-  let history: Node[] | undefined;
-  if (fetchingHistory.isSuccess) { 
-    history = fetchingHistory.data!
-      .filter(node => contact.numbers
-        .find(number => number.number === node.number));
-  }
 
   return (
     <div className="contact-info-ctn">
@@ -115,10 +99,10 @@ const ContactInfoPage: FC = () => {
         </div>
       </div>
 
-      <div className="contact-info">
+      <div className="contact-info" ref={scrollRef}>
         <Chapter>
           <div className="contact-info-header">
-            <Photo src={contact.photo} size="100px" alt={contact.name} />
+            <Photo photo={contact.photo} size={100} alt={contact.name} />
             <div className="contact-info-header-name">{contact.name}</div>
           </div>
         </Chapter>
@@ -134,20 +118,15 @@ const ContactInfoPage: FC = () => {
         <Chapter title="Contact">
           <ContactNumbers numbers={contact.numbers} call={call} />
         </Chapter>
-            
 
         <ChapterBar />
 
         <Chapter title="History">
-          {fetchingHistory.isLoading && (
-            <PendingTab text="LOADING" message="Please wait" />
-          )}
-          <ErrorMessage error={fetchingHistory.error} />
-          {history && (
-            history.length === 0 ? 
-              (<div>There is no history with this contact yet.</div>) : 
-              (<HistoryNodes nodes={history!} contacts={[ contact ]} />)
-          )}
+          <HistoryNodes
+            scrollRef={scrollRef}
+            queryKey={HistoryApi.QueryKeys.historyByContact(contactId, 10)}
+            queryFunc={(page) => HistoryApi.getAllByContact(contactId, { number: page, size: 10 })}
+          />
         </Chapter>
 
       </div>
@@ -156,4 +135,3 @@ const ContactInfoPage: FC = () => {
 }
 
 export default ContactInfoPage;
-
