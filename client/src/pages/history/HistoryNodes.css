@@ -9,6 +9,7 @@
 .history-nodes-date {
   color: var(--c-subtext);
   font-size: 12px;
+  padding-top: 5px;
   font-weight: bold;
 }
 

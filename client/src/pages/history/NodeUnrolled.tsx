@@ -1,43 +1,45 @@
 import { FC, MouseEvent } from "react";
 import { useNavigate, Link } from "react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { ImPhone } from "react-icons/im";
-import { queryClient } from "../../lib/query.ts";
-import NumberTypeIcon from "../../components/NumberTypeIcon";
 import Photo from "../../components/Photo";
 import DurationInMs from "../../components/DurationInMs";
 import Button from "../../components/Button";
-import { Contact } from "../../services/contacts.ts";
-import { Node, CallStatus, QueryKeys, remove } from "../../services/history.ts";
+import HistoryApi, { Record, CallStatus } from "../../services/history.ts";
 import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
 import "./NodeUnrolled.css";
 
 interface Props {
-  node: Node;
-  contact?: Contact;
+  record: Record;
   rollUp: () => void;
 }
 
-const NodeUnrolled: FC<Props> = ({ node, rollUp, contact }) => {
+const NodeUnrolled: FC<Props> = ({ record, rollUp }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const removing = useMutation({
-    mutationFn: remove,
+    mutationFn: HistoryApi.remove,
     onSuccess: () => {
-      navigate("/history");
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.history] });
+      queryClient.invalidateQueries({ predicate: HistoryApi.QueryKeys.predicate });
     }
   });
 
   const handleRemove = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    removing.mutate(node.id);
+    removing.mutate(record.id);
   }
 
   const handleCall = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    navigate(`/call/${extractPhoneNumber(node.number)}`);
+    navigate(`/call/${extractPhoneNumber(record.number)}`);
+  }
+
+  const contact = record.contact;
+
+  const duration = () => {
+    return (<DurationInMs date1={record.startDate} date2={record.endDate!} />);
   }
 
   return (
@@ -52,7 +54,7 @@ const NodeUnrolled: FC<Props> = ({ node, rollUp, contact }) => {
       />
       <div className="node-unrolled-content">
         <div className="node-unrolled-photo">
-          <Photo src={contact ? contact.photo : ""} size="60px"/>
+          <Photo photo={contact?.photo} size="60px"/>
         </div>
         <div className="node-unrolled-info">
           {contact && (
@@ -61,28 +63,22 @@ const NodeUnrolled: FC<Props> = ({ node, rollUp, contact }) => {
             </Link>
           )}
           <div className="node-unrolled-number">
-            {contact && (
-              <NumberTypeIcon
-                type={contact.numbers
-                  .find(number => number.number === node.number)!.type}
-              />
-            )} 
-            <div>{formatPhoneNumber(node.number)}</div>
+            <div>{formatPhoneNumber(record.number)}</div>
           </div>
           <div className="node-unrolled-status">
-            {node.status === CallStatus.INCOMING && 
-              (<span>Incoming,{" "}
-                <DurationInMs date1={node.startDate} date2={node.endDate!} />
-              </span>)}
-            {node.status === CallStatus.OUTCOMING && 
-              (<span>Outcoming,{" "}
-                <DurationInMs date1={node.startDate} date2={node.endDate!} />
-              </span>)}
-            {node.status === CallStatus.MISSED && (<span>Missed</span>)}
-            {node.status === CallStatus.FAILED && (<span>Failed</span>)}
+            {
+              record.status === CallStatus.INCOMING &&
+              (<span>Incoming{record.endDate ? <>, {duration()}</> : ""}</span>)
+            }
+            {
+              record.status === CallStatus.OUTCOMING &&
+              (<span>Outcoming{record.endDate ? <>, {duration()}</> : ""}</span>)
+            }
+            {record.status === CallStatus.MISSED && (<span>Missed</span>)}
+            {record.status === CallStatus.FAILED && (<span>Failed</span>)}
           </div>
           <div className="node-unrolled-time">
-            {node.startDate.toTimeString().substring(0, 5)}
+            {record.startDate.toTimeString().substring(0, 5)}
           </div>
         </div>
       </div>

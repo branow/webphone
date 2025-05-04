@@ -1,68 +1,67 @@
-import { FC, useState } from "react";
+import { FC, useState, ReactNode, RefObject } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import PendingTab from "../../components/PendingTab";
+import ErrorMessage from "../../components/ErrorMessage";
 import HistoryNode from "./HistoryNode";
-import { Node } from "../../services/history.ts";
-import { Contact } from "../../services/contacts.ts";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll.ts";
+import { Record } from "../../services/history.ts";
+import { Page } from "../../services/backend.ts";
 import "./HistoryNodes.css";
 
 interface Props {
-  nodes: Node[];
-  contacts: Contact[];
+  scrollRef: RefObject<HTMLDivElement>;
+  queryKey: string[];
+  queryFunc: (page: number) => Promise<Page<Record>>;
 }
 
-const HistoryNodes: FC<Props> = ({ nodes, contacts }) => {
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>();
+const HistoryNodes: FC<Props> = ({ scrollRef, queryKey, queryFunc }) => {
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
+  const fetching = useInfiniteQuery({
+    queryKey: queryKey,
+    queryFn: ({ pageParam }) => queryFunc(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.number < lastPage.totalPages ? lastPage.number + 1 : null,
+  });
+
+  useInfiniteScroll({
+    scrollRef,
+    loadFactor: 0.9,
+    move: fetching.fetchNextPage
+  });
+
+  const item = (record: Record, index: number, records: Record[]) => {
+    let dateMark: ReactNode;
+    if (index === 0 || record.startDate.getDate() !== records[index - 1].startDate.getDate()) {
+      dateMark = (
+        <div className="history-nodes-date">
+          {record.startDate.toDateString()}
+        </div>
+      )
+    }
+
+    return (
+      <div key={record.id}>
+        {dateMark && (dateMark)}
+        <HistoryNode
+          unrolled={record.id === selectedNodeId}
+          record={record}
+          unroll={() => setSelectedNodeId(record.id)}
+          rollUp={() => setSelectedNodeId(null)}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="history-nodes">
-      {groupByDate(nodes).map(nodeGroup => (
-        <div key={nodeGroup[0].startDate.toDateString()}>
-          <div className="history-nodes-date">
-            {nodeGroup[0].startDate.toDateString()}
-          </div>
-          <div className="history-nodes-of-date">
-            {nodeGroup.map(node => {
-              const contact = findContact(node, contacts);
-              return (
-                <HistoryNode
-                  key={node.id}
-                  unrolled={node.id === selectedNodeId}
-                  node={node}
-                  contact={contact}
-                  unroll={() => setSelectedNodeId(node.id)}
-                  rollUp={() => setSelectedNodeId(null)}
-                />
-              )
-            })}
-          </div>
-        </div>
-      ))}
+      {fetching.data && fetching.data.pages.map((page: Page<Record>) =>
+        <div key={page.number}>{page.items.map(item)}</div>
+      )}
+      {fetching.isError && <ErrorMessage error={fetching.error} />}
+      {fetching.isLoading && <PendingTab text="LOADING" />}
     </div>
   );
 };
-
-function groupByDate(nodes: Node[]): Node[][] {
-  if (nodes.length === 0) return [];
-  nodes.sort((n1, n2) => n2.startDate.getTime() - n1.startDate.getTime());
-  const grouped: Node[][] = [[]];
-  
-  let curDate: string = nodes[0].startDate.toDateString();
-  grouped[0].push(nodes[0]);
-  for (let i = 1, j = 0; i < nodes.length; i++) {
-    const nextDate = nodes[i].startDate.toDateString();
-    if (curDate === nextDate) {
-      grouped[j].push(nodes[i]);
-    } else {
-      grouped.push([]);
-      grouped[++j].push(nodes[i]);
-      curDate = nextDate;
-    }
-  }
-  
-  return grouped;
-}
-
-function findContact(node: Node, contacts: Contact[]): Contact | undefined {
-  return contacts.find(contact => contact.numbers.find(number => number.number === node.number))
-}
 
 export default HistoryNodes;

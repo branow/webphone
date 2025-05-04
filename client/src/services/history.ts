@@ -1,4 +1,6 @@
-import { uuid } from "../util/identifier.ts";
+import { ensureAuthentication } from "./keycloak.ts";
+import { Page, BACKEND_ORIGIN, PageOptions, RequestBuilder, logRequestResponse, handleApiError } from "./backend.ts";
+import { Query } from "@tanstack/react-query";
 
 export enum CallStatus {
   INCOMING = "incoming",
@@ -7,95 +9,126 @@ export enum CallStatus {
   FAILED = "failed",
 }
 
-export interface Node {
+export type Contact = {
   id: string;
+  name: string;
+  photo?: string;
+}
+
+export type Record = {
+  id: string;
+  number: string;
+  status: CallStatus;
+  startDate: Date;
+  endDate?: Date;
+  contact?: Contact;
+}
+
+export type CreateRecord = {
   number: string;
   status: CallStatus;
   startDate: Date;
   endDate?: Date;
 }
 
-export enum QueryKeys {
-  history = "history",
-}
-
-interface Data {
-  history: Node[];
-}
-
-let history: Node[] | null = null;
-
-export async function create(node: Node): Promise<Node> {
-  console.log("Creating history node");
-  await fetchAll();
-
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      node.id = uuid();
-      history!.push(node);
-      console.log(history);
-      resolve(node);
-    }, 1000);
-  });
-}
-
-
-export async function getAll(): Promise<Node[]> {
-  console.log("Fetching history");
-  return fetchAll();
-}
-
-
-export async function fetchAll(): Promise<Node[]> {
-  if (history) {
-    return history;
+export const QueryKeys = {
+  history: (size: number): string[] => ["history", size.toString()],
+  historyByContact: (contact: string, size: number): string[] => 
+    ["history", "contact", contact, size.toString()],
+  predicate: (query: Query) => {
+    return query.queryKey.includes("history");
   }
+}
 
-  const response = await fetch('/data.json');
+export async function getAll({ number, size }: PageOptions): Promise<Page<Record>> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/history/user/${subject}`)
+      .param("number", number)
+      .param("size", size))
+    .get().bearer(token).fetch();
+  return await response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle(async res => mapRecordPage(await res.json<Page<Record>>()));
+}
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch history: ${response.status} ${response.statusText}`)
+export async function getAllByContact(
+  contactId: string, { number, size }: PageOptions
+): Promise<Page<Record>> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/history/user/${subject}/contact/${contactId}`)
+      .param("number", number)
+      .param("size", size))
+    .get().bearer(token).fetch();
+  return await response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle(async res => mapRecordPage(await res.json<Page<Record>>()));
+}
+
+export async function create(record: CreateRecord): Promise<Record> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/history/user/${subject}`))
+    .post().bearer(token).bodyJson(record).fetch();
+  return await response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle(async res => mapRecord(await res.json<Record>()));
+}
+
+export async function remove(id: string): Promise<void> {
+  const { token } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/history/${id}`))
+    .delete().bearer(token).fetch();
+  return await response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .process();
+}
+
+export async function removeAll(): Promise<void> {
+  const { token, subject } = await ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/history/user/${subject}`))
+    .delete().bearer(token).fetch();
+  return await response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .process();
+}
+
+function mapRecordPage(page: Page<any>): Page<Record> {
+  const items = page.items.map(mapRecord);
+  return { ...page, items };
+}
+
+function mapRecord(record: any): Record {
+  return {
+    ...record,
+    startDate: new Date(record.startDate),
+    endDate: record.endDate ? new Date(record.endDate) : undefined,
   }
-
-  const data: Data = await response.json();
-
-  history = data.history.map(node => ({
-    ...node,
-    startDate: new Date(node.startDate),
-    endDate: node.endDate ? new Date(node.endDate) : undefined,
-  }));
-
-  return history;
 }
-
-
-export async function removeAll(): Promise<boolean> {
-  console.log("Deleting history");
-  
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      history = [];
-      resolve(true);
-    }, 1000);
-  })
-}
-
-
-export async function remove(id: string): Promise<boolean> {
-  console.log("Deleting history node");
-  
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      history = history!.filter(node => node.id !== id);
-      resolve(true);
-    }, 1000);
-  })
-}
-
 
 export default {
   QueryKeys,
   getAll,
+  getAllByContact,
+  create,
   remove,
   removeAll,
 };
