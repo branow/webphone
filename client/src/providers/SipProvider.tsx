@@ -1,5 +1,6 @@
-import { FC, createContext, useState, useEffect, ReactNode } from "react";
+import { FC, createContext, useRef, useState, useEffect, useContext, ReactNode } from "react";
 import JsSIP from "jssip";
+import { AuthContextType, AuthContext } from "./AuthProvider";
 import Storage from "../lib/storage.ts";
 
 export enum ConnectionState {
@@ -59,8 +60,14 @@ interface Props {
 
 const SipProvider: FC<Props> = ({ children }) => {
   const [sipState, setSipState] = useState<SipState>(initialSipState);
+  // Using Ref because of loosing sip state data during frequent 
+  // react state updates.
+  const sipStateRef = useRef<SipState>(initialSipState);
+  const { authenticated } = useContext<AuthContextType | null>(AuthContext)!;
 
   useEffect(() => {
+    if (!authenticated) return;
+
     const savedSipAccount = SipAccountStorage.get();
     if (savedSipAccount) {
       register(savedSipAccount);
@@ -81,7 +88,7 @@ const SipProvider: FC<Props> = ({ children }) => {
         console.error(error);
       });
     }
-  }, []);
+  }, [authenticated]);
 
   const register = (newSipAccount: SipAccount) => {
     const socket 
@@ -93,15 +100,9 @@ const SipProvider: FC<Props> = ({ children }) => {
       password: newSipAccount.password,
     };
     
-    // Shadow the sipState value, bacuse of loosing data during frequent 
-    // react state updating.
-    let sipState: SipState = { ...initialSipState };
-    setSipState(sipState);
-
     const changeState = (newState: any) => {
-      const newSipState = { ...sipState, ...newState };
-      sipState = newSipState;
-      setSipState(newSipState);
+      sipStateRef.current = { ...sipStateRef.current, ...newState };
+      setSipState(sipStateRef.current);
     }
 
     try {
@@ -166,8 +167,8 @@ const SipProvider: FC<Props> = ({ children }) => {
   }
 
   return (
-    <SipContext.Provider 
-      value={{ 
+    <SipContext.Provider
+      value={{
         ua: sipState.ua,
         sipAccount: sipState.sipAccount,
         register,
