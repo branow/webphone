@@ -8,6 +8,7 @@
   border-radius: 50%;
   color: var(--c-subtext);
   text-align: center;
+  overflow: hidden;
 }
 
 .photo svg {
