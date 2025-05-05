@@ -88,56 +88,56 @@ const CallProvider: FC<Props> = ({ children }) => {
         event.streams[0]?.getTracks()
           .forEach((track) => remoteStream.addTrack(track));
 
-        console.log('call provider add stream', remoteStream);
+        log('call provider add stream', remoteStream);
         changeState({ stream: remoteStream });
       }
 
       session.on("peerconnection", (e) => {
-        console.log("peerconneciton", e, callState);
+        log("peerconneciton", e, callState);
       });
 
       session.on("connecting", (e) => {
-        console.log("connecting", e, callState);
+        log("connecting", e, callState);
       });
 
       session.on("sending", (e) => {
-        console.log("sending", e, callState);
+        log("sending", e, callState);
       });
 
       session.on("progress", (e: any) => {
-        console.log("progress", e, callState);
+        log("progress", e, callState);
         changeState({ state: CallState.PROGRESS });
       });
 
       session.on("accepted", (e: any) => {
-        console.log("accepted", e, callState);
+        log("accepted", e, callState);
       });
 
       session.on("confirmed", (e: any) => {
-        console.log("comfirmed", e, callState);
+        log("comfirmed", e, callState);
         changeState({ state: CallState.CONFIRMED });
       });
 
       session.on("ended", (e) => {
-        console.log("ended", e, callState);
+        log("ended", e, callState);
         const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
         const endedBy = e.originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE;
         changeState({ state: CallState.ENDED, endDate, endedBy });
       });
 
       session.on("failed", (e) => {
-        console.log("failed", e);
+        log("failed", e);
         const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
         changeState({ state: CallState.FAILED, endDate });
       });
 
       session.on("hold", (e) => {
-        console.log("hold", e);
+        log("hold", e);
         changeState({ state: CallState.HOLD });
       });
 
       session.on("unhold", (e) => {
-        console.log("unhold", e);
+        log("unhold", e);
         changeState({ state: CallState.CONFIRMED });
       });
     });
@@ -146,7 +146,7 @@ const CallProvider: FC<Props> = ({ children }) => {
   }, [ua]);
 
   const doCall = (number: string) => {
-    console.log("do call:", number);
+    log("do call:", number);
     const options = {
       "mediaConstraints": { "audio": true }
     }
@@ -181,7 +181,7 @@ const CallProvider: FC<Props> = ({ children }) => {
 
   const terminate = () => {
     if (session) {
-      console.log("terminate session");
+      log("terminate session");
       session.terminate();
     }
   }
@@ -203,5 +203,11 @@ const CallProvider: FC<Props> = ({ children }) => {
     </CallContext.Provider>
   );
 };
+
+function log(...data: any[]) {
+  if (import.meta.env.WEBPHONE_PROFILE === "dev") {
+    console.log(...data);
+  }
+}
 
 export default CallProvider;

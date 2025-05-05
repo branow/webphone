@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState, createContext } from "react";
-import keycloak, { initKeycloak, login } from "../services/keycloak";
+import keycloak, { login } from "../services/keycloak";
 
 export interface AuthContextType {
   authenticated?: boolean;
@@ -63,7 +63,3 @@ const AuthProvider: FC<Props> = ({ children }) => {
 };
 
 export default AuthProvider;
-
-
-
-

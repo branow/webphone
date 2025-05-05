@@ -10,7 +10,6 @@ const KeypadPane: FC = () => {
   const [input, setInput] = useState<string>("");
 
   const handlePressKey = (key: Key) => {
-    console.log(key.sign);
     call!.sendDTMF(key.sign);
     setInput(input + key.sign);
   }

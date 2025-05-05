@@ -56,7 +56,6 @@ const ContactEditForm: FC<Props> = ({ contact, mutationFunc }) => {
   const savingContact = useMutation({
     mutationFn: async (contact: ContactDetails) => {
       const files = photoInputRef.current!.files;
-      console.log(files);
       if (files && files.length > 0) {
         const photo = files.item(files.length - 1)!;
         const response = await PhotoApi.upload(photo);

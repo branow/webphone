@@ -109,7 +109,7 @@ const SipProvider: FC<Props> = ({ children }) => {
       const ua = new JsSIP.UA(configuration);
 
       ua.on("connecting", (e) => {
-        console.log("connecting", e);
+        log("connecting", e);
         changeState({
           connectionState: ConnectionState.CONNECTING,
           connectionFailed: "",
@@ -117,12 +117,12 @@ const SipProvider: FC<Props> = ({ children }) => {
       });
 
       ua.on("connected", (e) => {
-        console.log("connected", e);
+        log("connected", e);
         changeState({ connectionState: ConnectionState.CONNECTED });
       });
 
       ua.on("disconnected", (e) => {
-        console.log("disconnected", e);
+        log("disconnected", e);
         let message = "";
         if (e.error) {
           message = "Connection failed: invalid proxy";
@@ -135,18 +135,18 @@ const SipProvider: FC<Props> = ({ children }) => {
       });
 
       ua.on("registered", (e) => {
-        console.log("registered", e);
+        log("registered", e);
         changeState({ registrationState: RegistrationState.REGISTERED });
         SipAccountStorage.set(newSipAccount);
       });
 
       ua.on("unregistered", (e) => {
-        console.log("unregistered", e);
+        log("unregistered", e);
         changeState({ registrationState: RegistrationState.UNREGISTERED });
       });
 
       ua.on("registrationFailed", (e) => {
-        console.log("registrationFailed", e);
+        log("registrationFailed", e);
         changeState({
           registrationState: RegistrationState.UNREGISTERED,
           registrationFailed: "Registration failed: invalid username, password or domain",
@@ -182,5 +182,11 @@ const SipProvider: FC<Props> = ({ children }) => {
     </SipContext.Provider>
   );
 };
+
+function log(...data: any[]) {
+  if (import.meta.env.WEBPHONE_PROFILE === "dev") {
+    console.log(...data);
+  }
+}
 
 export default SipProvider;
