@@ -8,7 +8,6 @@ import {
 import { IoIosKeypad } from "react-icons/io";
 import { ImPhoneHangUp } from "react-icons/im";
 import { CallContext } from "../../providers/CallProvider";
-import Button from "../../components/Button";
 import KeypadPane from "./KeypadPane";
 import AudioVisualizer from "../../util/waveform.js";
 import "./CallActivePane.css";
@@ -60,43 +59,51 @@ const CallActivePane: FC = () => {
           </div>
         </div>)}
       <div className="call-active-pane-controls">
-        {
-          volume ?
-          (<Button
+        {volume && (
+          <button
             className="transparent-btn call-active-pane-control-btn"
-            Icon={BsVolumeUpFill}
             onClick={() => setVolume(false)}
-          />) :
-          (<Button
+          >
+            <BsVolumeUpFill/>
+          </button>
+        )}
+        {!volume && (
+          <button
             className="transparent-btn call-active-pane-control-btn"
-            Icon={BsVolumeMuteFill}
             onClick={() => setVolume(true)}
-          />)
-        }
-        {
-          call!.isMuted ?
-          (<Button
+          >
+            <BsVolumeMuteFill/>
+          </button>
+        )}
+        {call!.isMuted && (
+          <button
             className="transparent-btn call-active-pane-control-btn"
-            Icon={BsMicMuteFill}
             onClick={() => call!.muteMicro(false)}
-          />) :
-          (<Button
+          >
+            <BsMicMuteFill />
+          </button>
+        )}
+        {!call!.isMuted && (
+          <button
             className="transparent-btn call-active-pane-control-btn"
-            Icon={BsMicFill}
             onClick={() => call!.muteMicro(true)}
-          />)
-        }
-        <Button
+          >
+            <BsMicFill />
+          </button>
+        )}
+        <button
           className="transparent-btn call-active-pane-control-btn"
-          Icon={IoIosKeypad}
           onClick={handleSwitchKeypad}
-        />
+        >
+          <IoIosKeypad />
+        </button>
       </div>
-      <Button
+      <button
         className="hang-up-btn control-btn"
-        Icon={ImPhoneHangUp}
         onClick={handleTerminate}
-      />
+      >
+        <ImPhoneHangUp />
+      </button>
     </div>
   )
 }

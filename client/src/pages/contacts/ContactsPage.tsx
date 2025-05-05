@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import NavTabs, { Tab } from "../../components/NavTabs";
 import SearchBar from "../../components/SearchBar";
-import Button from "../../components/Button";
 import ContactList from "./ContactList";
 import { useDebounce } from "../../hooks/useDebounce";
 import ContactApi from "../../services/contacts";
@@ -23,11 +22,12 @@ const ContactsPage: FC = () => {
         <div className="contact-list">
           <div className="contact-list-header">
             <SearchBar onQueryChange={debouncedSetQuery} />
-            <Button
+            <button
               className="green-btn contact-list-add-btn"
-              Icon={FaPlus}
               onClick={() => navigate("/contacts/create")}
-            />
+            >
+              <FaPlus />
+            </button>
           </div>
           <ContactList
             queryKey={ContactApi.QueryKeys.contacts(query, 25)}

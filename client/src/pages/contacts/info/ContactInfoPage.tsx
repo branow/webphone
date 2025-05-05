@@ -5,10 +5,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
 import Photo from "../../../components/Photo";
-import Button from "../../../components/Button";
 import PendingTab from "../../../components/PendingTab";
 import ErrorMessage from "../../../components/ErrorMessage";
-import NotFoundPage from "../../errors/NotFoundPage";
 import Chapter from "./Chapter";
 import ChapterBar from "./ChapterBar";
 import DeleteContactWindow from "../DeleteContactWindow";
@@ -20,11 +18,7 @@ import "./ContactInfoPage.css";
 
 const ContactInfoPage: FC = () => {
   const params = useParams<{ id: string }>();
-  const contactId: string = params.id || "";
-
-  if (!contactId) {
-    return <NotFoundPage />
-  }
+  const contactId: string = params.id!;
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -79,23 +73,26 @@ const ContactInfoPage: FC = () => {
       )}
       <div className="contact-info-top">
         <div className="contact-info-top-left">
-          <Button
+          <button
             className="transparent-btn contact-info-back-btn"
-            Icon={IoIosArrowBack}
             onClick={() => navigate("/contacts")}
-          />
+          >
+            <IoIosArrowBack />
+          </button>
         </div>
         <div className="contact-info-top-right">
-          <Button
+          <button
             className="transparent-btn contact-info-edit-btn"
-            Icon={MdEdit}
             onClick={handleEdit}
-          />
-          <Button
+          >
+            <MdEdit />
+          </button>
+          <button
             className="transparent-btn delete-btn contact-info-delete-btn"
-            Icon={BsFillTrash3Fill}
             onClick={handleDeleteIntend}
-          />
+          >
+            <BsFillTrash3Fill />
+          </button>
         </div>
       </div>
 

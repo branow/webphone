@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { ImPhone } from "react-icons/im";
 import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
 import { SipContext, RegistrationState } from "../../providers/SipProvider";
-import Button from "../../components/Button"
 import Hover from "../../components/Hover";
 import NavTabs, { Tab } from "../../components/NavTabs";
 import Keypad, { Key } from "./Keypad";
@@ -19,7 +18,7 @@ const DialPadPage: FC = () => {
     if (registrationState !== RegistrationState.REGISTERED) {
       navigate("/account");
     }
-  }, [registrationState]);
+  }, [registrationState, navigate]);
 
   const handleCall = () => {
     navigate(`/call/${extractPhoneNumber(number)}`);
@@ -53,22 +52,24 @@ const DialPadPage: FC = () => {
         />
         <Hover>
           {isHovered => (
-            <Button
+            <button
               className="backspace-btn"
-              Icon={number && isHovered ? MdBackspace : MdOutlineBackspace}
               onClick={handleRemove}
               disabled={!number}
-            />
+            >
+              {number && isHovered ? <MdBackspace /> : <MdOutlineBackspace />}
+            </button>
           )}
         </Hover>
       </div>
       <Keypad onPressKey={handleKey} />
-      <Button
+      <button
         className="call-btn medium-btn"
-        Icon={ImPhone}
         onClick={handleCall}
         disabled={!number}
-      />
+      >
+        <ImPhone />
+      </button>
       <NavTabs tabs={[Tab.HISTORY, Tab.CONTACTS]} />
     </div>
   );

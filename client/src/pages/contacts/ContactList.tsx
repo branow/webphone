@@ -26,7 +26,7 @@ const ContactList: FC<Props> = ({ queryKey, queryFunc }) => {
   useInfiniteScroll({
     scrollRef: scrollRef,
     loadFactor: 0.9,
-    move: fetching.fetchNextPage
+    move: async () => { fetching.fetchNextPage(); }
   });
 
   const data = fetching.data;

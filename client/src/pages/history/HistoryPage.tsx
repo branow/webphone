@@ -5,7 +5,6 @@ import HistoryNodes from "./HistoryNodes";
 import ErrorMessage from "../../components/ErrorMessage";
 import PendingTab from "../../components/PendingTab";
 import NavTabs, { Tab } from "../../components/NavTabs";
-import Button from "../../components/Button";
 import HistoryApi from "../../services/history.ts";
 import "./HistoryPage.css";
 
@@ -34,11 +33,12 @@ const HistoryPage: FC = () => {
     <div className="history-page">
       <div className="history-page-header">
         <div className="history-page-title">HISTORY</div>
-        <Button
+        <button
           className="transparent-btn delete-btn history-page-delete-btn"
-          Icon={BsFillTrash3Fill}
           onClick={() => removingAll.mutate()}
-        />
+        >
+          <BsFillTrash3Fill />
+        </button>
       </div>
       <div className="history-page-nodes-ctn" ref={scrollRef}>
         <HistoryNodes

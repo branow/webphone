@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ErrorMessage from "../../../components/ErrorMessage";
 import PendingTab from "../../../components/PendingTab";
 import SearchBar from "../../../components/SearchBar";
-import Button from "../../../components/Button";
 import ContactApi, { Contact } from "../../../services/contacts.ts";
 import "./FeatureCodesPage.css";
 import FeatureCodeList from "./FeatureCodeList.tsx";
@@ -51,23 +50,25 @@ const FeatureCodesPage: FC = () => {
       <ErrorMessage error={importing.error} />
       <FeatureCodeList
         queryKey={ContactApi.QueryKeys.featureCodes(query)}
-        queryFunc={(page) => ContactApi.getFeatureCodes({ query: query, number: page })}
+        queryFunc={(page) => ContactApi.getFeatureCodes({ query: query, number: page, size: 25 })}
         isSelected={isSelected}
         select={select}
         unselect={unselect}
       />
       <div className="feature-numbers-ctrls">
-        <Button
+        <button
           className="feature-numbers-ctrl-btn"
-          text="IMPORT"
           onClick={handleImport}
           disabled={selected.length === 0}
-        />
-        <Button
+        >
+          IMPORT
+        </button>
+        <button
           className="feature-numbers-ctrl-btn"
-          text="CANCEL"
           onClick={handleCancel}
-        />
+        >
+          CANCEL
+        </button>
       </div>
     </div>
   );

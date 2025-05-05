@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import "./Chapter.css";
 
 interface Props {
-  title?: String;
+  title?: string;
   children: ReactNode;
 }
 

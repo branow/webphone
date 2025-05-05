@@ -1,7 +1,6 @@
 import { FC, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Button from "../../../components/Button";
 import ErrorMessage from "../../../components/ErrorMessage";
 import PendingTab from "../../../components/PendingTab";
 import NumbersEditForm from "./NumbersEditForm";
@@ -108,16 +107,8 @@ const ContactEditForm: FC<Props> = ({ contact, mutationFunc }) => {
       </Chapter>
 
       <div className="contact-edit-form-ctrls">
-        <Button
-          className="contact-edit-form-ctrl-btn"
-          text="SAVE"
-          onClick={handleSave}
-        />
-        <Button
-          className="contact-edit-form-ctrl-btn"
-          text="CANCEL"
-          onClick={handleCancel}
-        />
+        <button className="contact-edit-form-ctrl-btn" onClick={handleSave}>SAVE</button>
+        <button className="contact-edit-form-ctrl-btn" onClick={handleCancel}>CANCEL</button>
       </div>
     </div>
   );

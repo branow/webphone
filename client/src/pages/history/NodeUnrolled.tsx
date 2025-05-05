@@ -5,7 +5,6 @@ import { BsFillTrash3Fill } from "react-icons/bs";
 import { ImPhone } from "react-icons/im";
 import Photo from "../../components/Photo";
 import DurationInMs from "../../components/DurationInMs";
-import Button from "../../components/Button";
 import HistoryApi, { Record, CallStatus } from "../../services/history.ts";
 import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
 import "./NodeUnrolled.css";
@@ -47,14 +46,15 @@ const NodeUnrolled: FC<Props> = ({ record, rollUp }) => {
       className="node-unrolled"
       onClick={rollUp}
     >
-      <Button
+      <button
         className="transparent-btn delete-btn node-delete-btn"
-        Icon={BsFillTrash3Fill}
         onClick={handleRemove}
-      />
+      >
+        <BsFillTrash3Fill />
+      </button>
       <div className="node-unrolled-content">
         <div className="node-unrolled-photo">
-          <Photo photo={contact?.photo} size="60px"/>
+          <Photo photo={contact?.photo} size={60} />
         </div>
         <div className="node-unrolled-info">
           {contact && (
@@ -83,11 +83,12 @@ const NodeUnrolled: FC<Props> = ({ record, rollUp }) => {
         </div>
       </div>
       <div className="node-unrolled-call-btn-con">
-        <Button
+        <button
           className="call-btn"
-          Icon={ImPhone}
           onClick={handleCall}
-        />
+        >
+          <ImPhone />
+        </button>
       </div>
     </div>
   );

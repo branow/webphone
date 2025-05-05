@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import ErrorMessage from "../../../components/ErrorMessage";
 import PendingTab from "../../../components/PendingTab";
@@ -17,6 +17,8 @@ interface Prop {
 }
 
 const FeatureCodeList: FC<Prop> = ({ queryKey, queryFunc, isSelected, select, unselect }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const fetching = useInfiniteQuery({
     queryKey: queryKey,
     queryFn: ({ pageParam }) => queryFunc(pageParam),
@@ -24,13 +26,18 @@ const FeatureCodeList: FC<Prop> = ({ queryKey, queryFunc, isSelected, select, un
     getNextPageParam: (lastPage) => lastPage.number < lastPage.totalPages ? lastPage.number + 1 : null,
   });
 
-  const { scrollRef } = useInfiniteScroll({
+  useInfiniteScroll({
     loadFactor: 0.8,
-    move: fetching.fetchNextPage
+    move: async () => { await fetching.fetchNextPage(); },
+    scrollRef: scrollRef,
   });
 
   const handlePreviewClick = (contact: Contact) => {
-    isSelected(contact) ? unselect(contact) : select(contact);
+    if (isSelected(contact)) {
+      unselect(contact);
+    } {
+      select(contact);
+    }
   }
 
   return (

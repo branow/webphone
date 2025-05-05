@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { BsPersonFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import PendingTab from "./PendingTab";
@@ -15,31 +15,47 @@ interface Props {
 const Photo: FC<Props> = ({ photo, size, alt }) => {
   if (!photo) {
     return (
-      <div className="photo" style={{ width: size, height: size }}>
+      <PhotoContainer size={size}>
         <BsPersonFill size={size - 10}/>
-      </div>
+      </PhotoContainer>
     )
   }
 
   if (isUrl(photo)) {
     return (
-      <div className="photo" style={{ width: size, height: size }}>
+      <PhotoContainer size={size}>
         <img className="photo-img" src={photo} width={size} alt={alt} />
-      </div>
+      </PhotoContainer>
     )
   }
 
+  return (
+    <PhotoContainer size={size}>
+      <BackendPhoto photo={photo} size={size} alt={alt} />
+    </PhotoContainer>
+  );
+}
+
+const PhotoContainer: FC<{ size: number, children: ReactNode }> = ({ size, children }) => {
+  return (
+    <div className="photo" style={{ width: size, height: size, minWidth: size, minHeight: size }}>
+      {children}
+    </div>
+  );
+}
+
+const BackendPhoto: FC<{ photo: string, size: number, alt?: string }> = ({ photo, size, alt }) => {
   const fetching = useQuery({
     queryKey: PhotoApi.QueryKeys.photo(photo),
     queryFn: () => PhotoApi.get(photo),
   })
 
   return (
-    <div className="photo" style={{ width: size, height: size }}>
+    <>
       {fetching.isPending && <PendingTab text="LOADING" /> }
       {fetching.isError && <ErrorMessage error={fetching.error} />}
       {fetching.data && <img className="photo-img" src={fetching.data} width={size} alt={alt} />}
-    </div>
+    </>
   );
 }
 

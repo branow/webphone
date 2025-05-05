@@ -2,7 +2,6 @@ import { FC, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CallContext, CallState, Call, CallAgent } from "../../providers/CallProvider";
-import Button from "../../components/Button";
 import DurationInMs from "../../components/DurationInMs";
 import HistoryApi, { CallStatus } from "../../services/history.ts";
 import DTMFAudio from "../../util/dtmf.js";
@@ -81,11 +80,12 @@ const CallEndPane: FC = () => {
             <DurationInMs date1={call!.startDate} date2={call!.endDate} />
           </div>)}
       </div>
-      <Button
+      <button
         className="call-end-pane-back-btn"
-        text="BACK"
         onClick={handleBack}
-      />
+      >
+        BACK
+      </button>
     </div>
   );
 }

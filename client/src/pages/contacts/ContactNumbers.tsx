@@ -1,7 +1,6 @@
 import { FC } from "react";
 import {ImPhone } from "react-icons/im";
 import NumberTypeIcon from "../../components/NumberTypeIcon";
-import Button from "../../components/Button";
 import { Number } from "../../services/contacts";
 import { formatPhoneNumber } from "../../util/format";
 import "./ContactNumbers.css";
@@ -29,12 +28,13 @@ const ContactNumbers: FC<Props> = ({ numbers, call }) => {
               {formatPhoneNumber(number.number)}
             </div>
             {call && (
-              <Button
+              <button
                 className="call-btn small-btn"
-                Icon={ImPhone}
                 onClick={() => call(number.number)}
                 disabled={!number}
-              />
+              >
+                <ImPhone />
+              </button>
             )}
           </div>
         </div>

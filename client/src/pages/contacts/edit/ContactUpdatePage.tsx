@@ -7,7 +7,7 @@ import NotFoundPage from "../../errors/NotFoundPage";
 import ContactEditForm from "./ContactEditForm";
 import ContactApi from "../../../services/contacts.ts";
 
-const ContactEditPage: FC = () => {
+const ContactUpdatePage: FC = () => {
   const params = useParams<{ id: string }>();
   const contactId: string = params.id || "";
 
@@ -15,6 +15,12 @@ const ContactEditPage: FC = () => {
     return <NotFoundPage />
   }
 
+  return (
+    <ContactUpdatePageBody contactId={contactId} />
+  );
+};
+
+const ContactUpdatePageBody: FC<{ contactId: string }> = ({ contactId }) => {
   const fetchingContact = useQuery({
     queryKey: ContactApi.QueryKeys.contact(contactId),
     queryFn: () => ContactApi.get(contactId),
@@ -36,6 +42,6 @@ const ContactEditPage: FC = () => {
       mutationFunc={(contact) => ContactApi.update({ ...contact })}
     />
   );
-}
+};
 
-export default ContactEditPage;
+export default ContactUpdatePage;

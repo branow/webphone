@@ -8,7 +8,7 @@ import CallActivePane from "./CallActivePane";
 import CallEndPane from "./CallEndPane";
 import "./CallPage.css";
 
-const CallActivePage: FC = ({}) => {
+const CallActivePage: FC = () => {
   const navigate = useNavigate();
   const { registrationState } = useContext(SipContext)!;
   const { call } = useContext(CallContext)!;

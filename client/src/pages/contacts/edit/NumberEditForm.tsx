@@ -1,7 +1,6 @@
 import { FC, useState, ChangeEvent } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import TextInput from "../../../components/TextInput";
-import Button from "../../../components/Button";
 import { EditableNumber } from "./ContactEditForm";
 import { NumberType } from "../../../services/contacts.ts";
 import { formatPhoneNumber, extractPhoneNumber } from "../../../util/format.ts";
@@ -64,11 +63,12 @@ const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber }) => {
         onBlur={handleNumberUnfocus}
         validate={validateNumber}
       />
-        <Button
+        <button
           className="transparent-btn delete-btn number-edit-form-delete-btn"
-          Icon={BsFillTrash3Fill}
           onClick={() => handleDelete(number)}
-        />
+        >
+          <BsFillTrash3Fill />
+        </button>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export enum ConnectionState {
   FETCHING = "fetching",
   CONNECTING = "connecting",
   CONNECTED = "connected",
-  DISCONNECTED = "connected",
+  DISCONNECTED = "disconnected",
 }
 
 export enum RegistrationState {
@@ -72,7 +72,7 @@ const SipProvider: FC<Props> = ({ children }) => {
     if (savedSipAccount) {
       register(savedSipAccount);
     } else {
-      setSipState({...sipState, connectionState: ConnectionState.FETCHING });
+      setSipState((sipState) => ({...sipState, connectionState: ConnectionState.FETCHING }));
       fetch("/sip-credentials").then(response => {
         if (response.status === 200) {
           const fetchedSipAccount: SipAccount = {
@@ -84,11 +84,11 @@ const SipProvider: FC<Props> = ({ children }) => {
           register(fetchedSipAccount);
         }
       }).catch(error => {
-        setSipState({...sipState, connectionState: ConnectionState.FETCHING });
+        setSipState((sipState) => ({...sipState, connectionState: ConnectionState.DISCONNECTED }));
         console.error(error);
       });
     }
-  }, [authenticated]);
+  }, [authenticated, setSipState]);
 
   const register = (newSipAccount: SipAccount) => {
     const socket 

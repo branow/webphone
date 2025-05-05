@@ -1,5 +1,4 @@
 import { FC } from "react";
-import Button from "../../components/Button";
 import HistoryApi, { Record, CreateRecord, CallStatus } from "../../services/history";
 import ContactApi, { ContactDetails, Number, NumberType, CreateContact } from "../../services/contacts";
 
@@ -11,7 +10,7 @@ const TestDataPage: FC = () => {
   return (
     <div>
       <p>Test Data</p>
-      <Button text="Generate" onClick={handleGenerate}/>
+      <button onClick={handleGenerate}>Generate</button>
     </div>
   )
 }
@@ -127,7 +126,7 @@ function randDate({ min, max }: { min?: Date, max: Date }): Date {
 }
 
 function randColor(): string {
-  return Array.from({ length: 6 }).map(_ => randNumber({ max: 15 }).toString(16)).join("");
+  return Array.from({ length: 6 }).map(() => randNumber({ max: 15 }).toString(16)).join("");
 }
 
 function randBoolean(probability: number): boolean {

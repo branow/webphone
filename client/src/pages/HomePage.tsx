@@ -12,7 +12,7 @@ const HomePage: FC = () => {
     } else {
       navigate("/dialpad");
     }
-  }, [registrationState]);
+  }, [navigate, registrationState]);
 
   return (<></>);
 }

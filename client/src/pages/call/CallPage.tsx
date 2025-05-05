@@ -7,7 +7,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import CallActivePage from "./CallActivePage";
 import "./CallPage.css";
 
-const CallPage: FC = ({}) => {
+const CallPage: FC = () => {
   const navigate = useNavigate();
   const { number } = useParams<{ number: string }>();
   
@@ -20,7 +20,7 @@ const CallPage: FC = ({}) => {
       doCall(number);
       setStartedCall(true);
     }
-  }, [number]);
+  }, [ number]);
 
   useEffect(() => {
     if (registrationState !== RegistrationState.REGISTERED) {

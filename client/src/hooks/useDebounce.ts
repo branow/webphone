@@ -11,7 +11,7 @@ export const useDebounce = <T>({ func, timeout }: DelayOptions<T>): DelayedFunc<
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    return () => { timeoutRef.current && clearTimeout(timeoutRef.current); }
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); }
   }, [])
 
   return (input: T) => {

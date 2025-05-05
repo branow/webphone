@@ -62,9 +62,9 @@ const CallProvider: FC<Props> = ({ children }) => {
 
     ua!.on("newRTCSession",
       (event: IncomingRTCSessionEvent | OutgoingRTCSessionEvent) => {
-      let originator = event.originator;
+      const originator = event.originator;
       session = event.session as RTCSession;
-      let request = event.request as IncomingRequest | OutgoingRequest;
+      const request = event.request as IncomingRequest | OutgoingRequest;
 
       // Hide the initial callState var, because of loosing
       // data during frequent react state updating.

@@ -1,6 +1,5 @@
 import { FC } from "react";
 import Window from "../../components/Window";
-import Button from "../../components/Button";
 import "./DeleteContactWindow.css";
 
 interface Props {
@@ -17,16 +16,18 @@ const DeleteContactWindow: FC<Props> = ({ contactName, deleteContact, close }) =
           Are you sure you want to delete the contact <strong>{contactName}</strong> ?
         </div>
         <div className="delete-contact-wdw-ctrls">
-          <Button
+          <button
             className="transparent-rect-btn"
-            text="OK"
             onClick={deleteContact}
-          />
-          <Button
+          >
+            OK
+          </button>
+          <button
             className="transparent-rect-btn"
-            text="Cancel"
             onClick={close}
-          />
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </Window>

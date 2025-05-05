@@ -1,7 +1,6 @@
 import { FC, useState, RefObject } from "react";
 import { BsCloudUploadFill } from "react-icons/bs";
 import Photo from "../../../components/Photo";
-import Button from "../../../components/Button";
 import FileChooser from "../../../components/FileChooser";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Hover from "../../../components/Hover";
@@ -41,11 +40,12 @@ const PhotoEditForm: FC<Props> = ({ contact, setPhoto, inputRef }) => {
               alt={contact.name}
             />
             {hover && (
-              <Button
+              <button
                 className="contact-edit-form-upload-photo-btn"
-                Icon={BsCloudUploadFill}
                 onClick={handleStartedLoadPhoto}
-              />
+              >
+                <BsCloudUploadFill />
+              </button>
             )}
           </div>
         )}

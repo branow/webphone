@@ -5,7 +5,7 @@ interface Trigger {
 }
 
 interface Props {
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef?: RefObject<HTMLInputElement>;
   trigger: Trigger;
   onLoadFile: (file: File) => void;
   accept?: string;
@@ -14,13 +14,13 @@ interface Props {
 const FileChooser: FC<Props> = ({ inputRef, trigger, onLoadFile, accept }) => {
 
   trigger.fire = () => {
-    if (inputRef.current) {
+    if (inputRef?.current) {
       inputRef.current.click();
     }
   };
 
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = () => {
-    if (inputRef.current && inputRef.current.files) {
+    if (inputRef && inputRef.current && inputRef.current.files) {
       const file = inputRef.current.files[0];
       onLoadFile(file);
     }

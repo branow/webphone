@@ -1,6 +1,5 @@
 import { FC, useRef, ReactNode, MouseEvent } from "react";
 import { IoClose } from "react-icons/io5";
-import Button from "./Button";
 import "./Window.css";
 
 interface Props {
@@ -25,11 +24,9 @@ const Window: FC<Props> = ({ children, close }) => {
     >
       <div className="window">
         {close && (
-          <Button
-            className="transparent-btn window-close-btn"
-            Icon={IoClose}
-            onClick={close}
-          />
+          <button className="transparent-btn window-close-btn" onClick={close}>
+            <IoClose />
+          </button>
         )}
         {children}
       </div>

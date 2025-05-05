@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { useNavigate, Link } from "react-router";
 import { FaGear } from "react-icons/fa6";
-import Button from "./Button";
 import "./NavBar.css";
 
 const NavBar: FC = () => {
@@ -20,11 +19,12 @@ const NavBar: FC = () => {
       <Link className="nav-bar-title" to="/dialpad">
         WEBPHONE
       </Link>
-      <Button
+      <button
         className="nav-bar-setting-btn transparent-btn"
-        Icon={FaGear}
         onClick={handleSetting}
-      />
+      >
+        <FaGear />
+      </button>
     </div>
   );
 };

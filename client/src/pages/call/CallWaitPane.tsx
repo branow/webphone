@@ -1,7 +1,6 @@
 import { FC, useContext, useEffect } from "react";
 import { ImPhone, ImPhoneHangUp } from "react-icons/im";
 import { CallContext, CallAgent } from "../../providers/CallProvider";
-import Button from "../../components/Button";
 import DTMFAudio from "../../util/dtmf.js";
 import "./CallWaitPane.css";
 
@@ -26,17 +25,20 @@ const CallWaitPane: FC = () => {
     <div className="call-wait-pane">
       <div className="calling"></div>
       <div className="call-wait-pane-control">
-        <Button
+        <button
           className="hang-up-btn control-btn"
-          Icon={ImPhoneHangUp}
           onClick={handleTerminate}
-        />
+        >
+          <ImPhoneHangUp />
+        </button>
         {isIncoming() &&
-          (<Button
+          (<button
             className="call-btn control-btn"
-            Icon={ImPhone}
             onClick={handleAnswer}
-          />)
+          >
+            <ImPhone />
+          </button>
+          )
         }
       </div>
     </div>

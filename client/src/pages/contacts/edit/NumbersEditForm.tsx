@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { FaPlus } from "react-icons/fa";
-import Button from "../../../components/Button";
 import { EditableNumber } from "./ContactEditForm";
 import NumberEditForm from "./NumberEditForm";
 import { NumberType } from "../../../services/contacts";
@@ -38,12 +37,13 @@ const NumbersEditForm: FC<Props> = ({ numbers, setNumbers }) => {
           deleteNumber={handleDelete}
         />
       ))}
-      <Button
+      <button
         className="contact-edit-form-numbers-add-btn"
-        Icon={FaPlus}
         onClick={handleAdd}
         disabled={numbers.length >= 10}
-      />
+      >
+        <FaPlus />
+      </button>
     </div>
   );
 }

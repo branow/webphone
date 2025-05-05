@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
 import { IoIosArrowBack } from "react-icons/io";
-import Button from "../../components/Button";
 import ChapterBar from "../contacts/info/ChapterBar";
 import Chapter from "../contacts/info/Chapter";
 import "./SettingsPage.css";
@@ -12,11 +11,12 @@ const SettingPage: FC = () => {
   return (
     <div className="setting-page">
       <div className="setting-header">
-        <Button
+        <button
           className="transparent-btn setting-back-btn"
-          Icon={IoIosArrowBack}
           onClick={() => navigate("/dialpad")}
-        />
+        >
+          <IoIosArrowBack />
+        </button>
         <div className="setting-header-title">
           SETTING
         </div>
@@ -40,11 +40,12 @@ const SettingPage: FC = () => {
         </Chapter>
         <ChapterBar />
         <Chapter title="Contacts">
-          <Button
-            text="Feature codes"
+          <button
             className="setting-chapter-btn"
             onClick={() => navigate("/contacts/import/feature-codes")}
-          />
+          >
+            Feature codes
+          </button>
         </Chapter>
       </div>
     </div>

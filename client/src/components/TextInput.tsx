@@ -21,7 +21,7 @@ const TextInput: FC<Props> = (props) => {
       const value = props.value === undefined ? "" : props.value
       setError(props.validate(value))
     }
-  }, [props.value])
+  }, [props])
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (props.onChange) props.onChange(event);
@@ -46,7 +46,6 @@ const TextInput: FC<Props> = (props) => {
       <div className="text-input-lower-ctn">
         {props.Icon && (<props.Icon className="text-input-icon" />)}
         <input
-          {...props}
           className="text-input"
           name={props.name}
           value={props.value}
