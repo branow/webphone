@@ -1,9 +1,10 @@
 import { FC, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CallContext, CallState, Call, CallAgent } from "../../providers/CallProvider";
 import DurationInMs from "../../components/DurationInMs";
-import HistoryApi, { CallStatus } from "../../services/history.ts";
+import { CallContext } from "../../context/CallContext";
+import HistoryApi, { CallStatus } from "../../services/history";
+import { CallOriginator, Call } from "../../lib/sip";
 import DTMFAudio from "../../util/dtmf.js";
 import "./CallEndPane.css";
 
@@ -18,15 +19,21 @@ const CallEndPane: FC = () => {
     }
   });
 
-  const { call } = useContext(CallContext)!;
-  const status = getCallStatus(call!);
+  const { call } = useContext(CallContext) as { call: Call };
+  const status = getCallStatus(call);
+
+  useEffect(() => {
+    if (!call) {
+      navigate("/dialpad");
+    }
+  }, [call])
   
   useEffect(() => {
     creating.mutate({
       number: call!.number,
       status: status,
-      startDate: call!.startDate,
-      endDate: call!.endDate,
+      startDate: call!.startTime,
+      endDate: call!.endTime,
     });
 
     DTMFAudio.playCustom("howler");
@@ -34,76 +41,74 @@ const CallEndPane: FC = () => {
       DTMFAudio.stop();
     }, 1000);
 
-    const timeout = setTimeout(() => {
-      navigate("/dialpad");
-    }, 5000);
     return () => {
-      clearTimeout(timeout);
       DTMFAudio.stop();
     }
   }, [])
 
+
+
   const handleBack = () => navigate("/dialpad");
 
   const isEndedByLocal = () => {
-    return call!.endedBy === CallAgent.LOCAL;
+    return !call.error && call.endedBy === CallOriginator.LOCAL;
   }
 
   const isEndedByRemote = () => {
-    return call!.endDate && call!.endedBy === CallAgent.REMOTE;
-  }
-
-  const localDoNotAnswer = () => {
-    return status === CallStatus.MISSED;
-  }
-
-  const remoteDoNotAnswer = () => {
-    return !call!.endDate && call!.endedBy === CallAgent.REMOTE;
-  }
-
-  const callFailed = () => {
-    return call!.state === CallState.FAILED && status !== CallStatus.MISSED;
+    return !call.error && call.endedBy === CallOriginator.REMOTE;
   }
 
   return (
     <div className="call-end-pane">
-      <div className="call-end-pane-message">
-        <div className="call-end-pane-status">
+      <div className="call-end-pane-msg">
+        <div className="call-end-pane-msg-stat">
+          {!call.error && <div className="call-end-pane-msg-stat-ok">SUCCESSFUL CALL</div>}
+          {call.error && <div className="call-end-pane-msg-stat-err">CALL FAILED</div>}
+        </div>
+        <div className="call-end-pane-msg-body">
+          {call.error && (<div>{mapErrorMessage(call.error)}</div>)}
           {isEndedByLocal() && (<div>You ended the call.</div>)}
           {isEndedByRemote() && (<div>The other participant ended the call.</div>)}
-          {localDoNotAnswer() && (<div>You missed the call.</div>)}
-          {remoteDoNotAnswer() && (<div>The other participant did not answer.</div>)}
-          {callFailed() && (<div>Call failed.</div>)}
         </div>
-        {call!.endDate && 
-          (<div className="call-end-pane-duration">
-            <DurationInMs date1={call!.startDate} date2={call!.endDate} />
+        {call.endTime &&
+          (<div className="call-end-pane-msg-dur">
+            <DurationInMs date1={call.startTime} date2={call.endTime} />
           </div>)}
       </div>
-      <button
-        className="call-end-pane-back-btn"
-        onClick={handleBack}
-      >
-        BACK
-      </button>
+      <div className="call-end-pane-back-btn-ctn">
+        <button
+          className="call-end-pane-back-btn"
+          onClick={handleBack}
+        >
+          BACK
+        </button>
+      </div>
     </div>
   );
 }
 
+function mapErrorMessage(error: string): string {
+  if (error === "Address Incomplete") return "Address Incomplete"; // invalid number
+  if (error === "Unavailable") return "Unavailable"; // you tried to call didn't get answer
+  if (error === "No Answer") return "No Answer"; // you didn't answer in time (missed)
+  if (error === "Rejected") return "Rejected"; // you didn't answer
+  return error;
+}
+
 function getCallStatus(call: Call): CallStatus {
-  if (call.state === CallState.FAILED && 
-    call.startedBy === CallAgent.REMOTE &&
-    !call.endDate) {
-    return CallStatus.MISSED;
-  } 
-  if (call.endDate) {
-    if (call.startedBy === CallAgent.LOCAL) {
+  if (call.error) {
+    if (call.error == "No Answer") {
+      return CallStatus.MISSED;
+    } else {
+      return CallStatus.FAILED;
+    }
+  } else {
+    if (call.startedBy === CallOriginator.LOCAL) {
       return CallStatus.OUTCOMING;
     } else {
       return CallStatus.INCOMING;
     }
   }
-  return CallStatus.FAILED;
 }
 
 export default CallEndPane;

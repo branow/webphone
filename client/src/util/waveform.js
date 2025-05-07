@@ -58,14 +58,10 @@ var AudioVisualizer = (function () {
             
             setTimeout(function(){
 
-                if(remoteAudio.srcObject){
-                    source = audioCtx.createMediaStreamSource(remoteAudio.srcObject);
-                    source.connect(analyser);
-                    started = true;
-                    visualize();
-                }else{
-                    console.error("provided mediaStream not active ! ");
-                }
+                source = audioCtx.createMediaStreamSource(remoteAudio);
+                source.connect(analyser);
+                started = true;
+                visualize();
 
             },100);
 

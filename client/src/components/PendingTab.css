@@ -9,12 +9,10 @@
 
 .pending-message {
   color: var(--c-subtext);
-  font-size: 18px;
   font-weight: bold;
 }
 
 .pending {
-  font-size: 32px;
   font-weight: bold;
   line-height: 1.5;
 

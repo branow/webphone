@@ -1,15 +1,12 @@
-import { FC, useContext, useState, useEffect, useRef } from "react";
-import {
-  BsMicFill,
-  BsMicMuteFill,
-  BsVolumeUpFill,
-  BsVolumeMuteFill
-} from "react-icons/bs";
+import { FC, useContext, useState } from "react";
+import { BsMicFill, BsMicMuteFill, BsVolumeUpFill, BsVolumeMuteFill } from "react-icons/bs";
 import { IoIosKeypad } from "react-icons/io";
 import { ImPhoneHangUp } from "react-icons/im";
-import { CallContext } from "../../providers/CallProvider";
+import { CallContext } from "../../context/CallContext";
 import KeypadPane from "./KeypadPane";
-import AudioVisualizer from "../../util/waveform.js";
+import { useAudioVisualizer } from "../../hooks/useAudioVisualizer";
+import { useAudio } from "../../hooks/useAudio";
+import { useVolume } from "../../hooks/useVolume";
 import "./CallActivePane.css";
 
 const audioVisualizerOptions = {
@@ -19,40 +16,21 @@ const audioVisualizerOptions = {
 }
 
 const CallActivePane: FC = () => {
-  const { call } = useContext(CallContext)!;
-  const audioRef = useRef(null);
-  const canvasRef = useRef(null);
-  const [volume, setVolume] = useState(true);
+  const { call, toggleMute, hangupCall } = useContext(CallContext);
+  const { audioRef } = useAudio(call!.remoteStream);
+  const { volume, mute, unmute } = useVolume({ audioRef });
+  const { canvasRef } = useAudioVisualizer(call!.remoteStream, audioVisualizerOptions);
   const [showKeypad, setShowKeypad] = useState(false);
 
-  useEffect(() => {
-    if (call!.stream && audioRef.current && canvasRef.current) {
-      const audio = audioRef.current as HTMLAudioElement;
-      audio.autoplay = true;
-      audio.srcObject = call!.stream;
-      const canvas = canvasRef.current as HTMLCanvasElement;
-      AudioVisualizer.init(canvas, audio, audioVisualizerOptions);
-      AudioVisualizer.start();
-      return () => AudioVisualizer.stop();
-    }
-  }, [call!.stream, audioRef, canvasRef])
-
-  useEffect(() => {
-    if (audioRef.current) {
-      const audio = audioRef.current as HTMLAudioElement;
-      audio.muted = !volume;
-    }
-  }, [audioRef, volume])
-
-  const handleTerminate = () => call!.terminate();
-
-  const handleSwitchKeypad = () => setShowKeypad(!showKeypad);
+  if (!call) {
+    return <>Unexpected error</>
+  }
 
   return (
     <div className="call-active-pane">
-      <audio ref={audioRef} />
+      <audio ref={audioRef} autoPlay={true} />
       <canvas ref={canvasRef} width="300" height="125" />
-      {showKeypad && 
+      {showKeypad &&
         (<div className="call-active-pane-keypad-outer-con">
           <div className="call-active-pane-keypad-inner-con">
             <KeypadPane />
@@ -62,7 +40,7 @@ const CallActivePane: FC = () => {
         {volume && (
           <button
             className="transparent-btn call-active-pane-control-btn"
-            onClick={() => setVolume(false)}
+            onClick={mute}
           >
             <BsVolumeUpFill/>
           </button>
@@ -70,37 +48,37 @@ const CallActivePane: FC = () => {
         {!volume && (
           <button
             className="transparent-btn call-active-pane-control-btn"
-            onClick={() => setVolume(true)}
+            onClick={unmute}
           >
             <BsVolumeMuteFill/>
           </button>
         )}
-        {call!.isMuted && (
+        {call.isMuted && (
           <button
             className="transparent-btn call-active-pane-control-btn"
-            onClick={() => call!.muteMicro(false)}
+            onClick={toggleMute}
           >
             <BsMicMuteFill />
           </button>
         )}
-        {!call!.isMuted && (
+        {!call.isMuted && (
           <button
             className="transparent-btn call-active-pane-control-btn"
-            onClick={() => call!.muteMicro(true)}
+            onClick={toggleMute}
           >
             <BsMicFill />
           </button>
         )}
         <button
           className="transparent-btn call-active-pane-control-btn"
-          onClick={handleSwitchKeypad}
+          onClick={() => setShowKeypad(!showKeypad)}
         >
           <IoIosKeypad />
         </button>
       </div>
       <button
         className="hang-up-btn control-btn"
-        onClick={handleTerminate}
+        onClick={() => hangupCall()}
       >
         <ImPhoneHangUp />
       </button>

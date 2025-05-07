@@ -1,20 +1,18 @@
 import { FC, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { SipContext, RegistrationState } from "../providers/SipProvider";
+import PendingTab from "../components/PendingTab";
+import { SipContext } from "../context/SipContext";
 
 const HomePage: FC = () => {
   const navigate = useNavigate();
-  const { registrationState } = useContext(SipContext)!;
+  const { connection } = useContext(SipContext);
 
   useEffect(() => {
-    if (registrationState === RegistrationState.UNREGISTERED) {
-      navigate("/account");
-    } else {
-      navigate("/dialpad");
-    }
-  }, [navigate, registrationState]);
+    if (connection.isConnected()) navigate("/dialpad");
+    if (connection.isDisconnected()) navigate("/account");
+  }, [navigate, connection]);
 
-  return (<></>);
+  return <PendingTab text="CONNECTING" />;
 }
 
 export default HomePage;

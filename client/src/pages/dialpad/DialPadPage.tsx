@@ -2,7 +2,7 @@ import { FC, useState, useContext, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router";
 import { ImPhone } from "react-icons/im";
 import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
-import { SipContext, RegistrationState } from "../../providers/SipProvider";
+import { SipContext } from "../../context/SipContext";
 import Hover from "../../components/Hover";
 import NavTabs, { Tab } from "../../components/NavTabs";
 import Keypad, { Key } from "./Keypad";
@@ -11,14 +11,14 @@ import "./DialPadPage.css";
 
 const DialPadPage: FC = () => {
   const navigate = useNavigate();
-  const { registrationState } = useContext(SipContext)!;
+  const { connection } = useContext(SipContext);
   const [number, setNumber] = useState("");
 
   useEffect(() => {
-    if (registrationState !== RegistrationState.REGISTERED) {
-      navigate("/account");
+    if (!connection.isConnected()) {
+      navigate("/home");
     }
-  }, [registrationState, navigate]);
+  }, [connection, navigate]);
 
   const handleCall = () => {
     navigate(`/call/${extractPhoneNumber(number)}`);
@@ -63,13 +63,15 @@ const DialPadPage: FC = () => {
         </Hover>
       </div>
       <Keypad onPressKey={handleKey} />
-      <button
-        className="call-btn medium-btn"
-        onClick={handleCall}
-        disabled={!number}
-      >
-        <ImPhone />
-      </button>
+      <div className="dial-pad-page-call-btn-ctn">
+        <button
+          className="call-btn medium-btn"
+          onClick={handleCall}
+          disabled={!number}
+        >
+          <ImPhone />
+        </button>
+      </div>
       <NavTabs tabs={[Tab.HISTORY, Tab.CONTACTS]} />
     </div>
   );

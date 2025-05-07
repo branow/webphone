@@ -1,3 +1,5 @@
+import { log } from "../util/log";
+
 export const BACKEND_ORIGIN = import.meta.env.WEBPHONE_BACKEND_ORIGIN;
 
 export interface Page<E> {
@@ -174,9 +176,7 @@ export class ResponseProcessor {
 
 // Utility
 export async function logRequestResponse(request: Request, response: Response) {
-  if (import.meta.env.WEBPHONE_PROFILE === "dev") {
-    console.log(`${response.status} ${request.method} ${request.url}`);
-  }
+  log(`${response.status} ${request.method} ${request.url}`);
 }
 
 export async function handleApiError(_: Request, res: Response) {

@@ -66,7 +66,17 @@
   color: var(--c-disabled);
 }
 
+.dial-pad-page-call-btn-ctn {
+  height: 65px;
+  width: 65px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .dial-pad-page .call-btn {
+  position: absolute;
   font-size: 32px;
   padding: 10px;
   padding-left: 12px;

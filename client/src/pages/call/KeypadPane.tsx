@@ -1,16 +1,16 @@
 import { FC, useContext, useState, ChangeEvent } from "react";
-import { CallContext } from "../../providers/CallProvider";
+import { CallContext } from "../../context/CallContext";
 import Keypad, { Key } from "../dialpad/Keypad";
 import TextInput from "../../components/TextInput";
 import { extractPhoneNumber } from "../../util/format.js";
 import "./KeypadPane.css";
 
 const KeypadPane: FC = () => {
-  const { call } = useContext(CallContext)!;
+  const { sendDtmf } = useContext(CallContext);
   const [input, setInput] = useState<string>("");
 
   const handlePressKey = (key: Key) => {
-    call!.sendDTMF(key.sign);
+    sendDtmf(key.sign);
     setInput(input + key.sign);
   }
 
@@ -25,7 +25,7 @@ const KeypadPane: FC = () => {
     // Send DTMF if user typed right sign.
     if (curInput.length === input.length + 1) {
       const sign = curInput.charAt(input.length - 1);
-      call!.sendDTMF(sign);
+      sendDtmf(sign);
     }
     setInput(curInput);
   }

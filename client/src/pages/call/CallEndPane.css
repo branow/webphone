@@ -1,32 +1,60 @@
 .call-end-pane {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.call-end-pane-msg {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  padding: 20px 0;
+  gap: 15px;
 }
 
-.call-end-pane-message {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.call-end-pane-status {
-  color: var(--c-subtext);
+.call-end-pane-msg-stat {
   font-size: 24px;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.call-end-pane-duration {
+.call-end-pane-msg-stat-err {
+  color: var(--c-red);
+}
+
+.call-end-pane-msg-stat-ok {
+  color: var(--c-green);
+}
+
+.call-end-pane-msg-body {
   color: var(--c-subtext);
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.call-end-pane-msg-dur {
+  color: var(--c-subtext);
+  font-size: 16px;
   font-weight: bold;
+}
+
+.call-end-pane-back-btn-ctn {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .call-end-pane-back-btn {
+  /* position: absolute; */
   background-color: var(--c-green);
   color: var(--c-icon);
   border: none;

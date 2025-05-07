@@ -27,7 +27,7 @@ const HistoryNodes: FC<Props> = ({ scrollRef, queryKey, queryFunc }) => {
   useInfiniteScroll({
     scrollRef,
     loadFactor: 0.9,
-    move: fetching.fetchNextPage
+    move: async () => { fetching.fetchNextPage(); }
   });
 
   const item = (record: Record, index: number, records: Record[]) => {

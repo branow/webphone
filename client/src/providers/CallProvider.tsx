@@ -1,213 +1,34 @@
-import { FC, ReactNode, createContext, useContext, useState, useEffect } from "react";
-import { SipContext } from "./SipProvider";
-import { RTCSession } from "jssip/lib/RTCSession";
-import { IncomingRequest, OutgoingRequest } from "jssip/lib/SIPMessage";
-import { IncomingRTCSessionEvent, OutgoingRTCSessionEvent } from "jssip/lib/UA";
+import { FC, ReactNode, useContext } from "react";
+import { SipContext } from "../context/SipContext";
+import { CallContext } from "../context/CallContext";
 
 interface Props {
+  callId: string;
   children: ReactNode;
 }
 
-export enum CallState {
-  PROGRESS = "progress",
-  FAILED = "failed",
-  CONFIRMED = "confirmed",
-  HOLD = "hold",
-  ENDED = "ended",
-}
-
-export enum CallDirection {
-  INCOMING = "incoming",
-  OUTCOMING = "outcoming",
-}
-
-export enum CallAgent {
-  LOCAL = "local",
-  REMOTE = "remote",
-}
-
-interface CallInfo {
-  startedBy: CallAgent;
-  number: string;
-  state: CallState;
-  isMuted: boolean;
-  startDate: Date;
-  stream?: MediaStream;
-  endDate?: Date;
-  endedBy?: CallAgent;
-}
-
-export interface Call extends CallInfo {
-  muteMicro: (mute: boolean) => void;
-  sendDTMF: (tone: string | number) => void;
-  answer: () => void;
-  terminate: () => void;
-}
-
-interface Value {
-  call: Call | null;
-  doCall: (number: string) => void;
-}
-
-export const CallContext = createContext<Value | null>(null);
-
-let session: RTCSession | null = null;
-
-const CallProvider: FC<Props> = ({ children }) => {
-  const { ua } = useContext(SipContext)!;
-  const [callState, setCallState] = useState<CallInfo | null>(null);
-
-  useEffect(() => {
-    if (ua == null) return;
-
-    ua!.on("newRTCSession",
-      (event: IncomingRTCSessionEvent | OutgoingRTCSessionEvent) => {
-      const originator = event.originator;
-      session = event.session as RTCSession;
-      const request = event.request as IncomingRequest | OutgoingRequest;
-
-      // Hide the initial callState var, because of loosing
-      // data during frequent react state updating.
-      let callState: CallInfo = {
-        startedBy: originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE,
-        number: request.ruri.user,
-        state: CallState.PROGRESS,
-        startDate: new Date(),
-        isMuted: session.isMuted().audio,
-      }
-      setCallState(callState);
-
-      const changeState = (newState: any) => {
-        const newCallState = { ...callState, ...newState }
-        callState = newCallState;
-        setCallState(newCallState);
-      } 
-
-      session.connection.ontrack = (event) => {
-        const remoteStream = new MediaStream();
-        event.streams[0]?.getTracks()
-          .forEach((track) => remoteStream.addTrack(track));
-
-        log('call provider add stream', remoteStream);
-        changeState({ stream: remoteStream });
-      }
-
-      session.on("peerconnection", (e) => {
-        log("peerconneciton", e, callState);
-      });
-
-      session.on("connecting", (e) => {
-        log("connecting", e, callState);
-      });
-
-      session.on("sending", (e) => {
-        log("sending", e, callState);
-      });
-
-      session.on("progress", (e: any) => {
-        log("progress", e, callState);
-        changeState({ state: CallState.PROGRESS });
-      });
-
-      session.on("accepted", (e: any) => {
-        log("accepted", e, callState);
-      });
-
-      session.on("confirmed", (e: any) => {
-        log("comfirmed", e, callState);
-        changeState({ state: CallState.CONFIRMED });
-      });
-
-      session.on("ended", (e) => {
-        log("ended", e, callState);
-        const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
-        const endedBy = e.originator === "local" ? CallAgent.LOCAL : CallAgent.REMOTE;
-        changeState({ state: CallState.ENDED, endDate, endedBy });
-      });
-
-      session.on("failed", (e) => {
-        log("failed", e);
-        const endDate = callState.state === CallState.CONFIRMED ? new Date() : undefined;
-        changeState({ state: CallState.FAILED, endDate });
-      });
-
-      session.on("hold", (e) => {
-        log("hold", e);
-        changeState({ state: CallState.HOLD });
-      });
-
-      session.on("unhold", (e) => {
-        log("unhold", e);
-        changeState({ state: CallState.CONFIRMED });
-      });
-    });
-
-    return () => { ua!.removeAllListeners(); }
-  }, [ua]);
-
-  const doCall = (number: string) => {
-    log("do call:", number);
-    const options = {
-      "mediaConstraints": { "audio": true }
-    }
-    ua!.call(number, options);
-  }
-
-  const answer = () => {
-    if (session) {
-      session.answer();
-    }
-  }
-
-  const sendDTMF = (tone: string | number) => {
-    if (session) {
-      session.sendDTMF(tone);
-    }
-  }
-
-  const muteMicro = (mute: boolean) => {
-    if (session) {
-      if (mute) {
-        session.mute();
-      } else {
-        session.unmute();
-      }
-      setCallState({
-        ...callState!,
-        isMuted: session.isMuted().audio,
-      });
-    }
-  }
-
-  const terminate = () => {
-    if (session) {
-      log("terminate session");
-      session.terminate();
-    }
-  }
-
-  let call: Call | null = null;
-  if (callState) {
-    call = {
-      ...callState,
-      muteMicro,
-      sendDTMF,
-      answer,
-      terminate,
-    }
-  }
+const CallProvider: FC<Props> = ({ callId, children }) => {
+  const {
+    calls,
+    answerCall,
+    hangupCall,
+    sendDtmf,
+    toggleHold,
+    toggleMute,
+  } = useContext(SipContext);
 
   return (
-    <CallContext.Provider value={{ call, doCall }}>
+    <CallContext.Provider value={{
+      call: calls.find(c => c.id === callId) || null,
+      answerCall: () => answerCall(callId),
+      hangupCall: () => hangupCall(callId),
+      sendDtmf: (tone: string | number) => sendDtmf(callId, tone),
+      toggleHold: () => toggleHold(callId),
+      toggleMute: () => toggleMute(callId),
+    }}>
       {children}
     </CallContext.Provider>
   );
 };
-
-function log(...data: any[]) {
-  if (import.meta.env.WEBPHONE_PROFILE === "dev") {
-    console.log(...data);
-  }
-}
 
 export default CallProvider;

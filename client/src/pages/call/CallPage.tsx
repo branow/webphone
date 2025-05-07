@@ -1,41 +1,30 @@
-import { FC, useEffect, useContext, useState } from "react";
+import { FC, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
-import { SipContext, RegistrationState } from "../../providers/SipProvider";
-import { CallContext } from "../../providers/CallProvider";
 import PendingTab from "../../components/PendingTab";
 import ErrorMessage from "../../components/ErrorMessage";
-import CallActivePage from "./CallActivePage";
+import { SipContext } from "../../context/SipContext";
 import "./CallPage.css";
 
 const CallPage: FC = () => {
   const navigate = useNavigate();
   const { number } = useParams<{ number: string }>();
-  
-  const { registrationState } = useContext(SipContext)!;
-  const { call, doCall } = useContext(CallContext)!;
-  const [startedCall, setStartedCall] = useState<boolean>(false);
+  const { calls, connection, makeCall } = useContext(SipContext);
 
   useEffect(() => {
-    if (number) {
-      doCall(number);
-      setStartedCall(true);
-    }
-  }, [ number]);
+    if (!connection.isConnected()) { navigate("/home"); return; }
+    if (number) { makeCall( number); }
+  }, [connection.isConnected(), number]);
 
   useEffect(() => {
-    if (registrationState !== RegistrationState.REGISTERED) {
-      navigate("/account");
-    }
-  }, [registrationState]);
+    const call = calls.find(c => !c.state.isEnded() && c.number === number);
+    if (call) navigate(`/call/active/${call.id}`);
+  }, [calls]);
 
-  if (!number)
+  if (!number) {
     return <ErrorMessage error="Invalid phone number" />
-
-  if (!call || !startedCall) {
-    return <PendingTab text="ESTABLISHING CALL" message="Please wait" />;
   }
 
-  return (<CallActivePage />);
+  return <PendingTab text="CALLING" message="Please wait" />;
 };
 
 export default CallPage;

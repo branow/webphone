@@ -4,7 +4,6 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import PageLayout from "./components/PageLayout";
 import AuthProvider from "./providers/AuthProvider";
 import SipProvider from "./providers/SipProvider";
-import CallProvider from "./providers/CallProvider";
 import SipAccountPage from "./pages/account/SipAccountPage";
 import HistoryPage from "./pages/history/HistoryPage";
 import ContactsPage from "./pages/contacts/ContactsPage";
@@ -14,6 +13,7 @@ import ContactUpdatePage from "./pages/contacts/edit/ContactUpdatePage";
 import FeatureCodesPage from "./pages/contacts/feature-codes/FeatureCodesPage";
 import DialPadPage from "./pages/dialpad/DialPadPage";
 import CallPage from "./pages/call/CallPage";
+import CallActivePage from "./pages/call/CallActivePage";
 import SettingsPage from "./pages/setting/SettingsPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 import HomePage from "./pages/HomePage";
@@ -36,6 +36,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/home",
         element: <HomePage />,
       },
       {
@@ -71,6 +75,10 @@ const router = createBrowserRouter([
         element: <CallPage />
       },
       {
+        path: "/call/active/:id",
+        element: <CallActivePage />
+      },
+      {
         path: "/account",
         element: <SipAccountPage />
       },
@@ -87,17 +95,15 @@ const queryClient = new QueryClient();
 
 const App: FC = () => {
   return (
-      <div className="app">
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <SipProvider>
-              <CallProvider>
-                <RouterProvider router={router} />
-              </CallProvider>
-            </SipProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </div>
+    <div className="app">
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <SipProvider>
+            <RouterProvider router={router} />
+          </SipProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </div>
   );
 }
 
