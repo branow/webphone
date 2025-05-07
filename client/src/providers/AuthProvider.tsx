@@ -1,11 +1,6 @@
-import { FC, ReactNode, useEffect, useState, createContext } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 import keycloak, { login } from "../services/keycloak";
-
-export interface AuthContextType {
-  authenticated?: boolean;
-}
-
-export const AuthContext = createContext<AuthContextType | null>(null);
 
 interface Props {
   children: ReactNode;
