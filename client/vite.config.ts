@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig(() => {
   const expose = [
@@ -12,6 +13,7 @@ export default defineConfig(() => {
     define: expose.reduce((acc, key) => {
       acc[`import.meta.env.${key}`] = JSON.stringify(process.env[key] || "");
       return acc;
-    }, {} as Record<string, string>)
+    }, {} as Record<string, string>),
+    plugins: [ basicSsl() ]
   }
 })
