@@ -47,7 +47,7 @@ import com.scisbo.webphone.services.HistoryService;
 import com.scisbo.webphone.services.PhotoService;
 import com.scisbo.webphone.utils.validation.SimpleValidationResultFormatter;
 
-@WebMvcTest
+@WebMvcTest(properties = "server.servlet.context-path=")
 @Import({
     WebSecurityConfig.class,
     ContactMapper.class,
