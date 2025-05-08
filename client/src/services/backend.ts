@@ -1,6 +1,6 @@
 import { log } from "../util/log";
 
-export const BACKEND_ORIGIN = import.meta.env.WEBPHONE_BACKEND_ORIGIN;
+export const BACKEND_ORIGIN = import.meta.env.WEBPHONE_BACKEND_ORIGIN + import.meta.env.WEBPHONE_CONTEXT_PATH;
 
 export interface Page<E> {
   number: number;

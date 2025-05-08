@@ -1,9 +1,10 @@
 import Keycloak from "keycloak-js";
+import { CONTEXT_PATH } from "../routes";
 
 const keycloak = new Keycloak({
     url: import.meta.env.WEBPHONE_KEYCLOAK_ORIGIN,
     realm: import.meta.env.WEBPHONE_KEYCLOAK_REALM,
-    clientId: import.meta.env.WEBPHONE_KEYCLOAK_CLIEND_ID,
+    clientId: import.meta.env.WEBPHONE_KEYCLOAK_CLIENT_ID,
 });
 
 interface Authentication {
@@ -15,7 +16,7 @@ export async function initKeycloak(): Promise<boolean> {
   if (!keycloak.didInitialize) {
     const auth = await keycloak.init({
       onLoad: "check-sso",
-      silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
+      silentCheckSsoRedirectUri: `${window.location.origin}${CONTEXT_PATH}/silent-check-sso.html`,
     });
     return auth;
   }
