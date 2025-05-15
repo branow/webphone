@@ -11,6 +11,7 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   value?: string;
   placeholder?: string;
   validate?: (value: string) => string;
+  onBlur?: () => void;
 }
 
 const TextInput: FC<Props> = (props) => {
@@ -50,6 +51,7 @@ const TextInput: FC<Props> = (props) => {
           name={props.name}
           value={props.value}
           onChange={handleOnChange}
+          onBlur={props.onBlur}
           placeholder={props.placeholder}
         />
       </div>

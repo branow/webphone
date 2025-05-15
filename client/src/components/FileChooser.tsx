@@ -5,7 +5,7 @@ interface Trigger {
 }
 
 interface Props {
-  inputRef?: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement>;
   trigger: Trigger;
   onLoadFile: (file: File) => void;
   accept?: string;

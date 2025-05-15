@@ -1,10 +1,11 @@
 .sip-account-form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 15px;
   width: 100%;
+  height: 100%;
   padding: 15px;
   box-sizing: border-box;
 }
@@ -69,8 +70,16 @@
   border-bottom: 2px solid var(--c-hover);
 }
 
+.sip-account-form-save-btn-ctn {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .sip-account-form-save-btn {
-  margin: 10px;
   background-color: var(--c-green);
   color: var(--c-icon);
   border: none;
@@ -84,7 +93,11 @@
   width: fit-content;
 }
 
-.sip-account-form-save-btn:hover {
+.sip-account-form-save-btn:not(:disabled):hover {
   background-color: var(--c-green-dark);
   font-size: 22px;
+}
+
+.sip-account-form-save-btn:disabled {
+  background-color: var(--c-disabled);
 }

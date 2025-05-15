@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useContext, ChangeEventHandler, MouseEventHandler } from "react";
+import { FC, useState, useRef, useEffect, useContext, ChangeEventHandler, MouseEventHandler } from "react";
 import { BsPersonFill, BsKeyFill, BsEraserFill, BsCloudUploadFill } from "react-icons/bs";
 import TextInput from "../../components/TextInput";
 import FileChooser from "../../components/FileChooser";
@@ -10,6 +10,7 @@ import "./SipAccountForm.css";
 const SipAccountForm: FC = () => {
   const { account, setAccount, connectionError } = useContext(SipContext);
   const [error, setError] = useState(connectionError);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setError(connectionError);
@@ -27,7 +28,7 @@ const SipAccountForm: FC = () => {
 
   const handleSave: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
-    setAccount(localAccount);
+    setAccount({ ...localAccount });
   };
 
   const handleClean: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -75,6 +76,17 @@ const SipAccountForm: FC = () => {
     reader.readAsText(file);
   }
 
+  const validateInput = (name: string, value: string): string => {
+    if (!value || !(value.trim())) return `${name} is mandatory`;
+    return "";
+  }
+
+  const accountIsValid = (): boolean => {
+    return !validateInput("", localAccount.username)
+      && !validateInput("", localAccount.password)
+      && !validateInput("", localAccount.domain);
+  }
+
   return (
     <form className="sip-account-form">
       <ErrorMessage className="sip-account-form-error" error={error} />
@@ -92,7 +104,7 @@ const SipAccountForm: FC = () => {
           <BsEraserFill />
         </button>
       </div>
-      <FileChooser trigger={fileTrigger} onLoadFile={handleLoadFile}/>
+      <FileChooser inputRef={fileInputRef} trigger={fileTrigger} onLoadFile={handleLoadFile}/>
       <TextInput
         className="sip-account-form-text-in"
         Icon={BsPersonFill}
@@ -100,6 +112,7 @@ const SipAccountForm: FC = () => {
         name="username"
         value={localAccount.username}
         onChange={handleChange}
+        validate={(input) => validateInput("Username", input)}
       />
       <TextInput
         className="sip-account-form-text-in"
@@ -108,6 +121,7 @@ const SipAccountForm: FC = () => {
         name="password"
         value={localAccount.password}
         onChange={handleChange}
+        validate={(input) => validateInput("Password", input)}
       />
       <TextInput
         className="sip-account-form-text-in"
@@ -115,13 +129,17 @@ const SipAccountForm: FC = () => {
         name="domain"
         value={localAccount.domain}
         onChange={handleChange}
+        validate={(input) => validateInput("Domain", input)}
       />
-      <button
-        className="sip-account-form-save-btn"
-        onClick={handleSave}
-      >
-        Save
-      </button>
+      <div className="sip-account-form-save-btn-ctn">
+        <button
+          className="sip-account-form-save-btn"
+          onClick={handleSave}
+          disabled={!accountIsValid()}
+        >
+          Save
+        </button>
+      </div>
     </form>
   );
 }
