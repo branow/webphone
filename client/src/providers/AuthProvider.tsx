@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import keycloak, { login } from "../services/keycloak";
+import { Auth } from "../services/auth";
 
 interface Props {
   children: ReactNode;
@@ -22,12 +22,13 @@ const AuthProvider: FC<Props> = ({ children }) => {
       }
     }
 
-    login()
+    Auth().login()
       .then(auth => {
         setAuthenticated(auth);
         if (!auth) {
           setError("Login failed. Thired-party cookies might be blocked.");
-      }})
+        }
+      })
       .catch(error => {
         console.error("Keycloak init error:", error);
         setAuthenticated(false);
@@ -37,11 +38,13 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
   if (error) {
     return (
-      <div>
-        <h2>Authentication Error</h2>
-        <p>{error}</p>
-        <p>Make sure third-party cookies are enabled in your browser.</p>
-        <button onClick={() => keycloak.login()}>Retry Login</button>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100vw", height: "100vh"  }}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 15 }}>
+          <h2>Authentication Error</h2>
+          <div>{error}</div>
+          <div>Make sure third-party cookies are enabled in your browser.</div>
+          <button onClick={() => Auth().login()}>Retry Login</button>
+        </div>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import { RequestBuilder, BACKEND_ORIGIN, handleApiError, logRequestResponse } from "./backend";
-import { ensureAuthentication } from "./keycloak";
+import { Auth } from "./auth";
 
 export type Photo = {
   id: string;
@@ -10,7 +10,7 @@ export const QueryKeys = {
 }
 
 export async function get(photo: string): Promise<string> {
-  const { token } = await ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u.origin(BACKEND_ORIGIN).path(`/api/photos/${photo}`))
     .get().bearer(token).fetch();
@@ -21,7 +21,7 @@ export async function get(photo: string): Promise<string> {
 }
 
 export async function upload(photo: File): Promise<Photo> {
-  const { token } = await ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
 
   const formData = new FormData();
   formData.append("photo", photo);

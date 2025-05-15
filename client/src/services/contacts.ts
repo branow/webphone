@@ -1,6 +1,6 @@
 import { Query } from "@tanstack/react-query";
 import { RequestBuilder, Page, QueryPageOptions, BACKEND_ORIGIN, logRequestResponse, handleApiError } from "./backend.ts";
-import { ensureAuthentication } from "./keycloak.ts";
+import { Auth } from "./auth";
 
 export enum NumberType {
   WORK = "work",
@@ -43,7 +43,7 @@ export const QueryKeys = {
 }
 
 export async function get(id: string): Promise<ContactDetails> {
-  const { token } = await ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -56,7 +56,7 @@ export async function get(id: string): Promise<ContactDetails> {
 }
 
 export async function getAll({ query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -72,7 +72,7 @@ export async function getAll({ query, number, size }: QueryPageOptions): Promise
 }
 
 export async function create(contact: CreateContact): Promise<ContactDetails> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -85,7 +85,7 @@ export async function create(contact: CreateContact): Promise<ContactDetails> {
 }
 
 export async function update(contact: UpdateContact): Promise<ContactDetails> {
-  const { token } = await ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -98,7 +98,7 @@ export async function update(contact: UpdateContact): Promise<ContactDetails> {
 }
 
 export async function remove(id: string): Promise<void> {
-  const { token } = await ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -111,7 +111,7 @@ export async function remove(id: string): Promise<void> {
 }
 
 export async function getFeatureCodes({ query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -127,7 +127,7 @@ export async function getFeatureCodes({ query, number, size }: QueryPageOptions)
 }
 
 export async function createBatch(contacts: CreateContact[]): Promise<Page<Contact>> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)

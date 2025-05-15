@@ -27,22 +27,21 @@ export const CONTEXT_PATH = import.meta.env.WEBPHONE_CONTEXT_PATH;
 
 const options = {
   basename: CONTEXT_PATH,
-}
+};
+
+
 
 export const router = createBrowserRouter([
   {
+
     path: "/",
     element: <PageLayout />,
     errorElement: <NotFoundPage />,
     children: [
-      {
-        path: "/",
+      ...["/", "/home", "/index.html", "/phone.html"].map(path => ({
+        path: path,
         element: <HomePage />,
-      },
-      {
-        path: "/home",
-        element: <HomePage />,
-      },
+      })),
       {
         path: "/dialpad",
         element: <DialPadPage />

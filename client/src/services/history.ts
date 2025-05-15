@@ -1,6 +1,6 @@
-import { ensureAuthentication } from "./keycloak.ts";
-import { Page, BACKEND_ORIGIN, PageOptions, RequestBuilder, logRequestResponse, handleApiError } from "./backend.ts";
 import { Query } from "@tanstack/react-query";
+import { Page, BACKEND_ORIGIN, PageOptions, RequestBuilder, logRequestResponse, handleApiError } from "./backend.ts";
+import { Auth } from "./auth.ts";
 
 export enum CallStatus {
   INCOMING = "incoming",
@@ -41,7 +41,7 @@ export const QueryKeys = {
 }
 
 export async function getAll({ number, size }: PageOptions): Promise<Page<Record>> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -58,7 +58,7 @@ export async function getAll({ number, size }: PageOptions): Promise<Page<Record
 export async function getAllByContact(
   contactId: string, { number, size }: PageOptions
 ): Promise<Page<Record>> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -73,7 +73,7 @@ export async function getAllByContact(
 }
 
 export async function create(record: CreateRecord): Promise<Record> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -86,7 +86,7 @@ export async function create(record: CreateRecord): Promise<Record> {
 }
 
 export async function remove(id: string): Promise<void> {
-  const { token } = await ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
@@ -99,7 +99,7 @@ export async function remove(id: string): Promise<void> {
 }
 
 export async function removeAll(): Promise<void> {
-  const { token, subject } = await ensureAuthentication();
+  const { token, subject } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)

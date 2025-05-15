@@ -2,6 +2,7 @@
 set -uo pipefail
 
 ACTION="${1:-}" # build or start
+OBJECT="${2:-}" # client, server, env
 
 function load_env() {
   if [[ -f ".env" ]]; then
@@ -15,31 +16,29 @@ function load_env() {
 }
 
 function check_env() {
-  if [ -z "$WEBPHONE_PROFILE" ]; then
-    echo "WEBPHONE_PROFILE not set, defaulting to 'prod'"
-    export WEBPHONE_PROFILE="prod"
-  fi
 
-  if [ -z "$WEBPHONE_SERVER_PORT" ]; then
-    echo "WEBPHONE_SERVER_PORT not set, defaulting to 8080"
-    export WEBPHONE_SERVER_PORT="8080"
-  fi
-
-  if [ -z "$WEBPHONE_CONTEXT_PATH" ]; then
-    echo "WEBPHONE_CONTEXT_PATH not set, using empty string"
-    export WEBPHONE_CONTEXT_PATH=""
-  fi
+  export WEBPHONE_PROFILE="${WEBPHONE_PROFILE:-prod}"
+  export WEBPHONE_SERVER_PORT="${WEBPHONE_SERVER_PORT:-8080}"
+  export WEBPHONE_CONTEXT_PATH="${WEBPHONE_CONTEXT_PATH:-}"
 
   # Required variables
   local missing_vars=()
+
+  if [ -z "$WEBPHONE_AUTH_HEADERS_URL" ]; then
+    for var in \
+      WEBPHONE_KEYCLOAK_ORIGIN \
+      WEBPHONE_KEYCLOAK_REALM \
+      WEBPHONE_KEYCLOAK_CLIENT_ID; do
+      if [[ -z "${!var:-}" ]]; then
+        missing_vars+=("$var")
+      fi
+    done
+  fi
 
   for var in \
     WEBPHONE_FRONTEND_ORIGIN \
     WEBPHONE_BACKEND_ORIGIN \
     WEBPHONE_DB_URL \
-    WEBPHONE_KEYCLOAK_ORIGIN \
-    WEBPHONE_KEYCLOAK_REALM \
-    WEBPHONE_KEYCLOAK_CLIENT_ID \
     WEBPHONE_ISSUER_URI; do
     if [[ -z "${!var:-}" ]]; then
       missing_vars+=("$var")
@@ -53,15 +52,6 @@ function check_env() {
     done
     exit 1
   fi
-
-  # Required vars
-  [ -z "$WEBPHONE_FRONTEND_ORIGIN" ] && echo "WEBPHONE_FRONTEND_ORIGIN is required" && exit 1
-  [ -z "$WEBPHONE_BACKEND_ORIGIN" ] && echo "WEBPHONE_BACKEND_ORIGIN is required" && exit 1
-  [ -z "$WEBPHONE_DB_URL" ] && echo "WEBPHONE_DB_URL is required" && exit 1
-  [ -z "$WEBPHONE_KEYCLOAK_ORIGIN" ] && echo "WEBPHONE_KEYCLOAK_ORIGIN is required" && exit 1
-  [ -z "$WEBPHONE_KEYCLOAK_REALM" ] && echo "WEBPHONE_KEYCLOAK_REALM is required" && exit 1
-  [ -z "$WEBPHONE_KEYCLOAK_CLIENT_ID" ] && echo "WEBPHONE_KEYCLOAK_CLIENT_ID is required" && exit 1
-  [ -z "$WEBPHONE_ISSUER_URI" ] && echo "WEBPHONE_ISSUER_URI is required" && exit 1
 }
 
 function setup_env() {
@@ -69,57 +59,90 @@ function setup_env() {
   check_env
 }
 
-function build() {
-  echo "Building application..."
+function build_client() {
   setup_env
 
-  echo "Building frontend..."
+  echo "Cleaning build artifacts..."
+  rm -rf build/client
+
+  echo "Building client..."
   (cd client && npm install && npm run build)
 
+  mkdir -p build/client
 
-  local static_dir="server/src/main/resources/static"
-  mkdir -p "$static_dir"
-
-  echo "Copying frontend build to backend..."
-  cp -R client/dist/* "$static_dir/"
-
-  echo "Building backend..."
-  (cd server && mvn clean install -DskipTests)
-
-  mkdir -p webphone
-
-  echo "Copying executable JAR to webphone/..."
-  cp server/target/webphone-*.jar webphone/
-
-  echo "Webphone JAR was built successfully."
+  echo "Copying client build to build/client..."
+  cp -R client/dist/* build/client/
 }
 
-function start() {
-  echo "Starting application..."
+function build_server() {
   setup_env
 
-  mkdir -p webphone
+  echo "Cleaning build artifacts..."
+  rm -rf build/server
 
-  local jar_file=$(cd webphone && ls webphone-*.jar 2>/dev/null | head -n 1)
+  echo "Building server..."
+  (cd server && mvn clean install -DskipTests)
+
+  mkdir -p build/server
+
+  echo "Copying executable JAR to build/server..."
+  cp server/target/webphone-*.jar build/server/
+
+  echo "Server JAR was built successfully."
+}
+
+function build() {
+  case "$OBJECT" in
+    client) build_client ;;
+    server) build_server ;;
+    env) setup_env ;;
+    *) build_client
+      build_server;;
+  esac
+}
+
+function start_server() {
+  echo "Starting backend..."
+
+  mkdir -p build
+
+  local jar_file=$(cd build/server && ls webphone-*.jar 2>/dev/null | head -n 1)
 
   if [ -z "$jar_file" ]; then
     echo "JAR not found. Running build..."
-    build
-    jar_file=$(cd webphone && ls webphone-*.jar 2>/dev/null | head -n 1)
+    build_server
+    jar_file=$(cd build/server && ls webphone-*.jar 2>/dev/null | head -n 1)
     if [ -z "$jar_file" ]; then
       echo "Build failed. Exiting."
       exit 1
     fi
   fi
 
-  echo "Running webphone/$jar_file..."
-  (cd webphone && java -jar "$jar_file")
+  setup_env
+
+  echo "Running build/server/$jar_file..."
+  (cd build/server && java -jar "$jar_file")
 }
 
-case "$ACTION" in
-  build) build ;;
-  start) start ;;
-  *) echo "Usage: $0 {build|start}" 
-    exit 1
-    ;;
-esac
+function start() {
+  case "$OBJECT" in
+    client) echo "'start client' is not supported (check 'start server')"
+      exit 1
+      ;;
+    server) start_server ;;
+    env) setup_env ;;
+    *) start_server;;
+  esac
+}
+
+function doAction() {
+  case "$ACTION" in
+    build) build ;;
+    start) start ;;
+    *) echo "Usage: $0 {build|start} {client|server|env}"
+      exit 1
+      ;;
+  esac
+}
+
+doAction

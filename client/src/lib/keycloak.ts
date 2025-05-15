@@ -1,18 +1,21 @@
 import Keycloak from "keycloak-js";
 import { CONTEXT_PATH } from "../routes";
+import { Authentication, AuthService } from "../services/auth";
 
-const keycloak = new Keycloak({
-    url: import.meta.env.WEBPHONE_KEYCLOAK_ORIGIN,
-    realm: import.meta.env.WEBPHONE_KEYCLOAK_REALM,
-    clientId: import.meta.env.WEBPHONE_KEYCLOAK_CLIENT_ID,
-});
+let keycloak: Keycloak;
 
-interface Authentication {
-  token: string;
-  subject: string;
+export function KeycloakService(): AuthService {
+  return { init, login, ensureAuthentication }
 }
 
-export async function initKeycloak(): Promise<boolean> {
+async function init(): Promise<boolean> {
+  if (!keycloak) {
+    keycloak = new Keycloak({
+      url: import.meta.env.WEBPHONE_KEYCLOAK_ORIGIN,
+      realm: import.meta.env.WEBPHONE_KEYCLOAK_REALM,
+      clientId: import.meta.env.WEBPHONE_KEYCLOAK_CLIENT_ID,
+    });
+  }
   if (!keycloak.didInitialize) {
     const auth = await keycloak.init({
       onLoad: "check-sso",
@@ -23,15 +26,15 @@ export async function initKeycloak(): Promise<boolean> {
   return keycloak.authenticated!;
 }
 
-export async function login(): Promise<boolean> {
-  const authenticated = await initKeycloak();
+async function login(): Promise<boolean> {
+  const authenticated = await init();
   if (!authenticated) {
     await keycloak.login({ redirectUri: currentUrl() });
   }
   return keycloak.authenticated!;
 }
 
-export async function ensureAuthentication(): Promise<Authentication> {
+async function ensureAuthentication(): Promise<Authentication> {
   await login();
 
   await keycloak.updateToken(15);
@@ -49,5 +52,3 @@ export async function ensureAuthentication(): Promise<Authentication> {
 function currentUrl(): string {
   return window.location.href;
 }
-
-export default keycloak;
