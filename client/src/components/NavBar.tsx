@@ -7,7 +7,7 @@ const NavBar: FC = () => {
   const navigate = useNavigate();
 
   const handleSetting = () => {
-    if (window.location.pathname === "/settings") {
+    if (window.location.pathname.endsWith("/settings")) {
       navigate(-1);
     } else {
       navigate("/settings");

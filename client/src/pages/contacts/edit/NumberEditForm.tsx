@@ -1,28 +1,24 @@
 import { FC, useState, ChangeEvent } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import TextInput from "../../../components/TextInput";
-import { EditableNumber } from "./ContactEditForm";
-import { NumberType } from "../../../services/contacts.ts";
-import { formatPhoneNumber, extractPhoneNumber } from "../../../util/format.ts";
+import { EditableNumber } from "../../../hooks/useContactEditForm";
+import { NumberType } from "../../../services/contacts";
+import { formatPhoneNumber, extractPhoneNumber } from "../../../util/format";
 import "./NumberEditForm.css";
 
 interface Props {
   number: EditableNumber;
   updateNumber: (number: EditableNumber) => void;
   deleteNumber: (number: EditableNumber) => void;
+  error?: string;
 }
 
 const getNumberTypes = () => {
   return [NumberType.HOME, NumberType.WORK, NumberType.MOBILE];
 }
 
-const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber }) => {
+const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber, error }) => {
   const [localNumber, setLocalNumber] = useState<EditableNumber>(number);
-
-  const validateNumber = (number: string): string => {
-    if (!number) return "Number is mandatory";
-    return "";
-  }
 
   const handleDelete = deleteNumber;
 
@@ -37,8 +33,8 @@ const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber }) => {
     updateNumber({ ...localNumber, type: newType });
   }
 
-  const handleNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const number = extractPhoneNumber(event.target.value);
+  const handleNumberChange = (value: string) => {
+    const number = extractPhoneNumber(value);
     setLocalNumber({ ...localNumber, number });
   }
 
@@ -59,9 +55,9 @@ const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber }) => {
       <TextInput
         className="number-edit-form-number"
         value={formatPhoneNumber(localNumber.number)}
-        onChange={handleNumberChange}
+        onValueChange={handleNumberChange}
         onBlur={handleNumberUnfocus}
-        validate={validateNumber}
+        error={error}
       />
         <button
           className="transparent-btn delete-btn number-edit-form-delete-btn"

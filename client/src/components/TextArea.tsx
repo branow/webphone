@@ -1,49 +1,48 @@
-import { FC, useState, HTMLAttributes, ChangeEvent } from "react";
+import { FC, ChangeEvent } from "react";
 import { IconType } from "react-icons";
 import ErrorMessage from "./ErrorMessage";
 import "./TextArea.css";
 
-interface Props extends HTMLAttributes<HTMLTextAreaElement> {
+interface Props {
+  onValueChange: (value: string) => void;
   className?: string;
   label?: string;
   Icon?: IconType;
+  error? : string;
   name?: string;
   value?: string;
   placeholder?: string;
-  validate?: (value: string) => string;
+  onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const TextArea: FC<Props> = (props) => {
-  const [error, setError] = useState<string>("");
+const TextArea: FC<Props> = ({ className, label, Icon, error, name, value, placeholder, onChange, onValueChange }) => {
 
   const handleOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    if (props.onChange) props.onChange(event);
-    if (props.validate) {
-      setError(props.validate(event.target.value))
-    }
+    if (onChange) onChange(event);
+    onValueChange(event.target.value);
   }
 
-  const className =  "text-area-upper-ctn" + (props.className ? " " + props.className : "");
+  const fillClassName =  "text-area-upper-ctn" + (className ? " " + className : "");
 
   return (
-    <div className={className}>
-      {props.label && (
+    <div className={fillClassName}>
+      {label && (
         <label
           className="text-input-label"
-          htmlFor={props.name}
+          htmlFor={name}
         >
-            {props.label}
+            {label}
         </label>
       )}
       <ErrorMessage error={error} />
       <div className="text-area-lower-ctn">
-        {props.Icon && (<props.Icon className="text-area-icon" />)}
+        {Icon && (<Icon className="text-area-icon" />)}
         <textarea
           className="text-area"
-          name={props.name}
-          value={props.value}
+          name={name}
+          value={value}
           onChange={handleOnChange}
-          placeholder={props.placeholder}
+          placeholder={placeholder}
         />
       </div>
     </div>

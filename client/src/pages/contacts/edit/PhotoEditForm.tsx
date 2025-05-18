@@ -1,19 +1,20 @@
-import { FC, useState, RefObject } from "react";
+import { FC, useState, useRef } from "react";
 import { BsCloudUploadFill } from "react-icons/bs";
 import Photo from "../../../components/Photo";
 import FileChooser from "../../../components/FileChooser";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Hover from "../../../components/Hover";
 import "./ContactEditForm.css";
-import { EditableContact } from "./ContactEditForm";
+import { EditableContact } from "../../../hooks/useContactEditForm";
 
 interface Props {
   contact: EditableContact;
   setPhoto: (url: string) => void;
-  inputRef: RefObject<HTMLInputElement>;
+  loadPhoto: (photo: File) => void;
 }
 
-const PhotoEditForm: FC<Props> = ({ contact, setPhoto, inputRef }) => {
+const PhotoEditForm: FC<Props> = ({ contact, loadPhoto, setPhoto }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>("");
 
   const handleLoadPhoto = (file: File) => {
@@ -22,11 +23,10 @@ const PhotoEditForm: FC<Props> = ({ contact, setPhoto, inputRef }) => {
       return;
     }
     setPhoto(URL.createObjectURL(file));
+    loadPhoto(file);
   }
 
-  const handleStartedLoadPhoto = () => photoLoadTrigger.fire();
-
-  const photoLoadTrigger = { fire: () => {} }
+  const handleStartedLoadPhoto = () => inputRef.current?.click();
 
   return (
     <div className="contact-edit-form-photo-ctn">
@@ -51,7 +51,6 @@ const PhotoEditForm: FC<Props> = ({ contact, setPhoto, inputRef }) => {
         )}
       </Hover>
       <FileChooser
-        trigger={photoLoadTrigger}
         onLoadFile={handleLoadPhoto}
         inputRef={inputRef}
         accept="image/png, image/jpeg, image/jpg"

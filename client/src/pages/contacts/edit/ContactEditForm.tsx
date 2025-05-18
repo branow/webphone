@@ -1,114 +1,91 @@
-import { FC, useState, useRef } from "react";
-import { useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { FC, useEffect } from "react";
 import ErrorMessage from "../../../components/ErrorMessage";
-import PendingTab from "../../../components/PendingTab";
+import TextInput from "../../../components/TextInput";
+import TextArea from "../../../components/TextArea";
 import NumbersEditForm from "./NumbersEditForm";
-import BioEditForm from "./BioEditForm";
-import NameEditForm from "./NameEditForm";
 import PhotoEditForm from "./PhotoEditForm";
 import Chapter from "../info/Chapter";
-import ContactApi, { Number, ContactDetails } from "../../../services/contacts";
-import PhotoApi from "../../../services/photos";
-import { hex } from "../../../util/identifier";
+import{ ContactDetails } from "../../../services/contacts";
 import "./ContactEditForm.css";
-
-
-export type EditableNumber = Number & { id: string };
-
-export type EditableContact = {
-  id: string;
-  name: string;
-  photo?: string;
-  bio?: string;
-  numbers: EditableNumber[]
-};
-
-function mapEditableContact(contact: ContactDetails): EditableContact {
-  return { ...contact, numbers: contact.numbers.map(mapEditableNumber) };
-}
-
-function mapEditableNumber(number: Number): EditableNumber {
-  return { ...number, id: hex(4) };
-}
-
+import { EditableNumber, useContactEditForm } from "../../../hooks/useContactEditForm";
 
 interface Props {
   contact: ContactDetails;
-  mutationFunc: (contact: ContactDetails) => Promise<ContactDetails>
+  loadPhoto: (photo: File) => void;
+  save: (contact: ContactDetails) => void;
+  cancel: () => void;
+  savingError?: string;
 }
 
-const ContactEditForm: FC<Props> = ({ contact, mutationFunc }) => {
-  const photoInputRef = useRef<HTMLInputElement>(null);
+const ContactEditForm: FC<Props> = ({ contact, loadPhoto, save, cancel, savingError }) => {
+  const {
+    error,
+    updateError,
+    form,
+    updateForm,
+  } = useContactEditForm({ contact });
 
-  const [localContact, setLocalContact] = useState<EditableContact>(
-    mapEditableContact(contact)
-  );
+  useEffect(() => updateError({ save: savingError }), [savingError])
 
-  const setName = (name: string) => setLocalContact({ ...localContact, name: name });
-  const setBio = (bio: string) => setLocalContact({ ...localContact, bio: bio });
-  const setPhoto = (url: string) => setLocalContact({ ...localContact, photo: url });
-  const setNumbers = (numbers: EditableNumber[]) => setLocalContact({ ...localContact, numbers: numbers });
+  const setPhoto = (url: string) => updateForm({ photo: url });
+  const setName = (name: string) => updateForm({ name });
+  const setBio = (bio: string) => updateForm({ bio });
+  const setNumbers = (numbers: EditableNumber[]) => updateForm({ numbers });
 
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const savingContact = useMutation({
-    mutationFn: async (contact: ContactDetails) => {
-      const files = photoInputRef.current!.files;
-      if (files && files.length > 0) {
-        const photo = files.item(files.length - 1)!;
-        const response = await PhotoApi.upload(photo);
-        contact.photo = response.id;
-      }
-      return mutationFunc(contact);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ predicate: ContactApi.QueryKeys.predicate });
-      navigate('/contacts');
-    }
-  });
-
-  const handleSave = () => {
-    savingContact.mutate(localContact);
-  }
-
-  const handleCancel = () => navigate("/contacts");
-
-  if (savingContact.isPending) {
-    return (<PendingTab text="LOADING" message="Please wait" />)
+  const isValid = () => {
+    return !error.name && !error.bio && !error.numberList && !error.numbers?.some(n => !!n);
   }
 
   return (
     <div className="contact-edit-form">
-      <ErrorMessage error={savingContact.isError ? savingContact.error!.message : ""} />
+      <ErrorMessage error={error.save} />
       <Chapter>
-        <PhotoEditForm contact={localContact} setPhoto={setPhoto} inputRef={photoInputRef} />
+        <PhotoEditForm contact={form} setPhoto={setPhoto} loadPhoto={loadPhoto} />
       </Chapter>
 
       <Chapter title="Name">
-        <NameEditForm
-          name={localContact.name}
-          setName={setName}
+        <TextInput
+          className="contact-edit-name"
+          value={form.name}
+          onValueChange={setName}
+          error={error.name}
         />
       </Chapter>
 
       <Chapter title="Contact">
         <NumbersEditForm
-          numbers={localContact.numbers}
+          numbers={form.numbers}
           setNumbers={setNumbers}
+          error={error.numberList}
+          numberErrors={error.numbers}
         />
       </Chapter>
 
       <Chapter title="Bio">
-        <BioEditForm
-          bio={localContact.bio}
-          setBio={setBio}
+        <TextArea
+          className="contact-edit-bio"
+          value={form.bio || ""}
+          onValueChange={setBio}
+          error={error.bio}
         />
       </Chapter>
 
       <div className="contact-edit-form-ctrls">
-        <button className="contact-edit-form-ctrl-btn" onClick={handleSave}>SAVE</button>
-        <button className="contact-edit-form-ctrl-btn" onClick={handleCancel}>CANCEL</button>
+        <button
+          type="button"
+          className="contact-edit-form-ctrl-btn"
+          onClick={() => save(form)}
+          disabled={!isValid()}
+        >
+          Save
+        </button>
+        <button
+          type="button"
+          className="contact-edit-form-ctrl-btn"
+          onClick={() => cancel()}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

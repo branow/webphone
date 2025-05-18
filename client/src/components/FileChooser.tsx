@@ -1,23 +1,12 @@
 import { FC, ChangeEventHandler, RefObject } from "react";
 
-interface Trigger {
-  fire: () => void;
-}
-
 interface Props {
   inputRef: RefObject<HTMLInputElement>;
-  trigger: Trigger;
   onLoadFile: (file: File) => void;
   accept?: string;
 }
 
-const FileChooser: FC<Props> = ({ inputRef, trigger, onLoadFile, accept }) => {
-
-  trigger.fire = () => {
-    if (inputRef?.current) {
-      inputRef.current.click();
-    }
-  };
+const FileChooser: FC<Props> = ({ inputRef, onLoadFile, accept }) => {
 
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = () => {
     if (inputRef && inputRef.current && inputRef.current.files) {

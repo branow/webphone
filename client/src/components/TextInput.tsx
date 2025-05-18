@@ -1,58 +1,52 @@
-import { FC, useState, useEffect, HTMLAttributes, ChangeEvent } from "react";
+import { FC, ChangeEvent, FocusEvent } from "react";
 import { IconType } from "react-icons";
 import ErrorMessage from "./ErrorMessage";
 import "./TextInput.css";
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
+interface Props {
+  onValueChange: (value: string) => void;
   className?: string;
   label?: string;
   Icon?: IconType;
+  error?: string;
   name?: string;
   value?: string;
   placeholder?: string;
-  validate?: (value: string) => string;
-  onBlur?: () => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
 }
 
-const TextInput: FC<Props> = (props) => {
-  const [error, setError] = useState<string>("");
-
-  useEffect(() => {
-    if (props.validate) {
-      const value = props.value === undefined ? "" : props.value
-      setError(props.validate(value))
-    }
-  }, [props])
+const TextInput: FC<Props> = (
+  { className, label, Icon, error, name, value, placeholder, onChange, onBlur, onValueChange }
+) => {
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (props.onChange) props.onChange(event);
-    if (props.validate) {
-      setError(props.validate(event.target.value))
-    }
+    if (onChange) onChange(event);
+    onValueChange(event.target.value);
   }
 
-  const className =  "text-input-upper-ctn" + (props.className ? " " + props.className : "");
+  const fullClassName =  "text-input-upper-ctn" + (className ? " " + className : "");
 
   return (
-    <div className={className}>
-      {props.label && (
+    <div className={fullClassName}>
+      {label && (
         <label
           className="text-input-label"
-          htmlFor={props.name}
+          htmlFor={name}
         >
-            {props.label}
+            {label}
         </label>
       )}
       <ErrorMessage error={error} />
       <div className="text-input-lower-ctn">
-        {props.Icon && (<props.Icon className="text-input-icon" />)}
+        {Icon && (<Icon className="text-input-icon" />)}
         <input
           className="text-input"
-          name={props.name}
-          value={props.value}
+          name={name}
+          value={value}
           onChange={handleOnChange}
-          onBlur={props.onBlur}
-          placeholder={props.placeholder}
+          onBlur={onBlur}
+          placeholder={placeholder}
         />
       </div>
     </div>
