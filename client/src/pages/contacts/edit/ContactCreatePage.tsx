@@ -16,7 +16,7 @@ const ContactCreatePage: FC = () => {
   const { t } = useTranslation();
   const { contact, loadPhoto, save, cancel, isPending, error } = useSaveContact({
     initContact: emptyContact,
-    saveFunc: (contact: ContactDetails) => ContactApi.create({ ...contact, photoUrl: contact.photo })
+    saveFunc: (contact: ContactDetails) => ContactApi.create({ ...contact })
   });
 
   if (isPending) {

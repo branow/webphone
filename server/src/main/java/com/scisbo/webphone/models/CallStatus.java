@@ -3,7 +3,7 @@ package com.scisbo.webphone.models;
 public enum CallStatus {
 
     INCOMING("incoming"),
-    OUTCOMING("outcoming"),
+    OUTGOING("outgoing"),
     MISSED("missed"),
     FAILED("failed");
 

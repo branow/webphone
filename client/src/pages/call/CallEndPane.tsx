@@ -107,7 +107,7 @@ function getCallStatus(call: Call): CallStatus {
     }
   } else {
     if (call.startedBy === CallOriginator.LOCAL) {
-      return CallStatus.OUTCOMING;
+      return CallStatus.OUTGOING;
     } else {
       return CallStatus.INCOMING;
     }

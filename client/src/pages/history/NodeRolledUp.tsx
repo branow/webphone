@@ -21,8 +21,8 @@ const NodeRolledUp: FC<Props> = ({ record, unroll }) => {
       <div>
         {record.status === CallStatus.INCOMING &&
           (<div className="icon-incoming"><BsFillTelephoneInboundFill /></div>)}
-        {record.status === CallStatus.OUTCOMING &&
-          (<div className="icon-outcoming"><BsFillTelephoneOutboundFill /></div>)}
+        {record.status === CallStatus.OUTGOING &&
+          (<div className="icon-outgoing"><BsFillTelephoneOutboundFill /></div>)}
         {record.status === CallStatus.MISSED &&
           (<div className="icon-missed"><BsFillTelephoneXFill /></div>)}
         {record.status === CallStatus.FAILED &&

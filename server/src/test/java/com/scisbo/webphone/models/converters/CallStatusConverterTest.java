@@ -43,7 +43,7 @@ public class CallStatusConverterTest {
     private static Stream<Arguments> provideTestRead() {
         return Stream.of(
             Arguments.of("incoming", CallStatus.INCOMING),
-            Arguments.of("outcoming", CallStatus.OUTCOMING),
+            Arguments.of("outgoing", CallStatus.OUTGOING),
             Arguments.of("missed", CallStatus.MISSED),
             Arguments.of("failed", CallStatus.FAILED)
         );
@@ -52,7 +52,7 @@ public class CallStatusConverterTest {
     private static Stream<Arguments> provideTestWrite() {
         return Stream.of(
             Arguments.of(CallStatus.INCOMING, "incoming"),
-            Arguments.of(CallStatus.OUTCOMING, "outcoming"),
+            Arguments.of(CallStatus.OUTGOING, "outgoing"),
             Arguments.of(CallStatus.MISSED, "missed"),
             Arguments.of(CallStatus.FAILED, "failed")
         );

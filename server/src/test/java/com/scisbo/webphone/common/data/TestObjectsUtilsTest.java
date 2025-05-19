@@ -166,7 +166,7 @@ public class TestObjectsUtilsTest {
                         "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa0"),
                         "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
                         "number": "67890",
-                        "status": "outcoming",
+                        "status": "outgoing",
                         "startDate": ISODate("2025-04-02T12:00:00Z"),
                         "endDate": ISODate("2025-04-02T12:45:00Z")
                     }
@@ -176,7 +176,7 @@ public class TestObjectsUtilsTest {
                     .id("60f5b6486f1c2d4e2f3e8fa0")
                     .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
                     .number("67890")
-                    .status(CallStatus.OUTCOMING)
+                    .status(CallStatus.OUTGOING)
                     .startDate(Date.from(Instant.parse("2025-04-02T12:00:00Z")))
                     .endDate(Date.from(Instant.parse("2025-04-02T12:45:00Z")))
                     .build()
@@ -188,7 +188,7 @@ public class TestObjectsUtilsTest {
                         "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa0"),
                         "user": "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0",
                         "number": "67890",
-                        "status": "outcoming",
+                        "status": "outgoing",
                         "startDate": ISODate("2025-04-02T12:00:00Z")
                     }
                     """
@@ -198,7 +198,7 @@ public class TestObjectsUtilsTest {
                     .id("60f5b6486f1c2d4e2f3e8fa0")
                     .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
                     .number("67890")
-                    .status(CallStatus.OUTCOMING)
+                    .status(CallStatus.OUTGOING)
                     .startDate(Date.from(Instant.parse("2025-04-02T12:00:00Z")))
                     .build()
             )

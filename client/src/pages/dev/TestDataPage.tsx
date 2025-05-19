@@ -1,6 +1,7 @@
 import { FC } from "react";
 import HistoryApi, { Record, CreateRecord, CallStatus } from "../../services/history";
 import ContactApi, { ContactDetails, Number, NumberType, CreateContact } from "../../services/contacts";
+import PhotoApi from "../../services/photos";
 
 const TestDataPage: FC = () => {
   const handleGenerate = () => {
@@ -15,7 +16,6 @@ const TestDataPage: FC = () => {
   )
 }
 
-
 const firstNames = [
   "James", "John", "Robert", "Michael", "William", "Daving", "Richard", "Olivia",
   "Charlotte", "Sophia", "Isabella", "Emma", "Amelia", "Mia", "Ava", "Evelyn", "Oliver",
@@ -29,7 +29,7 @@ const lastNames = [
   "Walsh", "Byrne", "O'Ryan", "O'Connor", "O'Neill"
 ];
 const numberTypes = [NumberType.HOME, NumberType.WORK, NumberType.MOBILE];
-const callStatuses = [CallStatus.INCOMING, CallStatus.OUTCOMING, CallStatus.FAILED, CallStatus.MISSED];
+const callStatuses = [CallStatus.INCOMING, CallStatus.OUTGOING, CallStatus.FAILED, CallStatus.MISSED];
 
 
 interface Model {
@@ -74,16 +74,25 @@ async function createRecord(contact?: ContactDetails): Promise<Record> {
 
 async function generateContact(): Promise<CreateContact> {
   const name = randItem(firstNames) + " " + randItem(lastNames);
-  const photo = randBoolean(0.75) ? 
-    `https://dummyjson.com/image/400x400/${randColor()}/${randColor()}?fontFamily=pacifico&text=${name.replace(" ", "+")}` : 
-    undefined
   const bio = randBoolean(1) ? await generateBio() : undefined;
+  const photoUrl = randBoolean(0.75)
+    ? `https://dummyjson.com/image/400x400/${randColor()}/${randColor()}?fontFamily=pacifico&text=${name.replace(" ", "+")}`
+    : undefined
+  const photo = photoUrl ? await uploadPhoto(photoUrl) : undefined;
+
   return {
     name: name,
     numbers: generateNumbers(),
-    photoUrl: photo,
+    photo: photo,
     bio: bio,
   };
+}
+
+async function uploadPhoto(url: string): Promise<string> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const file = new File([blob], "photo", { type: blob.type });
+  return (await PhotoApi.upload(file)).id;
 }
 
 function generateRecord(contact?: ContactDetails): CreateRecord {

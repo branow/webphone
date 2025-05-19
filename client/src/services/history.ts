@@ -4,7 +4,7 @@ import { Auth } from "./auth.ts";
 
 export enum CallStatus {
   INCOMING = "incoming",
-  OUTCOMING = "outcoming",
+  OUTGOING = "outgoing",
   MISSED = "missed",
   FAILED = "failed",
 }

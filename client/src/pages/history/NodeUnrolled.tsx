@@ -74,7 +74,7 @@ const NodeUnrolled: FC<Props> = ({ record, rollUp }) => {
               (<span>{t(d.call.status.incoming)}{record.endDate ? <>, {duration()}</> : ""}</span>)
             }
             {
-              record.status === CallStatus.OUTCOMING &&
+              record.status === CallStatus.OUTGOING &&
               (<span>{t(d.call.status.outgoing)}{record.endDate ? <>, {duration()}</> : ""}</span>)
             }
             {record.status === CallStatus.MISSED && (<span>{t(d.call.status.missed)}</span>)}

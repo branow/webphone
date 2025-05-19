@@ -149,7 +149,7 @@ public class HistoryRepositoryIT extends EmbeddedMongoDbAbstractIT {
         HistoryRecord record = HistoryRecord.builder()
             .number("123421")
             .user("f96a24d5-f4c7-418a-81b1-54e29d8dc7b0")
-            .status(CallStatus.OUTCOMING)
+            .status(CallStatus.OUTGOING)
             .startDate(new Date())
             .build();
         HistoryRecord savedRecord = this.repository.insert(record);

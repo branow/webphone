@@ -25,7 +25,7 @@ export type ContactDetails = ContactBase & { bio?: string };
 
 type ContactSave = {
   name: string;
-  photoUrl?: string;
+  photo?: string;
   bio?: string;
   numbers: Number[];
 }
