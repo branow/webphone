@@ -1,0 +1,173 @@
+{
+  "ui": {
+    "loading": {
+      "connecting": "Connecting",
+      "cleaning": "Cleaning",
+      "calling": "Calling",
+      "creating": "Creating",
+      "loading": "Loading",
+      "deleting": "Deleting",
+      "importing": "Importing",
+      "saving": "Saving",
+      "redirecting": "Redirecting",
+      "updating": "Updating",
+      "wait": "Please, wait."
+    },
+    "buttons": {
+      "save": "Save",
+      "ok": "OK",
+      "import": "Import",
+      "cancel": "Cancel",
+      "back": "Back"
+    },
+    "tabs": {
+      "dialpad": "Dialpad",
+      "history": "History",
+      "contacts": "Contacts",
+      "account": "Account"
+    },
+    "search": {
+      "placeholder": "Search..."
+    },
+    "duration": {
+      "minutes": "{{count}} m.",
+      "seconds": "{{count}} s."
+    }
+  },
+
+  "dialpad": {
+    "placeholder": "Phone Number"
+  },
+
+  "call": {
+    "status": {
+      "incoming": "Incoming",
+      "outgoing": "Outgoing",
+      "missed": "Missed",
+      "failed": "Failed"
+    },
+    "messages": {
+      "success": "Successful call",
+      "failed": "Call failed",
+      "endedByYou": "You ended the call.",
+      "endedByOther": "The other participant ended the call."
+    },
+    "errors": {
+      "missingNumber": "Number is missing.",
+      "missingId": "Caller identifier is missing.",
+      "invalidNumber": "Invalid number.",
+      "unavailable": "Contact unavailable.",
+      "noAnswer": "You missed the call.",
+      "rejected": "You rejected call.",
+      "unexpected": "Unexpected error: call could not be established."
+    }
+  },
+
+  "contact": {
+    "fields": {
+      "name": "Name",
+      "bio": "Bio",
+      "contact": "Contact",
+      "history": "History"
+    },
+    "numberTypes": {
+      "work": "work",
+      "home": "home",
+      "mobile": "mobile"
+    },
+    "errors": {
+      "emptyName": "Name is mandatory",
+      "emptyNumber": "Number is mandatory",
+      "emptyNumbers": "Contat must have at least one number",
+      "shortName": "Name must contain at least {{min}} characters",
+      "longBio": "Bio must not contain more than {{max}} characters",
+      "longName": "Name must not contain more than {{max}} characters",
+      "longNumber": "Number must be shorter then {{max}} characters",
+      "largePhoto": "The chosen photo is too large! Please select a photo smaller than {{size}} MB"
+    },
+    "messages": {
+      "deleteWarning": "Are you sure you want to delete the contact <bold>{{name}}<bold/>?"
+    }
+  },
+
+  "account": {
+    "fields": {
+      "username": "Username",
+      "password": "Password",
+      "domain": "Domain"
+    },
+    "messages": {
+      "success": "You connected successfully!"
+    },
+    "errors": {
+      "emptyUsername": "Username is mandatory",
+      "emptyPassword": "Password is mandatory",
+      "emptyDomain": "Domain is mandatory",
+      "emptyFile": "Empty file",
+      "longUsername": "Username must be shorter than {{max}} characters",
+      "longPassword": "Password must be shorter than {{max}} characters",
+      "longDomain": "Domain must be shorter than {{max}} characters",
+      "readFile": "Failed to read file",
+      "uploadFile": "Failed to upload file",
+      "connectionFailed": "Cannot establish connection to the server, please check entered domain.",
+      "registrationFailed": "Registration failed: invalid username or password"
+    }
+  },
+
+  "errors": {
+    "404": {
+      "title": "404 So Sorry!",
+      "message": "The page you are looking for cannot be found."
+    },
+    "takeMeHome": "Take Me Home"
+  },
+
+  "backend": {
+    "errors": {
+      "unexpected": "Unexpected error occurred",
+      "invalid": {
+        "numberType": "Invalid number type",
+        "callStatus": "Invalid call status"
+      },
+      "uploadPhoto": "Failed to upload photo '{{name}}'",
+      "entityExists": {
+        "contact": {
+          "id": "Contact already exists with id '{{value}}'",
+          "name": "Contact already exists with name '{{value}}'",
+          "number": "Contact already exists with number '{{value}}'"
+        }
+      },
+      "entityNotFound": {
+        "contact": {
+          "id": "Contact not found with id '{{value}}'"
+        }
+      },
+      "missing": {
+        "name": "Name is mandatory",
+        "number": "Number is mandatory"
+      },
+      "empty": {
+        "numbers": "At least one number required"
+      },
+      "size": {
+        "name": "Name must be between {{min}} and {{max}} characters long",
+        "bio": "Bio must not be longer than {{max}} characters",
+        "numbers": "You can add up to {{max}} numbers"
+      }
+    }
+  },
+
+  "settings": {
+    "title": "Settings",
+    "general": "General",
+    "theme": "Theme",
+    "language": "Language",
+    "contacts": "Contacts",
+    "featureCodes": "Feature Codes",
+    "comingSoon": "Coming Soon"
+  },
+
+  "history": {
+    "title": "History"
+  }
+}

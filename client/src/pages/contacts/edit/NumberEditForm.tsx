@@ -1,8 +1,10 @@
 import { FC, useState, ChangeEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import TextInput from "../../../components/TextInput";
 import { EditableNumber } from "../../../hooks/useContactEditForm";
 import { NumberType } from "../../../services/contacts";
+import { d } from "../../../lib/i18n";
 import { formatPhoneNumber, extractPhoneNumber } from "../../../util/format";
 import "./NumberEditForm.css";
 
@@ -18,6 +20,7 @@ const getNumberTypes = () => {
 }
 
 const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber, error }) => {
+  const { t } = useTranslation();
   const [localNumber, setLocalNumber] = useState<EditableNumber>(number);
 
   const handleDelete = deleteNumber;
@@ -48,7 +51,7 @@ const NumberEditForm: FC<Props> = ({ number, updateNumber, deleteNumber, error }
       >
         {getNumberTypes().map(numberType => (
           <option key={numberType} value={numberType}>
-            {numberType}
+            {t(d.contact.numberTypes[numberType])}
           </option>
         ))}
       </select>

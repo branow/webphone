@@ -17,7 +17,7 @@ const NavBar: FC = () => {
   return (
     <div className="nav-bar">
       <Link className="nav-bar-title" to="/dialpad">
-        WEBPHONE
+        Webphone
       </Link>
       <button
         className="nav-bar-setting-btn transparent-btn"

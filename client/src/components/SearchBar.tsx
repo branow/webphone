@@ -1,5 +1,7 @@
-import { FC, ChangeEventHandler } from "react";
+import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import TextInput from "./TextInput";
+import { d } from "../lib/i18n";
 import "./SearchBar.css";
 
 interface Props {
@@ -7,17 +9,13 @@ interface Props {
 }
 
 const SearchBar: FC<Props> = ({ onQueryChange }) => {
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const query = event.target.value;
-    onQueryChange(query);
-  } 
+  const { t } = useTranslation();
 
   return (
     <TextInput
       className="search-bar"
-      placeholder="Search..."
-      onChange={handleChange}
+      placeholder={t(d.ui.search.placeholder)}
+      onValueChange={onQueryChange}
     />
   );
 }

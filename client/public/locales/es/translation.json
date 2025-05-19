@@ -1,0 +1,173 @@
+{
+  "ui": {
+    "loading": {
+      "connecting": "Conectando",
+      "cleaning": "Limpiando",
+      "calling": "Llamando",
+      "creating": "Creando",
+      "loading": "Cargando",
+      "deleting": "Eliminando",
+      "importing": "Importando",
+      "saving": "Guardando",
+      "redirecting": "Redirigiendo",
+      "updating": "Actualizando",
+      "wait": "Por favor, espera."
+    },
+    "buttons": {
+      "save": "Guardar",
+      "ok": "OK",
+      "import": "Importar",
+      "cancel": "Cancelar",
+      "back": "Atrás"
+    },
+    "tabs": {
+      "dialpad": "Teclado",
+      "history": "Historial",
+      "contacts": "Contactos",
+      "account": "Cuenta"
+    },
+    "search": {
+      "placeholder": "Buscar..."
+    },
+    "duration": {
+      "minutes": "{{count}} min",
+      "seconds": "{{count}} s"
+    }
+  },
+
+  "dialpad": {
+    "placeholder": "Número"
+  },
+
+  "call": {
+    "status": {
+      "incoming": "Entrante",
+      "outgoing": "Saliente",
+      "missed": "Perdida",
+      "failed": "Fallida"
+    },
+    "messages": {
+      "success": "Llamada exitosa",
+      "failed": "Llamada fallida",
+      "endedByYou": "Terminaste la llamada.",
+      "endedByOther": "El otro usuario colgó."
+    },
+    "errors": {
+      "missingNumber": "Falta el número.",
+      "missingId": "Falta el identificador.",
+      "invalidNumber": "Número inválido.",
+      "unavailable": "Contacto no disponible.",
+      "noAnswer": "Llamada perdida.",
+      "rejected": "Rechazaste la llamada.",
+      "unexpected": "Error inesperado: no se pudo conectar."
+    }
+  },
+
+  "contact": {
+    "fields": {
+      "name": "Nombre",
+      "bio": "Biografía",
+      "contact": "Contacto",
+      "history": "Historial"
+    },
+    "numberTypes": {
+      "work": "trabajo",
+      "home": "casa",
+      "mobile": "móvil"
+    },
+    "errors": {
+      "emptyName": "Nombre obligatorio",
+      "emptyNumber": "Número obligatorio",
+      "emptyNumbers": "Debe haber al menos un número",
+      "shortName": "El nombre debe tener al menos {{min}} caracteres",
+      "longBio": "La biografía no puede superar {{max}} caracteres",
+      "longName": "El nombre no puede superar {{max}} caracteres",
+      "longNumber": "El número debe ser menor de {{max}} caracteres",
+      "largePhoto": "¡La foto es muy grande! Selecciona una menor de {{size}} MB"
+    },
+    "messages": {
+      "deleteWarning": "¿Seguro que deseas eliminar el contacto <bold>{{name}}<bold/>?"
+    }
+  },
+
+  "account": {
+    "fields": {
+      "username": "Usuario",
+      "password": "Contraseña",
+      "domain": "Dominio"
+    },
+    "messages": {
+      "success": "¡Conexión exitosa!"
+    },
+    "errors": {
+      "emptyUsername": "Usuario obligatorio",
+      "emptyPassword": "Contraseña obligatoria",
+      "emptyDomain": "Dominio obligatorio",
+      "emptyFile": "Archivo vacío",
+      "longUsername": "El usuario debe tener menos de {{max}} caracteres",
+      "longPassword": "La contraseña debe tener menos de {{max}} caracteres",
+      "longDomain": "El dominio debe tener menos de {{max}} caracteres",
+      "readFile": "Error al leer archivo",
+      "uploadFile": "Error al subir archivo",
+      "connectionFailed": "No se puede conectar al servidor, verifica el dominio.",
+      "registrationFailed": "Error de registro: usuario o contraseña inválidos"
+    }
+  },
+
+  "errors": {
+    "404": {
+      "title": "404 ¡Lo sentimos!",
+      "message": "La página no fue encontrada."
+    },
+    "takeMeHome": "Llévame al inicio"
+  },
+
+  "backend": {
+    "errors": {
+      "unexpected": "Ocurrió un error inesperado",
+      "invalid": {
+        "numberType": "Tipo de número inválido",
+        "callStatus": "Estado de llamada inválido"
+      },
+      "uploadPhoto": "Error al subir foto '{{name}}'",
+      "entityExists": {
+        "contact": {
+          "id": "Ya existe un contacto con ID '{{value}}'",
+          "name": "Ya existe un contacto con nombre '{{value}}'",
+          "number": "Ya existe un contacto con número '{{value}}'"
+        }
+      },
+      "entityNotFound": {
+        "contact": {
+          "id": "No se encontró contacto con ID '{{value}}'"
+        }
+      },
+      "missing": {
+        "name": "Nombre obligatorio",
+        "number": "Número obligatorio"
+      },
+      "empty": {
+        "numbers": "Se requiere al menos un número"
+      },
+      "size": {
+        "name": "El nombre debe tener entre {{min}} y {{max}} caracteres",
+        "bio": "La biografía no puede superar {{max}} caracteres",
+        "numbers": "Máximo {{max}} números permitidos"
+      }
+    }
+  },
+
+  "settings": {
+    "title": "Ajustes",
+    "general": "General",
+    "theme": "Tema",
+    "language": "Idioma",
+    "contacts": "Contactos",
+    "featureCodes": "Códigos",
+    "comingSoon": "Próximamente"
+  },
+
+  "history": {
+    "title": "Historial"
+  }
+}

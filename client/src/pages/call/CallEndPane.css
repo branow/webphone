@@ -55,6 +55,7 @@
 
 .call-end-pane-back-btn {
   /* position: absolute; */
+  text-transform: uppercase;
   background-color: var(--c-green);
   color: var(--c-icon);
   border: none;

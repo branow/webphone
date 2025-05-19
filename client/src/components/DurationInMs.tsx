@@ -1,4 +1,6 @@
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
+import { d } from "../lib/i18n";
 
 interface Props {
   date1: Date;
@@ -6,10 +8,16 @@ interface Props {
 }
 
 const DurationInMis: FC<Props> = ({date1, date2}) => {
-  const {minutes, seconds} = calcDurationInMsString(date1, date2);
+  const { t } = useTranslation();
+  const { minutes, seconds } = calcDurationInMsString(date1, date2);
+
+  const parts = [];
+  if (minutes > 0) parts.push(t(d.ui.duration.minutes, { count: minutes }));
+  if (seconds > 0 || minutes === 0) parts.push(t(d.ui.duration.seconds, { count: seconds }));
+
   return (
     <span>
-      {minutes} m. {seconds} s.
+      {parts.join(" ")}
     </span>
   );
 };

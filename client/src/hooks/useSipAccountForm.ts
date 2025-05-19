@@ -1,6 +1,8 @@
 import { useEffect, useState, useContext, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { SipContext } from "../context/SipContext";
 import { SipAccount } from "../lib/sip";
+import { d } from "../lib/i18n";
 import { validator } from "../util/validator";
 
 const emptySipAccount: SipAccount = {
@@ -18,6 +20,7 @@ interface SipAccountError {
 }
 
 export function useSipAccountForm() {
+  const { t } = useTranslation();
   const { account, setAccount, connectionError } = useContext(SipContext);
   const [form, setForm] = useState<SipAccount>(emptySipAccount);
   const [error, setError] = useState<SipAccountError>({});
@@ -37,18 +40,18 @@ export function useSipAccountForm() {
   }, [form])
 
   const validateUsername = (value: string) => validator(value)
-    .notBlank("Username is mandatory")
-    .max(200, "Username is too long")
+    .notBlank(t(d.account.errors.emptyUsername))
+    .max(200, t(d.account.errors.longUsername, { max: 200 }))
     .validate();
 
   const validatePassword = (value: string) => validator(value)
-    .notBlank("Password is mandatory")
-    .max(1000, "Password is too long")
+    .notBlank(t(d.account.errors.emptyPassword))
+    .max(200, t(d.account.errors.longPassword, { max: 200 }))
     .validate();
 
   const validateDomain = (value: string) => validator(value)
-    .notBlank("Domain is mandatory")
-    .max(200, "Domain is too long")
+    .notBlank(t(d.account.errors.emptyDomain))
+    .max(200, t(d.account.errors.longDomain, { max: 200 }))
     .validate();
 
   const validate = () => {
@@ -82,7 +85,7 @@ export function useSipAccountForm() {
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       if (!e.target?.result) {
-        updateError({ file: "Empty file" })
+        updateError({ file: t(d.account.errors.emptyFile) })
         return;
       }
 
@@ -96,10 +99,10 @@ export function useSipAccountForm() {
         updateError({ file: undefined })
       } catch (e) {
         console.warn(e);
-        updateError({ file: "Failed to read data from file" })
+        updateError({ file: t(d.account.errors.readFile) })
       }
     }
-    reader.onerror = () => updateError({ file: "File read error" });
+    reader.onerror = () => updateError({ file: t(d.account.errors.uploadFile) });
     reader.readAsText(file);
   }
 

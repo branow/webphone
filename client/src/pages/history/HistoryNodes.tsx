@@ -1,11 +1,13 @@
 import { FC, useState, ReactNode, RefObject } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import PendingTab from "../../components/PendingTab";
 import ErrorMessage from "../../components/ErrorMessage";
 import HistoryNode from "./HistoryNode";
-import { useInfiniteScroll } from "../../hooks/useInfiniteScroll.ts";
-import { Record } from "../../services/history.ts";
-import { Page } from "../../services/backend.ts";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { Record } from "../../services/history";
+import { Page } from "../../services/backend";
+import i18n, { d } from "../../lib/i18n";
 import "./HistoryNodes.css";
 
 interface Props {
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const HistoryNodes: FC<Props> = ({ scrollRef, queryKey, queryFunc }) => {
+  const { t } = useTranslation();
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const fetching = useInfiniteQuery({
@@ -35,7 +38,12 @@ const HistoryNodes: FC<Props> = ({ scrollRef, queryKey, queryFunc }) => {
     if (index === 0 || record.startDate.getDate() !== records[index - 1].startDate.getDate()) {
       dateMark = (
         <div className="history-nodes-date">
-          {record.startDate.toDateString()}
+          {new Intl.DateTimeFormat(i18n.language, {
+            weekday: 'short',
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+          }).format(record.startDate)}
         </div>
       )
     }
@@ -59,7 +67,7 @@ const HistoryNodes: FC<Props> = ({ scrollRef, queryKey, queryFunc }) => {
         <div key={page.number}>{page.items.map(item)}</div>
       )}
       {fetching.isError && <ErrorMessage error={fetching.error} />}
-      {fetching.isLoading && <PendingTab text="LOADING" />}
+      {fetching.isLoading && <PendingTab text={t(d.ui.loading.loading)} />}
     </div>
   );
 };

@@ -9,6 +9,7 @@
 }
 
 .nav-tab-btn {
+  text-transform: uppercase;
   text-align: center;
   flex-grow: 1;
   text-decoration: none;

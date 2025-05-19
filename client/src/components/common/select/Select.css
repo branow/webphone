@@ -1,0 +1,11 @@
+.select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.select__options {
+  position: absolute;
+  top: 100%;
+}

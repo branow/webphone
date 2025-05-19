@@ -1,12 +1,15 @@
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { BsPersonFill, BsKeyFill, BsEraserFill, BsCloudUploadFill } from "react-icons/bs";
 import TextInput from "../../components/TextInput";
 import FileChooser from "../../components/FileChooser";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useSipAccountForm } from "../../hooks/useSipAccountForm";
+import { d } from "../../lib/i18n";
 import "./SipAccountForm.css";
 
 const SipAccountForm: FC = () => {
+  const { t } = useTranslation();
   const {
     error,
     form,
@@ -47,7 +50,7 @@ const SipAccountForm: FC = () => {
       <TextInput
         className="sip-account-form-text-in"
         Icon={BsPersonFill}
-        label="User"
+        label={t(d.account.fields.username)}
         name="username"
         value={form.username}
         onValueChange={setUsername}
@@ -56,7 +59,7 @@ const SipAccountForm: FC = () => {
       <TextInput
         className="sip-account-form-text-in"
         Icon={BsKeyFill}
-        label="Password"
+        label={t(d.account.fields.password)}
         name="password"
         value={form.password}
         onValueChange={setPassword}
@@ -64,7 +67,7 @@ const SipAccountForm: FC = () => {
       />
       <TextInput
         className="sip-account-form-text-in"
-        label="Domain"
+        label={t(d.account.fields.domain)}
         name="domain"
         value={form.domain}
         onValueChange={setDomain}
@@ -76,7 +79,7 @@ const SipAccountForm: FC = () => {
           onClick={save}
           disabled={!isValidForm()}
         >
-          Save
+          {t(d.ui.buttons.save)}
         </button>
       </div>
     </div>

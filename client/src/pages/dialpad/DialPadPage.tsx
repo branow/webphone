@@ -1,16 +1,19 @@
 import { FC, useState, useContext, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { ImPhone } from "react-icons/im";
 import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
 import { SipContext } from "../../context/SipContext";
 import Hover from "../../components/Hover";
 import NavTabs, { Tab } from "../../components/NavTabs";
 import Keypad, { Key } from "./Keypad";
-import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
+import { d } from "../../lib/i18n";
+import { formatPhoneNumber, extractPhoneNumber } from "../../util/format";
 import "./DialPadPage.css";
 
 const DialPadPage: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { connection } = useContext(SipContext);
   const [number, setNumber] = useState("");
 
@@ -46,7 +49,7 @@ const DialPadPage: FC = () => {
           id="phoneNumber"
           className="number-in"
           type="text"
-          placeholder="Phone number"
+          placeholder={t(d.dialpad.placeholder)}
           value={number}
           onChange={handleChange}
         />

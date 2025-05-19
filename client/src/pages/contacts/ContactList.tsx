@@ -1,11 +1,13 @@
 import { FC, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import ContactPreview from "./ContactPreview";
 import PendingTab from "../../components/PendingTab";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useInfiniteScroll } from "../../hooks/useInfiniteScroll.ts";
-import { Page } from "../../services/backend.ts";
-import { Contact } from "../../services/contacts.ts";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { Page } from "../../services/backend";
+import { Contact } from "../../services/contacts";
+import { d } from "../../lib/i18n";
 import "./ContactList.css";
 
 interface Props {
@@ -14,6 +16,9 @@ interface Props {
 }
 
 const ContactList: FC<Props> = ({ queryKey, queryFunc }) => {
+
+  const { t } = useTranslation();
+
   const fetching = useInfiniteQuery({
     queryKey: queryKey,
     queryFn: ({ pageParam }) => queryFunc(pageParam),
@@ -44,7 +49,7 @@ const ContactList: FC<Props> = ({ queryKey, queryFunc }) => {
         </div>
       ))}
       {fetching.isError && <ErrorMessage error={fetching.error} />}
-      {fetching.isLoading && <PendingTab text="LOADING" />}
+      {fetching.isLoading && <PendingTab text={t(d.ui.loading.loading)} />}
     </div>
   );
 }

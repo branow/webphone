@@ -1,5 +1,7 @@
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { d } from "../lib/i18n";
 import "./NavTabs.css";
 
 export enum Tab {
@@ -13,13 +15,6 @@ interface Props {
   tabs: Tab[];
 }
 
-const labels: Record<Tab, string> = {
-  [Tab.DIALPAD]: "DIALPAD",
-  [Tab.HISTORY]: "HISTORY",
-  [Tab.CONTACTS]: "CONTACTS",
-  [Tab.ACCOUNT]: "ACCOUNT",
-};
-
 const pathes: Record<Tab, string> = {
   [Tab.DIALPAD]: "/dialpad",
   [Tab.HISTORY]: "/history",
@@ -28,11 +23,13 @@ const pathes: Record<Tab, string> = {
 };
 
 const NavTabs: FC<Props> = ({ tabs }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="nav-tabs">
       {tabs.map(tab =>
         <Link key={tab} className="nav-tab-btn" to={pathes[tab]}>
-          {labels[tab]}
+          {t(d.ui.tabs[tab])}
         </Link>
       )}
     </div>
@@ -40,4 +37,3 @@ const NavTabs: FC<Props> = ({ tabs }) => {
 }
 
 export default NavTabs;
-

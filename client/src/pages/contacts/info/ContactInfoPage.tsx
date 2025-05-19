@@ -1,5 +1,6 @@
 import { FC, useState, useRef } from "react";
 import { useNavigate, useParams} from "react-router";
+import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoIosArrowBack } from "react-icons/io";
 import { BsFillTrash3Fill } from "react-icons/bs";
@@ -12,11 +13,13 @@ import ChapterBar from "./ChapterBar";
 import DeleteContactWindow from "../DeleteContactWindow";
 import ContactNumbers from "../ContactNumbers";
 import HistoryNodes from "../../history/HistoryNodes";
-import ContactApi from "../../../services/contacts.ts";
-import HistoryApi from "../../../services/history.ts";
+import ContactApi from "../../../services/contacts";
+import HistoryApi from "../../../services/history";
+import { d } from "../../../lib/i18n";
 import "./ContactInfoPage.css";
 
 const ContactInfoPage: FC = () => {
+  const { t } = useTranslation();
   const params = useParams<{ id: string }>();
   const contactId: string = params.id!;
 
@@ -53,11 +56,11 @@ const ContactInfoPage: FC = () => {
   }
 
   if (fetchingContact.isPending) {
-    return (<PendingTab text="FETCHING" message="Please wait" />);
+    return (<PendingTab text={t(d.ui.loading.loading)} message={t(d.ui.loading.wait)} />);
   }
 
   if (removingContact.isPending) {
-    return (<PendingTab text="DELETING" message="Please wait" />);
+    return (<PendingTab text={t(d.ui.loading.deleting)} message={t(d.ui.loading.wait)} />);
   }
 
   const contact = fetchingContact.data!;
@@ -106,19 +109,19 @@ const ContactInfoPage: FC = () => {
 
         <ChapterBar />
 
-        <Chapter title="Bio">
+        <Chapter title={t(d.contact.fields.bio)}>
           <div>{contact.bio}</div>
         </Chapter>
 
         <ChapterBar />
 
-        <Chapter title="Contact">
+        <Chapter title={t(d.contact.fields.contact)}>
           <ContactNumbers numbers={contact.numbers} call={call} />
         </Chapter>
 
         <ChapterBar />
 
-        <Chapter title="History">
+        <Chapter title={t(d.contact.fields.history)}>
           <HistoryNodes
             scrollRef={scrollRef}
             queryKey={HistoryApi.QueryKeys.historyByContact(contactId, 10)}

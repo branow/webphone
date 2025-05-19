@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { BsPersonFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import PendingTab from "./PendingTab";
 import ErrorMessage from "./ErrorMessage";
 import PhotoApi from "../services/photos";
@@ -45,6 +46,8 @@ const PhotoContainer: FC<{ size: number, children: ReactNode }> = ({ size, child
 }
 
 const BackendPhoto: FC<{ photo: string, size: number, alt?: string }> = ({ photo, size, alt }) => {
+  const { t } = useTranslation(); 
+
   const fetching = useQuery({
     queryKey: PhotoApi.QueryKeys.photo(photo),
     queryFn: () => PhotoApi.get(photo),
@@ -52,7 +55,7 @@ const BackendPhoto: FC<{ photo: string, size: number, alt?: string }> = ({ photo
 
   return (
     <>
-      {fetching.isPending && <PendingTab text="LOADING" /> }
+      {fetching.isPending && <PendingTab text={t("common.load.loading")} /> }
       {fetching.isError && <ErrorMessage error={fetching.error} />}
       {fetching.data && <img className="photo-img" src={fetching.data} width={size} alt={alt} />}
     </>

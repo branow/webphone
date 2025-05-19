@@ -1,10 +1,13 @@
 import { useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { UA } from "jssip";
 import { RTCSessionEvent } from "jssip/lib/UA";
-import { ConnectionState, IncomingCallHandler, CallInfo, SipAccount, init, CallState, CallDirection, Call, ConnectionStateWrapper, Session, CallStateWrapper, getCallOriginator } from "../lib/sip";
-import { log, warn } from "../util/log";
 import { IncomingAckEvent, IncomingEvent, OutgoingAckEvent, OutgoingEvent, RTCSession } from "jssip/lib/RTCSession";
 import { IncomingRequest, OutgoingRequest } from "jssip/lib/SIPMessage";
+import { ConnectionState, IncomingCallHandler, CallInfo, SipAccount, init, CallState, CallDirection, Call, ConnectionStateWrapper, Session, CallStateWrapper, getCallOriginator } from "../lib/sip";
+import { d } from "../lib/i18n";
+import { log, warn } from "../util/log";
 
 interface Return {
   account: SipAccount | null;
@@ -22,7 +25,7 @@ interface Return {
 }
 
 export function useSip(): Return {
-
+  const { t } = useTranslation();
   const [account, setAccount] = useState<SipAccount | null>(null);
   const [connection, setConnection] = useState(ConnectionState.DISCONNECTED);
   const [connectionError, setConnectionError] = useState<string>();
@@ -52,7 +55,7 @@ export function useSip(): Return {
     ua.on("disconnected", (e) => {
       log("DISCONNECTED", e);
       setConnection(ConnectionState.DISCONNECTED);
-      setConnectionError(e.reason || "Cannot establish connection to the server, please check entered domain");
+      setConnectionError(localizeConnectionFailedReason(t, e.reason) || t(d.account.errors.connectionFailed));
       if (e.error) ua.stop();
     });
 
@@ -71,9 +74,9 @@ export function useSip(): Return {
       setConnection(ConnectionState.DISCONNECTED);
 
       if (e.response.status_code === 403) {
-        setConnectionError("Registration failed: invalid username or password");
+        setConnectionError(t(d.account.errors.registrationFailed));
       } else {
-        setConnectionError(e.response.reason_phrase);
+        setConnectionError(localizeRegistrationFailedReason(t, e.response.reason_phrase));
       }
     });
 
@@ -290,11 +293,18 @@ export function useSip(): Return {
   };
 };
 
-
 function mapCalls(calls: Map<string, Session>): Call[] {
   return Array.from(calls.values()).map(call => call.info).map(mapCall);
 }
 
 function mapCall(callInfo: CallInfo): Call {
   return { ...callInfo, state: new CallStateWrapper(callInfo.state) }
+}
+
+function localizeConnectionFailedReason(_t: TFunction<'translation', undefined>, reason?: string): string | undefined {
+  return reason;
+}
+
+function localizeRegistrationFailedReason(_t: TFunction<'translation', undefined>, reason?: string): string | undefined {
+  return reason;
 }

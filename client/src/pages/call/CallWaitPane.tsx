@@ -1,12 +1,15 @@
 import { FC, useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { ImPhone, ImPhoneHangUp } from "react-icons/im";
+import PendingTab from "../../components/PendingTab.js";
 import { CallContext } from "../../context/CallContext";
 import { CallOriginator } from "../../lib/sip";
+import { d } from "../../lib/i18n";
 import DTMFAudio from "../../util/dtmf.js";
 import "./CallWaitPane.css";
-import PendingTab from "../../components/PendingTab.js";
 
 const CallWaitPane: FC = () => {
+  const { t } = useTranslation();
   const { call, hangupCall, answerCall } = useContext(CallContext);
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const CallWaitPane: FC = () => {
   return (
     <div className="call-wait-pane">
       <div className="call-wait-pane-load-ctn">
-        <PendingTab text="CALLING" size={36} />
+        <PendingTab text={t(d.ui.loading.calling)} size={36} />
       </div>
       <div className="call-wait-pane-ctrl-ctn">
         <div className="call-wait-pane-ctrl-btn">

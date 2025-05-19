@@ -1,3 +1,4 @@
+import i18n, { d } from "../lib/i18n";
 import { log } from "../util/log";
 
 export const BACKEND_ORIGIN = import.meta.env.WEBPHONE_BACKEND_ORIGIN + import.meta.env.WEBPHONE_CONTEXT_PATH;
@@ -179,6 +180,7 @@ export async function logRequestResponse(request: Request, response: Response) {
   log(`${response.status} ${request.method} ${request.url}`);
 }
 
+
 export async function handleApiError(_: Request, res: Response) {
   const body = await res.json();
   throw buildError(body as ApiError);
@@ -192,6 +194,92 @@ interface ApiError {
 }
 
 function buildError(error?: ApiError): Error {
-  const message = error?.message || "Unexpected error occured";
-  return new Error(message);
+  console.warn(error?.message || "Unexpected error response!");
+  return new Error(localizeError(error));
+}
+
+function localizeError(error?: ApiError): string {
+  const defaultMsg = i18n.t(d.backend.errors.unexpected);
+  if (!error) return defaultMsg;
+
+  if (error.type === "error.invalid.value") {
+    let key;
+    switch (error.details?.name) {
+      case "number type": key = d.backend.errors.invalid.numberType; break;
+      case "call status": key = d.backend.errors.invalid.callStatus; break;
+    }
+    if (key) return i18n.t(key);
+  }
+
+  if (error.type === "error.photo.upload") {
+    const name = error.details?.name;
+    return i18n.t("backend.error.uploadPhoto", { name });
+  }
+
+  if (error.type === "error.entity.already.exists") {
+    const entity = error.details?.entity;
+    if (entity === "contact") {
+      let key;
+      switch (error.details?.fieldName) {
+        case "id": key = d.backend.errors.entityExists.contact.id; break;
+        case "name": key = d.backend.errors.entityExists.contact.name; break;
+        case "number": key = d.backend.errors.entityExists.contact.number; break;
+      }
+      if (key) return i18n.t(key, { value: error.details?.fieldValue });
+    }
+  }
+
+  if (error.type === "error.entity.not.found") {
+    const entity = error.details?.entity;
+    if (entity === "contact") {
+      let key;
+      switch (error.details?.fieldName) {
+        case "id": key = d.backend.errors.entityNotFound.contact.id; break;
+      }
+      if (key) return i18n.t(key, { value: error.details?.fieldValue });
+    }
+  }
+
+  if (error.type === "error.validation") {
+    const fields = error.details as InvalidField[]
+    return fields.map(field => {
+      return field.errors.map(error => {
+
+        if (error.code === "NotBlank" || error.code === "NotNull") {
+          if (field.name === "name") return i18n.t(d.backend.errors.missing.name);
+          if (field.name.startsWith("numbers[")) return i18n.t(d.backend.errors.missing.number);
+        }
+
+        if (error.code === "NotEmpty") {
+          if (field.name === "numbers") return i18n.t(d.backend.errors.empty.numbers);
+        }
+
+        if (error.code === "Size") {
+          const min = error.arguments?.min;
+          const max = error.arguments?.max;
+          if (field.name === "name") return i18n.t(d.backend.errors.size.name, { min, max });
+          if (field.name === "bio") return i18n.t(d.backend.errors.size.name, { min, max });
+          if (field.name === "numbers") return i18n.t(d.backend.errors.size.name, { min, max });
+        }
+
+        if (error.code === "Pattern") {
+          if (field.name.startsWith("numbers[")) return i18n.t(d.backend.errors.pattern.number);
+        }
+        return "";
+      }).filter(msg => !!msg).join(" ")
+    }).join("\n");
+  }
+
+  return defaultMsg;
+}
+
+interface InvalidField {
+  name: string;
+  value: any;
+  errors: ValidationError[]
+}
+
+interface ValidationError {
+  code: string;
+  arguments: any;
 }

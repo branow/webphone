@@ -1,0 +1,174 @@
+{
+  "ui": {
+    "loading": {
+      "connecting": "З'єднання",
+      "cleaning": "Очищення",
+      "calling": "Виклик",
+      "creating": "Створення",
+      "loading": "Завантаження",
+      "deleting": "Видалення",
+      "importing": "Імпорт",
+      "saving": "Збереження",
+      "redirecting": "Перенаправлення",
+      "updating": "Оновлення",
+      "wait": "Зачекайте, будь ласка."
+    },
+    "buttons": {
+      "save": "Зберегти",
+      "ok": "OK",
+      "import": "Імпортувати",
+      "cancel": "Скасувати",
+      "back": "Назад"
+    },
+    "tabs": {
+      "dialpad": "Клавіатура",
+      "history": "Історія",
+      "contacts": "Контакти",
+      "account": "Обліковий"
+    },
+    "search": {
+      "placeholder": "Пошук..."
+    },
+    "duration": {
+      "minutes": "{{count}} хв.",
+      "seconds": "{{count}} с."
+    }
+  },
+
+  "dialpad": {
+    "placeholder": "Номер"
+  },
+
+  "call": {
+    "status": {
+      "incoming": "Вхідний",
+      "outgoing": "Вихідний",
+      "missed": "Пропущений",
+      "failed": "Збій"
+    },
+    "messages": {
+      "success": "Виклик успішний",
+      "failed": "Помилка виклику",
+      "endedByYou": "Ви завершили виклик.",
+      "endedByOther": "Співрозмовник завершив виклик."
+    },
+    "errors": {
+      "missingNumber": "Немає номера.",
+      "missingId": "Немає ідентифікатора.",
+      "invalidNumber": "Недійсний номер.",
+      "unavailable": "Контакт недоступний.",
+      "noAnswer": "Виклик пропущено.",
+      "rejected": "Ви відхилили виклик.",
+      "unexpected": "Неочікувана помилка: виклик неможливий."
+    }
+  },
+
+  "contact": {
+    "fields": {
+      "name": "Ім'я",
+      "bio": "Про себе",
+      "contact": "Контакт",
+      "history": "Історія"
+    },
+    "numberTypes": {
+      "work": "робочий",
+      "home": "домашній",
+      "mobile": "мобільний"
+    },
+    "errors": {
+      "emptyName": "Ім'я обов'язкове",
+      "emptyNumber": "Номер обов'язковий",
+      "emptyNumbers": "Має бути хоч один номер",
+      "shortName": "Ім'я має містити мінімум {{min}} символів",
+      "longBio": "Біо не більше {{max}} символів",
+      "longName": "Ім'я не більше {{max}} символів",
+      "longNumber": "Номер не довший за {{max}} символів",
+      "largePhoto": "Фото завелике! Виберіть менше {{size}} МБ"
+    },
+    "messages": {
+      "deleteWarning": "Ви впевнені, що хочете видалити контакт <bold>{{name}}<bold/>?"
+    }
+  },
+
+  "account": {
+    "fields": {
+      "username": "Логін",
+      "password": "Пароль",
+      "domain": "Домен"
+    },
+    "messages": {
+      "success": "Успішне з'єднання!"
+    },
+    "errors": {
+      "emptyUsername": "Логін обов'язковий",
+      "emptyPassword": "Пароль обов'язковий",
+      "emptyDomain": "Домен обов'язковий",
+      "emptyFile": "Файл порожній",
+      "longUsername": "Логін має бути коротше {{max}} символів",
+      "longPassword": "Пароль має бути коротше {{max}} символів",
+      "longDomain": "Домен має бути коротше {{max}} символів",
+      "readFile": "Не вдалося прочитати файл",
+      "uploadFile": "Не вдалося завантажити файл",
+      "connectionFailed": "Не вдалося підключитися до сервера, перевірте домен.",
+      "registrationFailed": "Помилка реєстрації: невірне ім’я або пароль"
+    }
+  },
+
+  "errors": {
+    "404": {
+      "title": "404 Вибачте!",
+      "message": "Сторінку не знайдено."
+    },
+    "takeMeHome": "На головну"
+  },
+
+  "backend": {
+    "errors": {
+      "unexpected": "Сталася помилка",
+      "invalid": {
+        "numberType": "Недійсний тип номера",
+        "callStatus": "Недійсний статус виклику"
+      },
+      "uploadPhoto": "Не вдалося завантажити фото '{{name}}'",
+      "entityExists": {
+        "contact": {
+          "id": "Контакт вже існує з ID '{{value}}'",
+          "name": "Контакт вже існує з іменем '{{value}}'",
+          "number": "Контакт вже існує з номером '{{value}}'"
+        }
+      },
+      "entityNotFound": {
+        "contact": {
+          "id": "Контакт не знайдено за ID '{{value}}'"
+        }
+      },
+      "missing": {
+        "name": "Ім'я обов'язкове",
+        "number": "Номер обов'язковий"
+      },
+      "empty": {
+        "numbers": "Потрібен хоча б один номер"
+      },
+      "size": {
+        "name": "Ім’я має бути від {{min}} до {{max}} символів",
+        "bio": "Біо не довше {{max}} символів",
+        "numbers": "Максимум {{max}} номерів"
+      }
+    }
+  },
+
+  "settings": {
+    "title": "Налаштування",
+    "general": "Загальні",
+    "theme": "Тема",
+    "language": "Мова",
+    "contacts": "Контакти",
+    "featureCodes": "Коди функцій",
+    "comingSoon": "Незабаром"
+  },
+
+  "history": {
+    "title": "Історія"
+  }
+}
+

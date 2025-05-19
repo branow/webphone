@@ -97,6 +97,7 @@
 }
 
 .contact-edit-form-ctrl-btn {
+  text-transform: uppercase;
   font-size: 18px;
   padding: 10px;
   border-radius: 10%;

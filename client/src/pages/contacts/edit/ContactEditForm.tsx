@@ -1,13 +1,15 @@
 import { FC, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import ErrorMessage from "../../../components/ErrorMessage";
 import TextInput from "../../../components/TextInput";
 import TextArea from "../../../components/TextArea";
 import NumbersEditForm from "./NumbersEditForm";
 import PhotoEditForm from "./PhotoEditForm";
 import Chapter from "../info/Chapter";
-import{ ContactDetails } from "../../../services/contacts";
-import "./ContactEditForm.css";
 import { EditableNumber, useContactEditForm } from "../../../hooks/useContactEditForm";
+import { ContactDetails } from "../../../services/contacts";
+import { d } from "../../../lib/i18n";
+import "./ContactEditForm.css";
 
 interface Props {
   contact: ContactDetails;
@@ -18,6 +20,7 @@ interface Props {
 }
 
 const ContactEditForm: FC<Props> = ({ contact, loadPhoto, save, cancel, savingError }) => {
+  const { t } = useTranslation();
   const {
     error,
     updateError,
@@ -43,7 +46,7 @@ const ContactEditForm: FC<Props> = ({ contact, loadPhoto, save, cancel, savingEr
         <PhotoEditForm contact={form} setPhoto={setPhoto} loadPhoto={loadPhoto} />
       </Chapter>
 
-      <Chapter title="Name">
+      <Chapter title={t(d.contact.fields.name)}>
         <TextInput
           className="contact-edit-name"
           value={form.name}
@@ -52,7 +55,7 @@ const ContactEditForm: FC<Props> = ({ contact, loadPhoto, save, cancel, savingEr
         />
       </Chapter>
 
-      <Chapter title="Contact">
+      <Chapter title={t(d.contact.fields.contact)}>
         <NumbersEditForm
           numbers={form.numbers}
           setNumbers={setNumbers}
@@ -61,7 +64,7 @@ const ContactEditForm: FC<Props> = ({ contact, loadPhoto, save, cancel, savingEr
         />
       </Chapter>
 
-      <Chapter title="Bio">
+      <Chapter title={t(d.contact.fields.bio)}>
         <TextArea
           className="contact-edit-bio"
           value={form.bio || ""}
@@ -72,19 +75,17 @@ const ContactEditForm: FC<Props> = ({ contact, loadPhoto, save, cancel, savingEr
 
       <div className="contact-edit-form-ctrls">
         <button
-          type="button"
           className="contact-edit-form-ctrl-btn"
           onClick={() => save(form)}
           disabled={!isValid()}
         >
-          Save
+          {t(d.ui.buttons.save)}
         </button>
         <button
-          type="button"
           className="contact-edit-form-ctrl-btn"
           onClick={() => cancel()}
         >
-          Cancel
+          {t(d.ui.buttons.cancel)}
         </button>
       </div>
     </div>

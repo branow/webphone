@@ -1,12 +1,16 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { BsMicFill, BsMicMuteFill, BsVolumeUpFill, BsVolumeMuteFill } from "react-icons/bs";
 import { IoIosKeypad } from "react-icons/io";
 import { ImPhoneHangUp } from "react-icons/im";
+import ErrorMessage from "../../components/ErrorMessage";
 import { CallContext } from "../../context/CallContext";
 import KeypadPane from "./KeypadPane";
 import { useAudioVisualizer } from "../../hooks/useAudioVisualizer";
 import { useAudio } from "../../hooks/useAudio";
 import { useVolume } from "../../hooks/useVolume";
+import { d } from "../../lib/i18n";
 import "./CallActivePane.css";
 
 const audioVisualizerOptions = {
@@ -16,14 +20,20 @@ const audioVisualizerOptions = {
 }
 
 const CallActivePane: FC = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { call, toggleMute, hangupCall } = useContext(CallContext);
   const { audioRef } = useAudio(call!.remoteStream);
   const { volume, mute, unmute } = useVolume({ audioRef });
   const { canvasRef } = useAudioVisualizer(call!.remoteStream, audioVisualizerOptions);
   const [showKeypad, setShowKeypad] = useState(false);
 
+  useEffect(() => {
+    if (!call) navigate("/home");
+  }, [call])
+
   if (!call) {
-    return <>Unexpected error</>
+    return <ErrorMessage error={t(d.call.errors.unexpected)} />
   }
 
   return (

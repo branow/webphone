@@ -1,12 +1,14 @@
 import { FC, MouseEvent } from "react";
 import { useNavigate, Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { ImPhone } from "react-icons/im";
 import Photo from "../../components/Photo";
 import DurationInMs from "../../components/DurationInMs";
-import HistoryApi, { Record, CallStatus } from "../../services/history.ts";
-import { formatPhoneNumber, extractPhoneNumber } from "../../util/format.ts";
+import HistoryApi, { Record, CallStatus } from "../../services/history";
+import { d } from "../../lib/i18n";
+import { formatPhoneNumber, extractPhoneNumber } from "../../util/format";
 import "./NodeUnrolled.css";
 
 interface Props {
@@ -16,6 +18,7 @@ interface Props {
 
 const NodeUnrolled: FC<Props> = ({ record, rollUp }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const removing = useMutation({
@@ -68,14 +71,14 @@ const NodeUnrolled: FC<Props> = ({ record, rollUp }) => {
           <div className="node-unrolled-status">
             {
               record.status === CallStatus.INCOMING &&
-              (<span>Incoming{record.endDate ? <>, {duration()}</> : ""}</span>)
+              (<span>{t(d.call.status.incoming)}{record.endDate ? <>, {duration()}</> : ""}</span>)
             }
             {
               record.status === CallStatus.OUTCOMING &&
-              (<span>Outcoming{record.endDate ? <>, {duration()}</> : ""}</span>)
+              (<span>{t(d.call.status.outgoing)}{record.endDate ? <>, {duration()}</> : ""}</span>)
             }
-            {record.status === CallStatus.MISSED && (<span>Missed</span>)}
-            {record.status === CallStatus.FAILED && (<span>Failed</span>)}
+            {record.status === CallStatus.MISSED && (<span>{t(d.call.status.missed)}</span>)}
+            {record.status === CallStatus.FAILED && (<span>{t(d.call.status.failed)}</span>)}
           </div>
           <div className="node-unrolled-time">
             {record.startDate.toTimeString().substring(0, 5)}

@@ -1,4 +1,5 @@
 import { FC, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { BsCloudUploadFill } from "react-icons/bs";
 import Photo from "../../../components/Photo";
 import FileChooser from "../../../components/FileChooser";
@@ -6,6 +7,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import Hover from "../../../components/Hover";
 import "./ContactEditForm.css";
 import { EditableContact } from "../../../hooks/useContactEditForm";
+import { d } from "../../../lib/i18n";
 
 interface Props {
   contact: EditableContact;
@@ -14,12 +16,13 @@ interface Props {
 }
 
 const PhotoEditForm: FC<Props> = ({ contact, loadPhoto, setPhoto }) => {
+  const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>("");
 
   const handleLoadPhoto = (file: File) => {
     if (file.size > 1024 * 1024 * 8) { // not bigger then 8 megabytes
-      setError("The chosen photo is too large! Please select a photo smaller then 8 MB.");
+      setError(t(d.contact.errors.largePhoto, { max: 8 }));
       return;
     }
     setPhoto(URL.createObjectURL(file));

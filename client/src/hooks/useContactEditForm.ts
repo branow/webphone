@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Number, ContactDetails } from "../services/contacts";
+import { d } from "../lib/i18n";
 import { hex } from "../util/identifier";
 import { validator } from "../util/validator";
 
@@ -26,28 +28,29 @@ interface Props {
 }
 
 export function useContactEditForm({ contact } : Props) {
+  const { t } = useTranslation();
   const [form, setForm] = useState<EditableContact>(mapEditableContact(contact));
   const [error, setError] = useState<ContactError>({ });
 
   useEffect(() => validate(), [form]);
 
   const validateName = (name: string): string => validator(name)
-      .notBlank("Name is mandatory")
-      .min(3, "Too short name")
-      .max(50, "Too long name")
+      .notBlank(t(d.contact.errors.emptyName))
+      .min(3, t(d.contact.errors.shortName, { min: 3 }))
+      .max(100, t(d.contact.errors.longName, { max: 100 }))
       .validate();
 
   const validateBio = (bio: string | undefined) => validator(bio || "")
-    .max(250, "Too long bio")
+    .max(500, t(d.contact.errors.longBio, { max: 500 }))
     .validate();
 
   const validateNumberList = (numbers: EditableNumber[]) => validator(numbers)
-    .notEmpty("Contact must have at least one number")
+    .notEmpty(t(d.contact.errors.emptyNumbers))
     .validate();
 
   const validateNumber = (number: EditableNumber) => validator(number.number)
-    .notBlank("Number is mandatory")
-    .max(16, "Number is too long")
+    .notBlank(t(d.contact.errors.emptyNumber))
+    .max(16, t(d.contact.errors.longNumber))
     .validate();
 
   const validate = () => {

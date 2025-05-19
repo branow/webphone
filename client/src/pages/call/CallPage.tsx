@@ -1,12 +1,15 @@
 import { FC, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import PendingTab from "../../components/PendingTab";
 import ErrorMessage from "../../components/ErrorMessage";
 import { SipContext } from "../../context/SipContext";
+import { d } from "../../lib/i18n";
 import "./CallPage.css";
 
 const CallPage: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { number } = useParams<{ number: string }>();
   const { calls, connection, makeCall } = useContext(SipContext);
 
@@ -21,10 +24,10 @@ const CallPage: FC = () => {
   }, [calls]);
 
   if (!number) {
-    return <ErrorMessage error="Invalid phone number" />
+    return <ErrorMessage error={t(d.call.errors.missingNumber)} />
   }
 
-  return <PendingTab text="CALLING" message="Please wait" />;
+  return <PendingTab text={t(d.ui.loading.calling)} message={t(d.ui.loading.wait)} />;
 };
 
 export default CallPage;
