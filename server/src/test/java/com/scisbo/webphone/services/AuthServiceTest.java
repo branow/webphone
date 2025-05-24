@@ -1,21 +1,24 @@
 package com.scisbo.webphone.services;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-
+import com.scisbo.webphone.models.Contact;
+import com.scisbo.webphone.models.HistoryRecord;
 import com.scisbo.webphone.repositories.ContactRepository;
 import com.scisbo.webphone.repositories.HistoryRepository;
-import com.scisbo.webphone.models.HistoryRecord;
-import com.scisbo.webphone.models.Contact;
 
 @SpringJUnitConfig(AuthService.class)
 public class AuthServiceTest {
@@ -32,6 +35,18 @@ public class AuthServiceTest {
     @Test
     public void testBeanName(@Autowired ApplicationContext ctx) {
         ctx.getBean("authService");
+    }
+
+    @Test
+    public void testIsAdmin() {
+        var token = mock(JwtAuthenticationToken.class);
+
+        when(token.getTokenAttributes())
+            .thenReturn(Map.of("preferred_username", "user"))
+            .thenReturn(Map.of("preferred_username", "admin"));
+
+        assertFalse(this.service.isAdmin(token));
+        assertTrue(this.service.isAdmin(token));
     }
 
     @Test

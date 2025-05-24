@@ -1,0 +1,155 @@
+package com.scisbo.webphone.services;
+
+import static com.scisbo.webphone.repositories.AccountRepository.ENTITY_NAME;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.scisbo.webphone.dtos.service.AccountDto;
+import com.scisbo.webphone.dtos.service.CreateAccountDto;
+import com.scisbo.webphone.dtos.service.UpdateAccountDto;
+import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
+import com.scisbo.webphone.log.annotation.LogAfter;
+import com.scisbo.webphone.log.annotation.LogBefore;
+import com.scisbo.webphone.log.annotation.LogError;
+import com.scisbo.webphone.mappers.AccountMapper;
+import com.scisbo.webphone.models.Account;
+import com.scisbo.webphone.repositories.AccountRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class AccountService {
+
+    private final AccountMapper mapper;
+    private final AccountRepository repository;
+    private final ContactService contactService;
+    private final HistoryService historyService;
+
+    /**
+     * Retrieves the account for the specified user.
+     *
+     * @param user the user identifier
+     * @return a {@link AccountDto} object
+     * @throws EntityNotFoundException if no account is found by the specified user
+     * */
+    @LogBefore("Retrieving contact with ID=#{#id}")
+    @LogAfter("Retrieved contacts with ID=#{#result.getId()}")
+    @LogError("Failed to retrieve contact [#{#error.toString()}]")
+    public AccountDto getByUser(String user) {
+        return this.mapper.mapAccountDto(this.repository.getByUser(user));
+    }
+
+    /**
+     * Retrieves a paginated list of accounts for the specified keyword
+     * ordered by username.
+     *
+     * @param keyword   the keyword to search
+     * @param pageable  the pagination information
+     * @return a page of {@link AccountDto}
+     * */
+    @LogBefore("Retrieving accounts for keyword=#{#keyword}, page=#{#pageable}")
+    @LogAfter("Retrieved accounts: #{#result}")
+    @LogError("Failed to retrieve accounts [#{#error.toString()}]")
+    public Page<AccountDto> getAll(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return this.repository.findAllOrderByUsername(pageable)
+                .map(this.mapper::mapAccountDto);
+        }
+        return this.repository.findByKeywordOrderByUsername(keyword, pageable)
+            .map(this.mapper::mapAccountDto);
+    }
+
+    /**
+     * Creates a new account.
+     *
+     * @params createDto the data for the new contact
+     * @return the created {@link AccountDto} object
+     * @throws EntityAlreadyExistsException if an account with the same user or
+     *         or sip username already exists.
+     * */
+    @LogBefore("Creating account for user=#{#createDto.getUser()}")
+    @LogAfter("Created account with ID=#{#result.getId()}")
+    @LogError("Failed to create account [#{#error.toString()}]")
+    public AccountDto create(CreateAccountDto createDto) {
+        var account = this.mapper.mapAccount(createDto);
+        validateNewAccount(account);
+        var savedAccount = this.repository.save(account);
+        return this.mapper.mapAccountDto(savedAccount);
+    }
+
+    /**
+     * Updates the given account. Fields updated: {@code username}, 
+     * {@code active}, {@code sip}.
+     *
+     * @param updateDto the update data
+     * @return the updated {@link AccountDto}
+     * @throws EntityNotFoundException if no account exists the given identifier
+     * @throws EntityAlreadyExistsException if another account with the same 
+     *         SIP username exists
+     * */
+    @LogBefore("Updating account for ID=#{#updateDto.getId()}")
+    @LogAfter("Updated account with ID=#{#result.getId()}")
+    @LogError("Failed to udpate account [#{#error.toString()}]")
+    public AccountDto update(UpdateAccountDto updateDto) {
+        var updateAccount = this.mapper.mapAccount(updateDto);
+        validateUpdatedAccount(updateAccount);
+
+        var account = this.repository.getById(updateDto.getId());
+        account.setUsername(updateAccount.getUsername());
+        account.setActive(updateAccount.getActive());
+        account.setSip(updateAccount.getSip());
+
+        var updatedAccount = this.repository.save(account);
+        return this.mapper.mapAccountDto(updatedAccount);
+    }
+
+    /**
+     * Deletes an account by its identifier and associated contacts, 
+     * history records, photos.
+     *
+     * @param id the account's identifier
+     * */
+    @LogBefore("Deleting account for ID=#{#id}")
+    @LogAfter("Deleted account with ID=#{#id}")
+    @LogError("Failed to delete account [#{#error.toString()}]")
+    public void deleteById(String id) {
+        this.repository.findById(id).ifPresent(account -> {
+            this.contactService.deleteByUser(account.getUser());
+            this.historyService.deleteByUser(account.getUser());
+            this.repository.deleteById(id);
+        });
+    }
+
+    private void validateNewAccount(Account account) {
+        checkUserUniqueness(account);
+        checkSipUsernameUniqueness(account);
+    }
+
+    private void validateUpdatedAccount(Account account) {
+        checkSipUsernameUniqueness(account);
+    }
+
+    private void checkUserUniqueness(Account account) {
+        this.repository.findByUser(account.getUser())
+            .stream()
+            .filter(a -> !a.getId().equals(account.getId()))
+            .findAny()
+            .ifPresent(a -> {
+                throw new EntityAlreadyExistsException(ENTITY_NAME, "user", account.getUser());
+            });
+    }
+
+    private void checkSipUsernameUniqueness(Account account) {
+        this.repository.findBySipUsername(account.getSip().getUsername())
+            .stream()
+            .filter(a -> !a.getId().equals(account.getId()))
+            .findAny()
+            .ifPresent(a -> {
+                throw new EntityAlreadyExistsException(ENTITY_NAME, "sip username", account.getSip().getUsername());
+            });
+    }
+
+}

@@ -2,6 +2,7 @@ package com.scisbo.webphone.services;
 
 import java.util.Objects;
 
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import com.scisbo.webphone.log.annotation.LogAfter;
@@ -19,6 +20,12 @@ public class AuthService {
 
     private final ContactRepository contactRepository;
     private final HistoryRepository historyRepository;
+
+    @LogAfter("Checked if user is admin: user=#{#auth.name}, result=#{#result}")
+    @LogError("Failed to check if user is admin [#{#error.toString()}")
+    public boolean isAdmin(JwtAuthenticationToken auth) {
+        return "admin".equals(auth.getTokenAttributes().get("preferred_username"));
+    }
 
     @LogAfter("Checked delete permission: user=#{#userId}, record=#{#recordId}, result=#{#result}")
     @LogError("Failed to check delete permission [#{#error.toString()}")

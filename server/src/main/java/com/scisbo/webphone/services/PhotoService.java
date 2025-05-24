@@ -50,6 +50,9 @@ public class PhotoService {
      * @param image the photo as a byte array
      * @return a {@link PhotoDto} representing the saved photo
      */
+    @LogBefore("Uploading photo: size=#{#image.length}")
+    @LogAfter("Uploaded photo with ID=#{#result.getId()}")
+    @LogError("Failed to upload photo [#{#error.toString()}]")
     public PhotoDto upload(byte[] image) {
         Photo photo = this.mapper.mapPhoto(image);
         this.repository.insert(photo);

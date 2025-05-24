@@ -130,10 +130,24 @@ public class ContactService {
     @LogAfter("Deleted contact with ID=#{#id}")
     @LogError("Failed to delete contact [#{#error.toString()}]")
     public void deleteById(String id) {
-        this.repository.findById(id).ifPresent(contact -> {
-            deletePhotoIfPresent(contact.getPhoto());
-            this.repository.deleteById(id);
-        });
+        this.repository.findById(id).ifPresent(this::delete);
+    }
+
+    /**
+     * Deletes all contacts for the specified user and associated photos.
+     *
+     * @param user the user identifier
+     * */
+    @LogBefore("Deleting contacts for user=#{#user}")
+    @LogAfter("Deleted contacts for user=#{#user}")
+    @LogError("Failed to delete contacts [#{#error.toString()}]")
+    public void deleteByUser(String user) {
+        this.repository.findByUser(user).forEach(this::delete);
+    }
+
+    private void delete(Contact contact) {
+        deletePhotoIfPresent(contact.getPhoto());
+        this.repository.deleteById(contact.getId());
     }
 
     private void validateNewContact(Contact contact) {

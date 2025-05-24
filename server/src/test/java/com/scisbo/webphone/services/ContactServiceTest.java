@@ -313,9 +313,10 @@ public class ContactServiceTest {
     }
 
     @Test
-    public void testDelete() {
+    public void testDeleteById() {
         String id = UUID.randomUUID().toString();
         Contact contact = Contact.builder()
+            .id(id)
             .photo("photoId")
             .build();
 
@@ -328,12 +329,31 @@ public class ContactServiceTest {
     }
 
     @Test
-    public void testDelete_notExistingContact() {
+    public void testDeleteById_notExistingContact() {
         String id = UUID.randomUUID().toString();
         when(this.repository.findById(id)).thenReturn(Optional.empty());
         this.service.deleteById(id);
         verify(this.repository, never()).deleteById(id);
         verify(this.photoRepository, never()).deleteById(any(String.class));
+    }
+
+    @Test
+    public void testDeleteByUser() {
+        var user = "user";
+        var contacts = List.of(
+            Contact.builder().id("id1").photo("photo1").build(),
+            Contact.builder().id("id2").photo("photo2").build(),
+            Contact.builder().id("id3").photo("photo3").build()
+        );
+
+        when(this.repository.findByUser(user)).thenReturn(contacts);
+        
+        this.service.deleteByUser(user);
+
+        for (var contact: contacts) {
+            verify(this.repository).deleteById(contact.getId());
+            verify(this.photoRepository).deleteById(contact.getPhoto());
+        }
     }
 
 }
