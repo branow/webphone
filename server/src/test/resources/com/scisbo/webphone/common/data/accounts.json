@@ -1,0 +1,122 @@
+[
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa2"),
+    "user": "3b15a74c-2f29-4cde-8f24-781ecfd3a891",
+    "username": "alice.smith",
+    "active": true,
+    "sip": {
+      "username": "alice.smith",
+      "password": "hashed_password_1",
+      "domain": "example.com",
+      "proxy": "proxy.example.com"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa3"),
+    "user": "9f81a674-b65b-4200-9d22-bbfe5db86f0a",
+    "username": "bob.jones",
+    "active": false,
+    "sip": {
+      "username": "bob.jones",
+      "password": "hashed_password_2",
+      "domain": "example.org",
+      "proxy": "proxy.example.org"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa4"),
+    "user": "2d21e803-1123-4c97-97f4-219e325aa321",
+    "username": "charlie.adams",
+    "active": true,
+    "sip": {
+      "username": "charlie.adams",
+      "password": "hashed_password_3",
+      "domain": "test.io",
+      "proxy": "proxy.test.io"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa5"),
+    "user": "671bbf5f-b792-4f8d-95a7-5bfbf1af7b88",
+    "username": "danielle.wong",
+    "active": false,
+    "sip": {
+      "username": "danielle.wong",
+      "password": "hashed_password_4",
+      "domain": "service.net",
+      "proxy": "proxy.service.net"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa6"),
+    "user": "bdc20980-5b02-4c60-982c-30b3644fa529",
+    "username": "edward.miller",
+    "active": true,
+    "sip": {
+      "username": "edward.miller",
+      "password": "hashed_password_5",
+      "domain": "company.dev",
+      "proxy": "proxy.company.dev"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa7"),
+    "user": "a01cf409-7b7f-40a5-b7bb-9e87725a59c3",
+    "username": "frank.thomas",
+    "active": true,
+    "sip": {
+      "username": "frank.thomas",
+      "password": "hashed_password_6",
+      "domain": "alpha.io",
+      "proxy": "proxy.alpha.io"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa8"),
+    "user": "c2eb5f19-bc58-4a97-9ef4-2efb580c731f",
+    "username": "grace.lee",
+    "active": false,
+    "sip": {
+      "username": "grace.lee",
+      "password": "hashed_password_7",
+      "domain": "beta.com",
+      "proxy": "proxy.beta.com"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa9"),
+    "user": "fd3299a8-6be7-495d-b2e9-d1a52f3088fd",
+    "username": "henry.kim",
+    "active": true,
+    "sip": {
+      "username": "henry.kim",
+      "password": "hashed_password_8",
+      "domain": "charlie.org",
+      "proxy": "proxy.charlie.org"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8faa"),
+    "user": "e21298b6-746e-4e13-a5f2-338b67468284",
+    "username": "irene.nguyen",
+    "active": false,
+    "sip": {
+      "username": "irene.nguyen",
+      "password": "hashed_password_9",
+      "domain": "delta.dev",
+      "proxy": "proxy.delta.dev"
+    }
+  },
+  {
+    "_id": ObjectId("60f5b6486f1c2d4e2f3e8fab"),
+    "user": "9740f63e-2e7a-4e0b-a786-e420df3a9a3e",
+    "username": "jack.owens",
+    "active": true,
+    "sip": {
+      "username": "jack.owens",
+      "password": "hashed_password_10",
+      "domain": "echo.tech",
+      "proxy": "proxy.echo.tech"
+    }
+  }
+]

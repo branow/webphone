@@ -11,6 +11,10 @@ import org.bson.types.Binary;
 
 public class TestDataUtils {
 
+    public static List<Document> accounts() {
+        return parseResource("accounts.json");
+    }
+
     public static List<Document> photos() {
         return parseResource("photos.json").stream()
             .map(TestDataUtils::uploadImage)

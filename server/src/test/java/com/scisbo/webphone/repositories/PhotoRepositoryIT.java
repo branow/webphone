@@ -22,17 +22,19 @@ import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbIT;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Photo;
 
+
 @EnableMongoRepositories
 @SpringJUnitConfig(PhotoRepository.class)
 public class PhotoRepositoryIT extends EmbeddedMongoDbIT {
 
-    private static String COLLECTION = "photoes";
+    private static String COLLECTION = "photos";
 
     @Autowired
     private MongoTemplate template;
 
     @Autowired
     private PhotoRepository repository;
+
 
     @Test
     public void testGetById() {

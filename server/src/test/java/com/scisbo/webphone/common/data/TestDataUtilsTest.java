@@ -11,7 +11,14 @@ import org.junit.jupiter.api.Test;
 public class TestDataUtilsTest {
 
     @Test
-    void testPhotoes() {
+    void testAccounts() {
+        List<Document> accounts = TestDataUtils.accounts();
+        assertNotNull(accounts);
+        assertEquals(10, accounts.size());
+    }
+
+    @Test
+    void testPhotos() {
         List<Document> photos = TestDataUtils.photos();
         assertNotNull(photos);
         assertEquals(5, photos.size());

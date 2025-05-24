@@ -17,17 +17,26 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.scisbo.webphone.models.Account;
 import com.scisbo.webphone.models.CallStatus;
 import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.HistoryRecord;
 import com.scisbo.webphone.models.Number;
 import com.scisbo.webphone.models.NumberType;
 import com.scisbo.webphone.models.Photo;
+import com.scisbo.webphone.models.Sip;
 
 public class TestObjectsUtilsTest {
 
     @Test
-    void testPhotoes() {
+    void testAccounts() {
+        List<Account> accounts = TestObjectsUtils.accounts();
+        assertNotNull(accounts);
+        assertEquals(10, accounts.size());
+    }
+
+    @Test
+    void testPhotos() {
         List<Photo> photos = TestObjectsUtils.photos();
         assertNotNull(photos);
         assertEquals(5, photos.size());
@@ -45,6 +54,13 @@ public class TestObjectsUtilsTest {
         List<HistoryRecord> history = TestObjectsUtils.history();
         assertNotNull(history);
         assertEquals(18, history.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideTestSipAccount")
+    void testSipAccount(Document doc, Account expected) {
+        Account actual = TestObjectsUtils.mapAccount(doc);
+        assertEquals(expected, actual);
     }
 
     @ParameterizedTest
@@ -67,6 +83,41 @@ public class TestObjectsUtilsTest {
     void testMapHistoryRecord(Document doc, HistoryRecord expected) {
         HistoryRecord actual = TestObjectsUtils.mapHistoryRecord(doc);
         assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> provideTestSipAccount() {
+        return Stream.of(
+            Arguments.of(
+                Document.parse(
+                    """
+                      {
+                        "_id": ObjectId("60f5b6486f1c2d4e2f3e8fa2"),
+                        "user": "3b15a74c-2f29-4cde-8f24-781ecfd3a891",
+                        "username": "alice.smith",
+                        "active": true,
+                        "sip": {
+                          "username": "alice.smith",
+                          "password": "hashed_password_1",
+                          "domain": "example.com",
+                          "proxy": "proxy.example.com"
+                        }
+                      }
+                    """
+                ),
+                Account.builder()
+                    .id("60f5b6486f1c2d4e2f3e8fa2")
+                    .user("3b15a74c-2f29-4cde-8f24-781ecfd3a891")
+                    .username("alice.smith")
+                    .active(true)
+                    .sip(Sip.builder()
+                        .username("alice.smith")
+                        .password("hashed_password_1")
+                        .domain("example.com")
+                        .proxy("proxy.example.com")
+                        .build())
+                    .build()
+            )
+        );
     }
 
     private static Stream<Arguments> provideTestMapPhoto() {
