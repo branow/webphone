@@ -1,21 +1,31 @@
-import { FC, useRef } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BsFillTrash3Fill } from "react-icons/bs";
-import HistoryNodes from "./HistoryNodes";
-import ErrorMessage from "../../components/ErrorMessage";
-import PendingTab from "../../components/PendingTab";
-import NavTabs, { Tab } from "../../components/NavTabs";
-import HistoryApi from "../../services/history.ts";
+import { AnimatePresence } from "framer-motion";
+import { styled } from "@linaria/react";
+import ErrorBanner from "../../components/common/messages/ErrorBanner";
+import FadeMotion from "../../components/common/motion/FadeMotion";
+import PendingPane from "../../components/common/motion/PendingPane";
+import NavTabs, { Tab } from "../../components/navtabs/NavTabs";
+import HistoryPageTop from "./HistoryPageTop";
+import HistoryPageBody from "./HistoryPageBody";
+import HistoryApi from "../../services/history";
 import { d } from "../../lib/i18n.ts";
-import "./HistoryPage.css";
+
+const Container = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+`;
 
 const HistoryPage: FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const removingAll = useMutation({
+  const cleaning = useMutation({
     mutationFn: HistoryApi.removeAll,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -24,34 +34,28 @@ const HistoryPage: FC = () => {
     }
   })
 
-  if (removingAll.isPending) {
-    return <PendingTab text={t(d.ui.loading.cleaning)} message={t(d.ui.loading.wait)} />;
-  }
-
-  if (removingAll.isError) {
-    return <ErrorMessage error={removingAll.error} />;
-  }
-
   return (
-    <div className="history-page">
-      <div className="history-page-header">
-        <div className="history-page-title">{t(d.history.title)}</div>
-        <button
-          className="transparent-btn delete-btn history-page-delete-btn"
-          onClick={() => removingAll.mutate()}
-        >
-          <BsFillTrash3Fill />
-        </button>
-      </div>
-      <div className="history-page-nodes-ctn" ref={scrollRef}>
-        <HistoryNodes
-          scrollRef={scrollRef}
-          queryKey={HistoryApi.QueryKeys.history(50)}
-          queryFunc={(page) => HistoryApi.getAll({ number: page, size: 50 })}
-        />
-      </div>
+    <Container>
+      <HistoryPageTop
+        clean={() => cleaning.mutate()}
+        cleanDisabled={cleaning.isPending || cleaning.isError}
+      />
+      <AnimatePresence mode="wait">
+        {!cleaning.isPending && (
+          <FadeMotion key="records">
+            <ErrorBanner error={cleaning.error} />
+            <HistoryPageBody />
+          </FadeMotion>
+        )}
+        {cleaning.isPending && (
+          <PendingPane key="pending"
+            label={t(d.ui.loading.cleaning)}
+            message={t(d.ui.loading.wait)}
+          />
+        )}
+      </AnimatePresence>
       <NavTabs tabs={[Tab.CONTACTS, Tab.DIALPAD]} />
-    </div>
+    </Container>
   );
 };
 

@@ -2,21 +2,3 @@ body {
   font-family: "Source Sans Pro", sans-serif;
   margin: 0;
 }
-
-body {
-  --c-icon: #fff; /* for buttons call, reject, accpet calls */
-  --c-blue: #03a9f4; /* for failed call icons */
-  --c-gray: #888; /* for incoming call icons */
-  --c-yellow: #ffb40b; /* for history icon */
-  --c-red: #f44336; /* for reject button and backspace icon */
-  --c-red-dark: #d32f2f; /* for backspace icon */
-  --c-green: #5fdd5a; /* for call/accept call buttons and outcoming call icons */
-  --c-green-dark: #22c65b; /* for call/accept call buttons */
-  --c-disabled: #eee; /* for disabled call buttons */
-  --c-hover: #eee; /* for hovered buttons with transparent bg */
-  --c-active: #ddd; /* for active buttons with transparent bg */
-  --c-subtext: #666; /* for sub labels or titles */
-  --c-semi-transparent: #AAA2;
-  --c-background: white;
-  --c-text: black;
-}

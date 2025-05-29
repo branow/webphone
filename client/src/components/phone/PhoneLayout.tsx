@@ -1,0 +1,36 @@
+import { FC, ReactNode } from "react";
+import { Outlet } from "react-router";
+import { styled } from "@linaria/react";
+import NavBar from "../navbar/NavBar";
+import PhoneContainer from "./PhoneContainer";
+import SipEventsHandler from "../sip/SipEventsHandler";
+import { size } from "../../styles";
+
+const NavBarContainer = styled.div`
+  height: ${size.navbar.h}px;
+`
+
+const MainContainer = styled.main`
+  position: relative;
+  height: ${size.phone.h - size.navbar.h}px;
+`
+interface Props {
+  children?: ReactNode;
+}
+
+const PhoneLayout: FC<Props> = ({ children }) => {
+  return (
+    <PhoneContainer>
+      <SipEventsHandler />
+      <NavBarContainer>
+        <NavBar />
+      </NavBarContainer>
+      <MainContainer>
+        <Outlet />
+        {children}
+      </MainContainer>
+    </PhoneContainer>
+  );
+}
+
+export default PhoneLayout;

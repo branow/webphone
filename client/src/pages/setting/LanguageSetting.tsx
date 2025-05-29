@@ -3,9 +3,77 @@ import { useTranslation } from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
 import Select from "../../components/common/select/Select";
 import { d } from "../../lib/i18n";
+import { styled } from "@linaria/react";
+import { font } from "../../styles";
+import { useTheme } from "../../hooks/useTheme";
+
+interface ContainerProps {
+  bgHover: string;
+  shadow: string;
+  shadowHover: string;
+}
+
+const Container = styled.div<ContainerProps>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & .option {
+    margin: 1px;
+    padding: 5px;
+    width: fit-content;
+    background-color: #0000;
+    box-shadow: 0 4px 4px ${p => p.shadow};
+    border: none;
+    border-radius: 10%;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+  }
+
+  & .option:hover {
+    background-color: ${p => p.bgHover};
+    box-shadow: 0 4px 4px ${p => p.shadowHover};
+  }
+`;
+
+const Name = styled.div<{ color: string }>`
+  font-size: ${font.size.m}px;
+  color: ${p => p.color};
+`;
 
 const langs = ["en", "es", "uk"];
+
 type LangCode = typeof langs[number];
+
+const LanguageSetting: FC = () => {
+  const { t, i18n } = useTranslation();
+  const th = useTheme();
+
+  console.log("l", i18n.languages);
+
+  const currentLang = langs.includes(i18n.language as LangCode)
+    ? (i18n.language as LangCode)
+    : "en";
+
+  return (
+    <Container
+      bgHover={th.colors.bgHover}
+      shadow={th.colors.bgHover}
+      shadowHover={th.colors.bgActive}
+    >
+      <Name color={th.colors.text}>{t(d.settings.language)}</Name>
+      <Select
+        options={langs}
+        getKey={(lang) => lang}
+        render={(lang) => <Flag lang={lang} />}
+        onSelect={(lang) => i18n.changeLanguage(lang)}
+        init={currentLang}
+      />
+    </Container>
+  );
+};
+
+export default LanguageSetting;
 
 const countries = new Map<LangCode, string>([
   ["en", "us"],
@@ -13,42 +81,19 @@ const countries = new Map<LangCode, string>([
   ["uk", "ua"],
 ]);
 
-const LanguageSetting: FC = () => {
-  const { t, i18n } = useTranslation();
-
-  const renderFlag = (lang: string) => {
-    const country = countries.get(lang as LangCode);
-    if (!country) {
-      console.warn(`No country code found for language: ${lang}`);
-      return <span>{lang.toUpperCase()}</span>;
-    }
-
-    return (
-      <ReactCountryFlag
-        svg
-        countryCode={country}
-        alt={lang}
-        style={{ width: "2em", height: "1.5em" }}
-      />
-    );
-  };
-
-  const currentLang = langs.includes(i18n.language as LangCode)
-    ? (i18n.language as LangCode)
-    : "en";
+const Flag: FC<{ lang: LangCode }> = ({ lang }) => {
+  const country = countries.get(lang);
+  if (!country) {
+    console.warn(`No country code found for language: ${lang}`);
+    return <span>{lang.toUpperCase()}</span>;
+  }
 
   return (
-    <div className="setting-lang">
-      <div>{t(d.settings.language)}</div>
-      <Select
-        options={langs}
-        getKey={(lang) => lang}
-        render={renderFlag}
-        onSelect={(lang) => i18n.changeLanguage(lang)}
-        init={currentLang}
-      />
-    </div>
+    <ReactCountryFlag
+      svg
+      countryCode={country}
+      alt={lang}
+      style={{ width: "2em", height: "1.5em" }}
+    />
   );
 };
-
-export default LanguageSetting;

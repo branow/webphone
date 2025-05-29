@@ -4,7 +4,6 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import AuthProvider from "./providers/AuthProvider";
 import SipProvider from "./providers/SipProvider";
 import { router } from "./routes";
-import "./App.css";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +19,6 @@ const App: FC = () => {
       </QueryClientProvider>
     </div>
   );
-}
+};
 
 export default App;

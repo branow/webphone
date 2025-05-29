@@ -1,9 +1,0 @@
-.search-bar input {
-  box-sizing: border-box;
-  font-size: 18px;
-  padding: 7px 10px;
-  width: 100%;
-  max-width: 100%;
-  border: none;
-  border-bottom: 2px solid var(--c-hover);
-}

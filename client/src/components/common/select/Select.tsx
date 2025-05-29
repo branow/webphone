@@ -1,6 +1,19 @@
 import { ReactNode, useState } from "react";
+import { styled } from "@linaria/react";
 import Option from "./Option";
-import "./Select.css";
+import AutoHeightMotion from "../motion/AutoHeightMotion";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+`;
+
+const OptionsContainer = styled.div`
+  position: absolute;
+  top: 100%;
+`
 
 interface SelectProps<T> {
   options: T[];
@@ -25,22 +38,24 @@ const Select = <T,>({ options, render, init, getKey, onSelect } : SelectProps<T>
   }
 
   return (
-    <div className="select">
+    <Container>
       <Option value={selected} render={render} onSelect={handleSelect} />
-      {isOpen && (
-        <div className="select__options">
-          {options
-            .filter(opt => getKey(opt) !== getKey(selected))
-            .map(opt => (
-              <Option
-                key={getKey(opt)}
-                value={opt}
-                render={render}
-                onSelect={handleSelect} />
-          ))}
-        </div>
-      )}
-    </div>
+      <OptionsContainer>
+        <AutoHeightMotion>
+          <div style={{ height: isOpen ? "auto" : 0 }}>
+            {options
+              .filter(opt => getKey(opt) !== getKey(selected))
+              .map(opt => (
+                <Option
+                  key={getKey(opt)}
+                  value={opt}
+                  render={render}
+                  onSelect={handleSelect} />
+            ))}
+          </div>
+        </AutoHeightMotion>
+      </OptionsContainer>
+    </Container>
   );
 };
 

@@ -86,7 +86,8 @@
       "largePhoto": "¡La foto es muy grande! Selecciona una menor de {{size}} MB"
     },
     "messages": {
-      "deleteWarning": "¿Seguro que deseas eliminar el contacto <bold>{{name}}<bold/>?"
+      "deleteWarning": "¿Seguro que deseas eliminar el contacto <bold>{{name}}<bold/>?",
+      "noContacts": "Aún no hay contactos"
     }
   },
 
@@ -168,6 +169,9 @@
   },
 
   "history": {
-    "title": "Historial"
+    "title": "Historial",
+    "messages": {
+      "noHistory": "Aún no hay historial de llamadas"
+    }
   }
 }
