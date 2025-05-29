@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import basicSsl from "@vitejs/plugin-basic-ssl";
+import wyw from "@wyw-in-js/vite";
 
 export default defineConfig(() => {
   const expose = [
@@ -13,10 +14,20 @@ export default defineConfig(() => {
   ];
   return {
     base: process.env["WEBPHONE_CONTEXT_PATH"],
+
     define: expose.reduce((acc, key) => {
       acc[`import.meta.env.${key}`] = JSON.stringify(process.env[key] || "");
       return acc;
     }, {} as Record<string, string>),
-    plugins: [ basicSsl() ]
+
+    plugins: [
+      basicSsl(),
+      wyw({
+        include: ["**/*.{ts,tsx}"],
+        babelOptions: {
+          presets: ["@babel/preset-typescript", "@babel/preset-react"],
+        },
+      }),
+    ],
   }
 })

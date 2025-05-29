@@ -10,6 +10,9 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    interpolation: {
+      escapeValue: false,
+    },
     backend: {
       loadPath: `${CONTEXT_PATH}/locales/{{lng}}/{{ns}}.json`,
     },
@@ -31,7 +34,7 @@ export const d = {
       importing: "ui.loading.importing",
       saving: "ui.loading.saving",
       redirecting: "ui.loading.redirecting",
-      updating: "ui.loading.update",
+      updating: "ui.loading.updating",
       wait: "ui.loading.wait",
     },
     buttons: {
@@ -108,6 +111,7 @@ export const d = {
     },
     messages: {
       deleteWarning: "contact.messages.deleteWarning",
+      noContacts:  "contact.messages.noContacts",
     },
   },
 
@@ -140,7 +144,7 @@ export const d = {
       title: "errors.404.title",
       message: "errors.404.message",
     },
-    takeMeHome: "errors.general.takeMeHome",
+    takeMeHome: "errors.takeMeHome",
   },
 
   backend: {
@@ -193,5 +197,8 @@ export const d = {
 
   history: {
     title: "history.title",
+    messages: {
+      noHistory:  "history.messages.noHistory",
+    },
   },
 };

@@ -1,53 +1,74 @@
 import { useEffect, RefObject, useRef } from "react";
 
-interface Props {
+interface Options {
   scrollRef: RefObject<HTMLDivElement>;
-  move: () => Promise<void>;
+  next: () => Promise<void>;
+  hasNext: boolean;
   loadFactor?: number;
 }
 
-export const useInfiniteScroll = ({ scrollRef, loadFactor, move, } : Props) => {
+export function useInfiniteScroll({ scrollRef, next, hasNext, loadFactor } : Options) {
   loadFactor = loadFactor || 0.7;
 
-  const oftenTriggerProtectionRef = useRef<boolean>(false);
+  const isLoadingRef = useRef(false);
 
+  const protectedNext = async(): Promise<void> => {
+    if (isLoadingRef.current) return;
+    isLoadingRef.current = true;
+    await next();
+    await waitForRender();
+    isLoadingRef.current = false;
+  }
 
   useEffect(() => {
+    if (!hasNext) return;
     const scroll = scrollRef.current!;
-
-    (async () => {
-      await waitForRender();
-      while(scroll.scrollHeight <= scroll.clientHeight) {
-        await move();
-        await waitForRender();
-      }
-    }) ();
-
-    const nextStep = async(): Promise<void> => {
-      await move();
-      await waitForRender();
-    }
+    if (!scroll) return;
 
     const handleScroll = () => {
-      if (oftenTriggerProtectionRef.current) return;
-      oftenTriggerProtectionRef.current = true;
+      const { scrollHeight, clientHeight, scrollTop } = scroll;
+      const triggerPoint = (scrollHeight - clientHeight) * loadFactor;
 
-      const divHeight = scroll.scrollHeight;
-      const divVisibleHeight = scroll.clientHeight;
-      const scrollPos = scroll.scrollTop;
-      const maxScrolPos = (divHeight - divVisibleHeight) * loadFactor;
-      if (scrollPos >= maxScrolPos) {
-        nextStep().then(() => oftenTriggerProtectionRef.current = false);
-      } else {
-        oftenTriggerProtectionRef.current = false;
+      if (scrollTop >= triggerPoint) {
+        protectedNext();
       }
     }
 
     scroll.addEventListener("scroll", handleScroll);
 
     return () => scroll.removeEventListener("scroll", handleScroll);
-  }, [ loadFactor, move, scrollRef ])
+  }, [ next, hasNext, loadFactor ]);
 
+  useEffect(() => {
+    if (!hasNext) return;
+    const scroll = scrollRef.current!;
+    if (!scroll) return;
+
+    const vf = new ViewportFiller(scroll, protectedNext, hasNext);
+    vf.start();
+
+    return () => { vf.stop(); };
+  }, [hasNext, next]);
+
+}
+
+class ViewportFiller {
+  constructor(
+    private scroll: HTMLDivElement,
+    private next: () => Promise<void>,
+    private hasNext: boolean,
+  ) {}
+
+  async start() {
+    waitForRender();
+    while (this.hasNext && this.scroll.scrollHeight < this.scroll.clientHeight) {
+      await this.next();
+    }
+  }
+
+  stop() {
+    this.hasNext = false;
+  }
 }
 
 const waitForRender = async (): Promise<void> => {

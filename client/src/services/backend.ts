@@ -21,7 +21,7 @@ export interface QueryPageOptions extends PageOptions {
 }
 
 export class URLBuilder {
- private _origin = "";
+  private _origin = "";
   private _path = "";
   private _params = new URLSearchParams();
 

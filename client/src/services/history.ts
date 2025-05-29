@@ -49,10 +49,15 @@ export async function getAll({ number, size }: PageOptions): Promise<Page<Record
       .param("number", number)
       .param("size", size))
     .get().bearer(token).fetch();
+  await wait(1000);
   return await response
     .any(logRequestResponse)
     .error(handleApiError)
     .handle(async res => mapRecordPage(await res.json<Page<Record>>()));
+}
+
+async function wait(time: number) {
+  return new Promise<void>((resolve) => { setTimeout(() => { resolve() }, time); });
 }
 
 export async function getAllByContact(

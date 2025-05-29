@@ -3,44 +3,52 @@ import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ContactApi, { ContactDetails } from "../services/contacts";
 import PhotoApi from "../services/photos";
+import { Paths } from "../routes";
 
 interface Props {
   initContact: ContactDetails;
-  saveFunc: (contact: ContactDetails) => Promise<ContactDetails>
+  saveContact: (contact: ContactDetails) => Promise<ContactDetails>
 }
 
-export function useSaveContact({ initContact, saveFunc }: Props) {
+interface SaveContact {
+  contact: ContactDetails;
+  photo?: File;
+}
+
+export function useSaveContact({ initContact, saveContact: saveFunc }: Props) {
   const [contact, setContact] = useState<ContactDetails>(initContact);
-  const [photo, loadPhoto] = useState<File>();
 
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
 
-  const savingContact = useMutation({
-    mutationFn: async (contact: ContactDetails) => {
-      setContact(contact);
+  const { error, isPending, mutate } = useMutation({
+    mutationFn: async ({ contact, photo }: SaveContact) => {
+      const contactCopy = { ...contact };
+
       if (photo) {
-        contact.photo = (await PhotoApi.upload(photo)).id;
+        const uploaded = await PhotoApi.upload(photo);
+        contactCopy.photo = uploaded.id;
       }
-      await saveFunc(contact);
+
+      const saved = await saveFunc(contactCopy);
+      return saved;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ predicate: ContactApi.QueryKeys.predicate });
-      navigate('/contacts');
+      navigate(Paths.ContactView({ id: data.id }));
+      setContact(data);
     }
   });
 
-  const save = (contact: ContactDetails) => savingContact.mutate(contact);
-
-  const cancel = () => navigate("/contacts");
+  const save = (contact: ContactDetails, photo?: File) => {
+    setContact({ ...contact });
+    mutate({ contact, photo });
+  };
  
   return {
     contact,
-    loadPhoto,
     save,
-    cancel,
-    isPending: savingContact.isPending,
-    error: savingContact.error,
+    isPending,
+    error,
   }
 }
