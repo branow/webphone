@@ -1,6 +1,7 @@
 package com.scisbo.webphone.config;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -90,7 +92,7 @@ public class WebSecurityConfigTest {
     @MockitoBean
     private SpelLoggerFactory spelLoggerFactory;
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] Request: {0}")
     @MethodSource("provideTestRequest_withoutJwt_responseUnauthorized")
     public void testRequest_withoutJwt_responseUnauthorized(MockHttpServletRequestBuilder req) throws Exception {
         this.mockMvc
@@ -98,7 +100,7 @@ public class WebSecurityConfigTest {
             .andExpect(status().isUnauthorized());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] Request: {0}, Mock {1}")
     @MethodSource("provideTestRequest_withJwt_responseForbidden")
     public void testRequest_withJwt_responseForbidden(
         MockHttpServletRequestBuilder req,
@@ -110,7 +112,7 @@ public class WebSecurityConfigTest {
             .andExpect(status().isForbidden());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] Request: {0}, Mock {1}")
     @MethodSource("provideTestRequest_withJwt_responseSuccess")
     public void testRequest_withJwt_responseSuccess(
         MockHttpServletRequestBuilder req,
@@ -158,92 +160,79 @@ public class WebSecurityConfigTest {
     private static Stream<Arguments> provideTestRequest_withJwt_responseForbidden() {
         return Stream.of(
             Arguments.of(
-                withJwt(get("/api/history/user/user1"), "user2"),
-                (Consumer<AuthService>) (service) -> {}
-            ),
-            Arguments.of(
-                withJwt(get("/api/history/user/user1/contact/contact1"), "user2"),
-                (Consumer<AuthService>) (service) -> {}
-            ),
-            Arguments.of(
-                withJwt(get("/api/history/user/user1/contact/contact1"), "user1"),
+                withJwt(get("/api/history/user/user1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.canGetContact("user1", "contact1"))
+                    when(service.canRetrieveRecords(any(JwtAuthenticationToken.class), eq("user1")))
                         .thenReturn(false);
                 }
             ),
             Arguments.of(
-                withJwt(post("/api/history/user/user1"), "user2")
-                .header("Content-Type", "application/json")
-                .content(RestUtils.toJson(
-                    CreateHistoryRecordRequest.builder()
-                        .number("1234")
-                        .status("incoming")
-                        .startDate(OffsetDateTime.now())
-                        .build()
-                )),
-                (Consumer<AuthService>) (service) -> {}
-            ),
-            Arguments.of(
-                withJwt(delete("/api/history/user/user1"), "user2"),
-                (Consumer<AuthService>) (service) -> {}
-            ),
-            Arguments.of(
-                withJwt(delete("/api/history/record1"), "user2"),
+                withJwt(get("/api/history/user/user1/contact/contact1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.canDeleteRecord("user2", "record1"))
+                    when(service.canRetrieveContactRecords(any(JwtAuthenticationToken.class), eq("user1"), eq("contact1")))
+                        .thenReturn(false);
+                }
+            ),
+            Arguments.of(
+                withJwt(post("/api/history/user/user1"), "user")
+                .header("Content-Type", "application/json")
+                .content(RestUtils.toJson(getCreateHistoryRecordRequest())),
+                (Consumer<AuthService>) (service) -> {
+                    when(service.canRetrieveContactRecords(any(JwtAuthenticationToken.class), eq("user1"), eq("contact1")))
+                        .thenReturn(false);
+                }
+            ),
+            Arguments.of(
+                withJwt(delete("/api/history/user/user1"), "user"),
+                (Consumer<AuthService>) (service) -> {
+                    when(service.canDeleteRecords(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(false);
+                }
+            ),
+            Arguments.of(
+                withJwt(delete("/api/history/record1"), "user"),
+                (Consumer<AuthService>) (service) -> {
+                    when(service.canDeleteRecord(any(JwtAuthenticationToken.class), eq("record1")))
                         .thenReturn(false);
                 }
             ),
 
             Arguments.of(
-                withJwt(get("/api/contacts/user/user1"), "user2"),
-                (Consumer<AuthService>) (service) -> {}
-            ),
-            Arguments.of(
-                withJwt(get("/api/contacts/contact1"), "user2"),
+                withJwt(get("/api/contacts/user/user1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.canGetContact("user2", "contact1"))
+                    when(service.canRetrieveContacts(any(JwtAuthenticationToken.class), eq("user1")))
                         .thenReturn(false);
                 }
             ),
             Arguments.of(
-                withJwt(post("/api/contacts/user/user1"), "user2")
-                    .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        CreateContactRequest.builder()
-                            .name("name")
-                            .numbers(List.of(
-                                NumberRequest.builder()
-                                    .type("work")
-                                    .number("1234")
-                                    .build()))
-                            .build()
-                    )),
-                (Consumer<AuthService>) (service) -> {}
-            ),
-            Arguments.of(
-                withJwt(put("/api/contacts/contact1"), "user2")
-                    .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        UpdateContactRequest.builder()
-                            .name("name")
-                            .numbers(List.of(
-                                NumberRequest.builder()
-                                    .type("work")
-                                    .number("1234")
-                                    .build()))
-                            .build()
-                    )),
+                withJwt(get("/api/contacts/contact1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.canUpdateContact("user2", "contact1"))
+                    when(service.canRetrieveContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(false);
                 }
             ),
             Arguments.of(
-                withJwt(delete("/api/contacts/contact1"), "user2"),
+                withJwt(post("/api/contacts/user/user1"), "user")
+                    .header("Content-Type", "application/json")
+                    .content(RestUtils.toJson(getCreateContactRequest())),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.canDeleteContact("user2", "contact1"))
+                    when(service.canCreateContact(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(false);
+                }
+            ),
+            Arguments.of(
+                withJwt(put("/api/contacts/contact1"), "user")
+                    .header("Content-Type", "application/json")
+                    .content(RestUtils.toJson(getUpdateContactRequest())),
+                (Consumer<AuthService>) (service) -> {
+                    when(service.canUpdateContact(any(JwtAuthenticationToken.class), eq("contact1")))
+                        .thenReturn(false);
+                }
+            ),
+            Arguments.of(
+                withJwt(delete("/api/contacts/contact1"), "user"),
+                (Consumer<AuthService>) (service) -> {
+                    when(service.canDeleteContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(false);
                 }
             ),
@@ -255,54 +244,35 @@ public class WebSecurityConfigTest {
                 }
             ),
             Arguments.of(
-                withJwt(get("/api/accounts/user/user1"), "user2"),
+                withJwt(get("/api/accounts/user/user1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.isAdmin(any())).thenReturn(false);
+                    when(service.canRetrieveAccount(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(false);
                 }
             ),
             Arguments.of(
-                withJwt(post("/api/accounts"), "user1")
+                withJwt(post("/api/accounts"), "user")
                     .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        CreateAccountRequest.builder()
-                            .user("user")
-                            .username("username")
-                            .active(true)
-                            .sip(SipRequest.builder()
-                                .username("username")
-                                .password("password")
-                                .domain("domain")
-                                .proxy("proxy")
-                                .build())
-                            .build()
-                    )),
+                    .content(RestUtils.toJson(getCreateAccountRequest())),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.isAdmin(any())).thenReturn(false);
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(false);
                 }
             ),
             Arguments.of(
-                withJwt(put("/api/accounts/account1"), "user1")
+                withJwt(put("/api/accounts/account1"), "user")
                     .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        UpdateAccountRequest.builder()
-                            .username("username")
-                            .active(true)
-                            .sip(SipRequest.builder()
-                                .username("username")
-                                .password("password")
-                                .domain("domain")
-                                .proxy("proxy")
-                                .build())
-                            .build()
-                    )),
+                    .content(RestUtils.toJson(getUpdateAccountRequest())),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.isAdmin(any())).thenReturn(false);
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(false);
                 }
             ),
             Arguments.of(
-                withJwt(delete("/api/accounts/account1"), "user1"),
+                withJwt(delete("/api/accounts/account1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.isAdmin(any())).thenReturn(false);
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(false);
                 }
             )
         );
@@ -311,112 +281,99 @@ public class WebSecurityConfigTest {
     private static Stream<Arguments> provideTestRequest_withJwt_responseSuccess() {
         return Stream.of(
             Arguments.of(
-                withJwt(get("/api/history/user/user1"), "user1"),
+                withJwt(get("/api/history/user/user1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canRetrieveRecords(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
                     when(map.historyService.getPageByUser(any(), any()))
                         .thenReturn(new PageImpl<>(List.of()));
                 }
             ),
             Arguments.of(
-                withJwt(get("/api/history/user/user1/contact/contact1"), "user1"),
+                withJwt(get("/api/history/user/user1/contact/contact1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.canGetContact("user1", "contact1"))
+                    when(map.authService.canRetrieveContactRecords(any(JwtAuthenticationToken.class), eq("user1"), eq("contact1")))
                         .thenReturn(true);
                     when(map.historyService.getPageSummaryByContactId(any(), any(), any()))
                         .thenReturn(new PageImpl<>(List.of()));
                 }
             ),
             Arguments.of(
-                withJwt(post("/api/history/user/user1"), "user1")
+                withJwt(post("/api/history/user/user1"), "user")
                 .header("Content-Type", "application/json")
-                .content(RestUtils.toJson(
-                    CreateHistoryRecordRequest.builder()
-                        .number("1234")
-                        .status("incoming")
-                        .startDate(OffsetDateTime.now())
-                        .build()
-                )),
+                .content(RestUtils.toJson(getCreateHistoryRecordRequest())),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canCreateRecord(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
                     when(map.historyService.create(any()))
                         .thenReturn(HistoryRecordDto.builder().status(CallStatus.MISSED).build());
                 }
             ),
             Arguments.of(
-                withJwt(delete("/api/history/user/user1"), "user1"),
-                (Consumer<ServiceMap>) (map) -> {}
+                withJwt(delete("/api/history/user/user1"), "user"),
+                (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canDeleteRecords(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
+                }
             ),
             Arguments.of(
-                withJwt(delete("/api/history/record1"), "user1"),
+                withJwt(delete("/api/history/record1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.canDeleteRecord("user1", "record1"))
+                    when(map.authService.canDeleteRecord(any(JwtAuthenticationToken.class), eq("record1")))
                         .thenReturn(true);
                 }
             ),
 
             Arguments.of(
-                withJwt(get("/api/contacts/user/user1"), "user1"),
+                withJwt(get("/api/contacts/user/user1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canRetrieveContacts(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
                     when(map.contactService.getByUser(any(), any(), any()))
                         .thenReturn(new PageImpl<>(List.of()));
                 }
             ),
             Arguments.of(
-                withJwt(get("/api/contacts/contact1"), "user1"),
+                withJwt(get("/api/contacts/contact1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.canGetContact("user1", "contact1"))
+                    when(map.authService.canRetrieveContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(true);
                     when(map.contactService.getDetailsById(any()))
                         .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
                 }
             ),
             Arguments.of(
-                withJwt(post("/api/contacts/user/user1"), "user1")
+                withJwt(post("/api/contacts/user/user1"), "user")
                     .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        CreateContactRequest.builder()
-                            .name("name")
-                            .numbers(List.of(
-                                NumberRequest.builder()
-                                    .type("work")
-                                    .number("1234")
-                                    .build()))
-                            .build()
-                    )),
+                    .content(RestUtils.toJson(getCreateContactRequest())),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canCreateContact(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
                     when(map.contactService.create(any()))
                         .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
                 }
             ),
             Arguments.of(
-                withJwt(put("/api/contacts/contact1"), "user1")
+                withJwt(put("/api/contacts/contact1"), "user")
                     .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        UpdateContactRequest.builder()
-                            .name("name")
-                            .numbers(List.of(
-                                NumberRequest.builder()
-                                    .type("work")
-                                    .number("1234")
-                                    .build()))
-                            .build()
-                    )),
+                    .content(RestUtils.toJson(getUpdateContactRequest())),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.canUpdateContact("user1", "contact1"))
+                    when(map.authService.canUpdateContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(true);
                     when(map.contactService.update(any()))
                         .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
                 }
             ),
             Arguments.of(
-                withJwt(delete("/api/contacts/contact1"), "user1"),
+                withJwt(delete("/api/contacts/contact1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.canDeleteContact("user1", "contact1"))
+                    when(map.authService.canDeleteContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(true);
                 }
             ),
 
             Arguments.of(
-                withJwt(get("/api/photos/photo1"), "user1"),
+                withJwt(get("/api/photos/photo1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
                     when(map.photoService.getById(any()))
                         .thenReturn(PhotoDto.builder().build());
@@ -426,75 +383,52 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(get("/api/accounts"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(true);
                     when(map.accountService.getAll(null, PageRequest.of(0, 50)))
                         .thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 50), 1));
-                    when(map.authService.isAdmin(any())).thenReturn(true);
                 }
             ),
             Arguments.of(
-                withJwt(get("/api/accounts/user/user1"), "user2"),
+                withJwt(get("/api/accounts/user/user1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canRetrieveAccount(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
                     when(map.accountService.getByUser("user1"))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
-                    when(map.authService.isAdmin(any())).thenReturn(true);
                 }
             ),
             Arguments.of(
-                withJwt(post("/api/accounts"), "user1")
+                withJwt(post("/api/accounts"), "user")
                     .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        CreateAccountRequest.builder()
-                            .user("user")
-                            .username("username")
-                            .active(true)
-                            .sip(SipRequest.builder()
-                                .username("username")
-                                .password("password")
-                                .domain("domain")
-                                .proxy("proxy")
-                                .build())
-                            .build()
-                    )),
+                    .content(RestUtils.toJson(getCreateAccountRequest())),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(true);
                     when(map.accountService.create(any()))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
-                    when(map.authService.isAdmin(any())).thenReturn(true);
                 }
             ),
             Arguments.of(
-                withJwt(put("/api/accounts/account1"), "user1")
+                withJwt(put("/api/accounts/account1"), "user")
                     .header("Content-Type", "application/json")
-                    .content(RestUtils.toJson(
-                        UpdateAccountRequest.builder()
-                            .username("username")
-                            .active(true)
-                            .sip(SipRequest.builder()
-                                .username("username")
-                                .password("password")
-                                .domain("domain")
-                                .proxy("proxy")
-                                .build())
-                            .build()
-                    )),
+                    .content(RestUtils.toJson(getUpdateAccountRequest())),
                 (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(true);
                     when(map.accountService.update(any()))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
-                    when(map.authService.isAdmin(any())).thenReturn(true);
                 }
             ),
             Arguments.of(
-                withJwt(delete("/api/accounts/account1"), "user1"),
+                withJwt(delete("/api/accounts/account1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.isAdmin(any())).thenReturn(true);
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(true);
                 }
             )
         );
     }
-
-    // private static MockHttpServletRequestBuilder withJwt(MockHttpServletRequestBuilder req, String sub, String preferredUsername) {
-    //     return req.with(jwt().jwt(jwt -> jwt.claim("sub", sub)
-    //         .claim("preferred_username",)));
-    // }
 
     private static MockHttpServletRequestBuilder withJwt(MockHttpServletRequestBuilder req, String sub) {
         return req.with(jwt().jwt(jwt -> jwt.claim("sub", sub)));
@@ -507,5 +441,62 @@ public class WebSecurityConfigTest {
         PhotoService photoService,
         AccountService accountService
     ) {}
+
+    private static CreateHistoryRecordRequest getCreateHistoryRecordRequest() {
+        return CreateHistoryRecordRequest.builder()
+           .number("1234")
+           .status("incoming")
+           .startDate(OffsetDateTime.now())
+           .build();
+    }
+
+    private static CreateContactRequest getCreateContactRequest() {
+        return CreateContactRequest.builder()
+            .name("name")
+            .numbers(List.of(
+                NumberRequest.builder()
+                    .type("work")
+                    .number("1234")
+                    .build()))
+            .build();
+    }
+
+    private static UpdateContactRequest getUpdateContactRequest() {
+        return UpdateContactRequest.builder()
+            .name("name")
+            .numbers(List.of(
+                NumberRequest.builder()
+                    .type("work")
+                    .number("1234")
+                    .build()))
+            .build();
+    }
+
+    private static CreateAccountRequest getCreateAccountRequest() {
+        return CreateAccountRequest.builder()
+            .user("user")
+            .username("username")
+            .active(true)
+            .sip(SipRequest.builder()
+                .username("username")
+                .password("password")
+                .domain("domain")
+                .proxy("proxy")
+                .build())
+            .build();
+    }
+
+    private static UpdateAccountRequest getUpdateAccountRequest() {
+        return UpdateAccountRequest.builder()
+            .username("username")
+            .active(true)
+            .sip(SipRequest.builder()
+                .username("username")
+                .password("password")
+                .domain("domain")
+                .proxy("proxy")
+                .build())
+            .build();
+    }
 
 }

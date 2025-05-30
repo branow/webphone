@@ -36,7 +36,7 @@ public class HistoryController {
     private final HistoryMapper mapper;
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("#userId == authentication.name")
+    @PreAuthorize("@authService.canRetrieveRecords(authentication, #userId)")
     public ResponseEntity<PageResponse<HistoryRecordResponse>> getPageByUser(
         @PathVariable("userId") String userId,
         @RequestParam(name = "number", required = false, defaultValue = "0") int number,
@@ -48,7 +48,7 @@ public class HistoryController {
     }
 
     @GetMapping("/user/{userId}/contact/{contactId}")
-    @PreAuthorize("#userId == authentication.name and @authService.canGetContact(#userId, #contactId)")
+    @PreAuthorize("@authService.canRetrieveContactRecords(authentication, #userId, #contactId)")
     public ResponseEntity<PageResponse<HistoryRecordSummaryResponse>> getPageByUserAndContact(
         @PathVariable("userId") String userId,
         @PathVariable("contactId") String contactId,
@@ -61,7 +61,7 @@ public class HistoryController {
     }
 
     @PostMapping("/user/{userId}")
-    @PreAuthorize("#userId == authentication.name")
+    @PreAuthorize("@authService.canCreateRecord(authentication, #userId)")
     public ResponseEntity<HistoryRecordResponse> create(
         @PathVariable("userId") String userId,
         @RequestBody @Valid CreateHistoryRecordRequest request
@@ -73,7 +73,7 @@ public class HistoryController {
     }
 
     @DeleteMapping("/user/{userId}")
-    @PreAuthorize("#userId == authentication.name")
+    @PreAuthorize("@authService.canDeleteRecords(authentication, #userId)")
     public ResponseEntity<?> deleteByUser(
         @PathVariable("userId") String userId
     ) {
@@ -82,7 +82,7 @@ public class HistoryController {
     }
 
     @DeleteMapping("/{recordId}")
-    @PreAuthorize("@authService.canDeleteRecord(authentication.name, #recordId)")
+    @PreAuthorize("@authService.canDeleteRecord(authentication, #recordId)")
     public ResponseEntity<?> deleteById(
         @PathVariable("recordId") String recordId
     ) {

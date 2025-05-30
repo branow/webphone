@@ -39,7 +39,7 @@ public class AccountController {
     private final PageMapper pageMapper;
 
     @GetMapping("/user/{user}")
-    @PreAuthorize("authentication.name == #user || @authService.isAdmin(authentication)")
+    @PreAuthorize("@authService.canRetrieveAccount(authentication, #user)")
     public ResponseEntity<AccountResponse> getByUser(
         @PathVariable("user") String user
     ) {

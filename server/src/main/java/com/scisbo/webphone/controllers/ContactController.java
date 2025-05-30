@@ -40,7 +40,7 @@ public class ContactController {
 
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("#userId == authentication.name")
+    @PreAuthorize("@authService.canRetrieveContacts(authentication, #userId)")
     public ResponseEntity<PageResponse<ContactResponse>> getByUser(
         @PathVariable("userId") String userId,
         @RequestParam(name = "search", required = false) String search,
@@ -53,7 +53,7 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("@authService.canGetContact(authentication.name, #id)")
+    @PreAuthorize("@authService.canRetrieveContact(authentication, #id)")
     public ResponseEntity<ContactDetailsResponse> getById(
         @PathVariable("id") String id
     ) {
@@ -63,7 +63,7 @@ public class ContactController {
     }
 
     @PostMapping("/user/{userId}")
-    @PreAuthorize("#userId == authentication.name")
+    @PreAuthorize("@authService.canCreateContact(authentication, #userId)")
     public ResponseEntity<ContactDetailsResponse> create(
         @PathVariable("userId") String userId,
         @RequestBody @Valid CreateContactRequest request
@@ -75,7 +75,7 @@ public class ContactController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@authService.canUpdateContact(authentication.name, #id)")
+    @PreAuthorize("@authService.canUpdateContact(authentication, #id)")
     public ResponseEntity<ContactDetailsResponse> update(
         @PathVariable("id") String id,
         @RequestBody @Valid UpdateContactRequest request
@@ -87,7 +87,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@authService.canDeleteContact(authentication.name, #id)")
+    @PreAuthorize("@authService.canDeleteContact(authentication, #id)")
     public ResponseEntity<?> deleteById(
         @PathVariable("id") String id
     ) {
