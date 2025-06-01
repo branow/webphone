@@ -1,6 +1,7 @@
 package com.scisbo.webphone.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +35,30 @@ public interface AccountRepository extends MongoRepository<Account, String>, Cus
      * @throws EntityNotFoundException if no account is found for the given user
      * */
     default Account getByUser(String user) {
-        return findByUser(user).stream().findAny()
+        return findByUser(user)
             .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "user", user));
     }
+
+    /**
+     * Retrieves a single active account for the specified user.
+     *
+     * @param user the account's user identifier
+     * @return a {@link Account} object
+     * @throws EntityNotFoundException if no active account is found for the given user 
+     * */
+    default Account getActiveByUser(String user) {
+        return findByUser(user)
+            .filter(Account::getActive)
+            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, "user", user));
+    }
+
+    /**
+     * Retrieves an account associated with the given user.
+     *
+     * @param user the user identifier
+     * @return list of {@link Account} objects
+     * */
+    Optional<Account> findByUser(String user);
 
     /**
      * Retrieves all accounts associated with the given user.
@@ -44,7 +66,7 @@ public interface AccountRepository extends MongoRepository<Account, String>, Cus
      * @param user the user identifier
      * @return list of {@link Account} objects
      * */
-    List<Account> findByUser(String user);
+    List<Account> findAllByUser(String user);
 
     /**
      * Retrieves all accounts associated with the given SIP username.
@@ -52,7 +74,7 @@ public interface AccountRepository extends MongoRepository<Account, String>, Cus
      * @param username the SIP username
      * @return list of {@link Account} objects
      * */
-    List<Account> findBySipUsername(String username);
+    List<Account> findAllBySipUsername(String username);
 
     /**
      * Retrieves all accounts ordered by username in ascending order.

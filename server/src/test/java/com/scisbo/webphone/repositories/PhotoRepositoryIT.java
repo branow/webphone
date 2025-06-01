@@ -18,14 +18,14 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.scisbo.webphone.common.data.TestDataUtils;
 import com.scisbo.webphone.common.data.TestObjectsUtils;
-import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbIT;
+import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbAbstractIT;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Photo;
 
 
 @EnableMongoRepositories
 @SpringJUnitConfig(PhotoRepository.class)
-public class PhotoRepositoryIT extends EmbeddedMongoDbIT {
+public class PhotoRepositoryIT extends EmbeddedMongoDbAbstractIT {
 
     private static String COLLECTION = "photos";
 

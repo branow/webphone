@@ -39,7 +39,7 @@ public class AccountController {
     private final PageMapper pageMapper;
 
     @GetMapping("/user/{user}")
-    @PreAuthorize("@authService.canRetrieveAccount(authentication, #user)")
+    @PreAuthorize("@authService.hasAdminAccount(authentication)")
     public ResponseEntity<AccountResponse> getByUser(
         @PathVariable("user") String user
     ) {
@@ -48,8 +48,18 @@ public class AccountController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/user/{user}/active")
+    @PreAuthorize("@authService.canRetrieveActiveAccount(authentication, #user)")
+    public ResponseEntity<AccountResponse> getActiveByUser(
+        @PathVariable("user") String user
+    ) {
+        AccountDto account = this.service.getActiveByUser(user);
+        AccountResponse res = this.mapper.mapAccountResponse(account);
+        return ResponseEntity.ok(res);
+    }
+
     @GetMapping
-    @PreAuthorize("@authService.isAdmin(authentication)")
+    @PreAuthorize("@authService.hasAdminAccount(authentication)")
     public ResponseEntity<PageResponse<AccountResponse>> getAll(
         @RequestParam(name = "search", required = false) String search,
         @RequestParam(name = "number", required = false, defaultValue = "0") int number,
@@ -61,7 +71,7 @@ public class AccountController {
     }
 
     @PostMapping
-    @PreAuthorize("@authService.isAdmin(authentication)")
+    @PreAuthorize("@authService.hasAdminAccount(authentication)")
     public ResponseEntity<AccountResponse> create(
         @RequestBody @Valid CreateAccountRequest req
     ) {
@@ -72,7 +82,7 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@authService.isAdmin(authentication)")
+    @PreAuthorize("@authService.hasAdminAccount(authentication)")
     public ResponseEntity<AccountResponse> update(
         @PathVariable("id") String id,
         @RequestBody @Valid UpdateAccountRequest req
@@ -84,7 +94,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@authService.isAdmin(authentication)")
+    @PreAuthorize("@authService.hasAdminAccount(authentication)")
     public ResponseEntity<AccountResponse> deleteById(
         @PathVariable("id") String id
     ) {

@@ -35,11 +35,25 @@ public class AccountService {
      * @return a {@link AccountDto} object
      * @throws EntityNotFoundException if no account is found by the specified user
      * */
-    @LogBefore("Retrieving contact with ID=#{#id}")
-    @LogAfter("Retrieved contacts with ID=#{#result.getId()}")
-    @LogError("Failed to retrieve contact [#{#error.toString()}]")
+    @LogBefore("Retrieving account with user=#{#user}")
+    @LogAfter("Retrieved account with ID=#{#result.getId()}")
+    @LogError("Failed to retrieve account [#{#error.toString()}]")
     public AccountDto getByUser(String user) {
         return this.mapper.mapAccountDto(this.repository.getByUser(user));
+    }
+
+    /**
+     * Retrieves the active account for the specified user.
+     *
+     * @param user the user identifier
+     * @return a {@link AccountDto} object
+     * @throws EntityNotFoundException if no active account is found by the specified user
+     * */
+    @LogBefore("Retrieving active account with user=#{#user}")
+    @LogAfter("Retrieved active account with ID=#{#result.getId()}")
+    @LogError("Failed to retrieve active account [#{#error.toString()}]")
+    public AccountDto getActiveByUser(String user) {
+        return this.mapper.mapAccountDto(this.repository.getActiveByUser(user));
     }
 
     /**
@@ -133,7 +147,7 @@ public class AccountService {
     }
 
     private void checkUserUniqueness(Account account) {
-        this.repository.findByUser(account.getUser())
+        this.repository.findAllByUser(account.getUser())
             .stream()
             .filter(a -> !a.getId().equals(account.getId()))
             .findAny()
@@ -143,7 +157,7 @@ public class AccountService {
     }
 
     private void checkSipUsernameUniqueness(Account account) {
-        this.repository.findBySipUsername(account.getSip().getUsername())
+        this.repository.findAllBySipUsername(account.getSip().getUsername())
             .stream()
             .filter(a -> !a.getId().equals(account.getId()))
             .findAny()

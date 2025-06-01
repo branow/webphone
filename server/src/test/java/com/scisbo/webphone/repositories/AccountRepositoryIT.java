@@ -1,6 +1,7 @@
 package com.scisbo.webphone.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.scisbo.webphone.common.data.TestDataUtils;
 import com.scisbo.webphone.common.data.TestObjectsUtils;
 import com.scisbo.webphone.common.mongodb.EmbeddedMongoDbIT;
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Account;
 
 
@@ -124,6 +126,32 @@ public class AccountRepositoryIT extends EmbeddedMongoDbIT {
     }
 
     @Test
+    public void testGetActiveByUser() {
+        Collection<Document> doc = this.template.insert(TestDataUtils.accounts(), COLLECTION);
+        Account expected = doc.stream()
+            .map(TestObjectsUtils::mapAccount)
+            .filter(Account::getActive)
+            .findAny()
+            .orElseThrow();
+
+        Account actual = this.repository.getActiveByUser(expected.getUser());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetActiveByUser_notActive_throwException() {
+        Collection<Document> doc = this.template.insert(TestDataUtils.accounts(), COLLECTION);
+        Account expected = doc.stream()
+            .map(TestObjectsUtils::mapAccount)
+            .filter(account -> !account.getActive())
+            .findAny()
+            .orElseThrow();
+
+        assertThrows(EntityNotFoundException.class,
+            () -> this.repository.getActiveByUser(expected.getUser()));
+    }
+
+    @Test
     public void testGetByUser() {
         Collection<Document> doc = this.template.insert(TestDataUtils.accounts(), COLLECTION);
         Account expected = doc.stream()
@@ -135,6 +163,12 @@ public class AccountRepositoryIT extends EmbeddedMongoDbIT {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testGetByUser_unexisting_throwException() {
+        assertThrows(EntityNotFoundException.class,
+            () -> this.repository.getByUser("unexsiting-user"));
+    }
+
     @ParameterizedTest
     @MethodSource("provideTestFindByUser")
     public void testFindByUser(String user) {
@@ -143,7 +177,7 @@ public class AccountRepositoryIT extends EmbeddedMongoDbIT {
             .map(TestObjectsUtils::mapAccount)
             .filter(a -> a.getUser().equals(user))
             .toList();
-        List<Account> actual = this.repository.findByUser(user);
+        List<Account> actual = this.repository.findAllByUser(user);
         assertEquals(expected, actual);
     }
 
@@ -163,7 +197,7 @@ public class AccountRepositoryIT extends EmbeddedMongoDbIT {
             .map(TestObjectsUtils::mapAccount)
             .filter(a -> a.getSip().getUsername().equals(username))
             .toList();
-        List<Account> actual = this.repository.findBySipUsername(username);
+        List<Account> actual = this.repository.findAllBySipUsername(username);
         assertEquals(expected, actual);
     }
 

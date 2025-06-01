@@ -59,6 +59,15 @@ public class AccountServiceTest {
     }
 
     @Test
+    public void testGetActiveByUser() {
+        var account = TestObjectsUtils.accounts().getFirst();
+        when(this.accountRepository.getActiveByUser(account.getUser())).thenReturn(account);
+        var expected = this.accountMapper.mapAccountDto(account);
+        var actual = this.accountService.getActiveByUser(account.getUser());
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testGetAll_withoutKeyword() {
         var keyword = " ";
         var accounts = TestObjectsUtils.accounts();
@@ -96,9 +105,9 @@ public class AccountServiceTest {
 
         var account = this.accountMapper.mapAccount(createAccount);
 
-        when(this.accountRepository.findByUser(createAccount.getUser()))
+        when(this.accountRepository.findAllByUser(createAccount.getUser()))
             .thenReturn(List.of());
-        when(this.accountRepository.findBySipUsername(createAccount.getSip().getUsername()))
+        when(this.accountRepository.findAllBySipUsername(createAccount.getSip().getUsername()))
             .thenReturn(List.of());
         when(this.accountRepository.save(account)).thenReturn(account);
 
@@ -123,9 +132,9 @@ public class AccountServiceTest {
 
         var account = this.accountMapper.mapAccount(createAccount);
 
-        when(this.accountRepository.findByUser(createAccount.getUser()))
+        when(this.accountRepository.findAllByUser(createAccount.getUser()))
             .thenReturn(List.of(TestObjectsUtils.accounts().getFirst()));
-        when(this.accountRepository.findBySipUsername(createAccount.getSip().getUsername()))
+        when(this.accountRepository.findAllBySipUsername(createAccount.getSip().getUsername()))
             .thenReturn(List.of());
 
         assertThrows(EntityAlreadyExistsException.class,
@@ -150,9 +159,9 @@ public class AccountServiceTest {
 
         var account = this.accountMapper.mapAccount(createAccount);
 
-        when(this.accountRepository.findByUser(createAccount.getUser()))
+        when(this.accountRepository.findAllByUser(createAccount.getUser()))
             .thenReturn(List.of());
-        when(this.accountRepository.findBySipUsername(createAccount.getSip().getUsername()))
+        when(this.accountRepository.findAllBySipUsername(createAccount.getSip().getUsername()))
             .thenReturn(List.of(TestObjectsUtils.accounts().getFirst()));
 
         assertThrows(EntityAlreadyExistsException.class,
@@ -203,7 +212,7 @@ public class AccountServiceTest {
 
         when(this.accountRepository.getById(updateAccount.getId()))
             .thenReturn(account);
-        when(this.accountRepository.findBySipUsername(updateAccount.getSip().getUsername()))
+        when(this.accountRepository.findAllBySipUsername(updateAccount.getSip().getUsername()))
             .thenReturn(List.of());
         when(this.accountRepository.save(updatedAccount)).thenReturn(updatedAccount);
 
@@ -241,7 +250,7 @@ public class AccountServiceTest {
 
         when(this.accountRepository.getById(updateAccount.getId()))
             .thenReturn(account);
-        when(this.accountRepository.findBySipUsername(updateAccount.getSip().getUsername()))
+        when(this.accountRepository.findAllBySipUsername(updateAccount.getSip().getUsername()))
             .thenReturn(List.of(TestObjectsUtils.accounts().getFirst()));
 
         assertThrows(EntityAlreadyExistsException.class,
