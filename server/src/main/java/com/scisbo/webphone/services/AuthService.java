@@ -100,41 +100,36 @@ public class AuthService {
             .orElse(false);
     }
 
-    @LogAfter("Checked if user has an active admin account: user=#{#auth.name}, result=#{#result}")
-    @LogError("Failed to check if user has an active admin account [#{#error.toString()}")
-    public boolean hasAdminAccount(JwtAuthenticationToken auth) {
-        return hasAccount(auth) && isAdmin(auth);
+    @LogAfter("Checked if user is an admin: user=#{#auth.name}, result=#{#result}")
+    @LogError("Failed to check if user is an admin [#{#error.toString()}")
+    public boolean isAdmin(JwtAuthenticationToken auth) {
+        return "admin".equals(auth.getTokenAttributes().get("preferred_username"));
     }
 
     private boolean canRetrieveAccountInfo(JwtAuthenticationToken auth, String userId) {
         return this.accountRepository.findByUser(userId)
-            .map(account -> isActive(account) && (isDefault(account) || isAccountOwner(auth, account)))
+            .map(account ->
+                   (isAdmin(auth) && (isDefault(account) || isAccountOwner(auth, account)))
+                || (isActive(account) && (isDefault(account) || isAccountOwner(auth, account)))
+            )
             .orElse(false);
     }
 
     private boolean canModifyAccountInfo(JwtAuthenticationToken auth, String userId) {
-        if (!hasAccount(auth)) return false;
         return this.accountRepository.findByUser(userId)
-            .map(account -> (isAdmin(auth) && isDefault(account)) || isAccountOwner(auth, account))
+            .map(account ->
+                   (isAdmin(auth) && (isDefault(account) || isAccountOwner(auth, account)))
+                || (isActive(account) && isAccountOwner(auth, account))
+            )
             .orElse(false);
-    }
-
-    private boolean isAdmin(JwtAuthenticationToken auth) {
-        return "admin".equals(auth.getTokenAttributes().get("preferred_username"));
-    }
-
-    private boolean hasAccount(JwtAuthenticationToken auth) {
-        return this.accountRepository.findByUser(auth.getName())
-            .filter(Account::getActive)
-            .isPresent();
-    }
-
-    private boolean isActive(Account account) {
-        return account.getActive();
     }
 
     private boolean isAccountOwner(JwtAuthenticationToken auth, Account account) {
         return Objects.equals(auth.getName(), account.getUser());
+    }
+
+    private boolean isActive(Account account) {
+        return account.getActive();
     }
 
     private boolean isDefault(Account account) {

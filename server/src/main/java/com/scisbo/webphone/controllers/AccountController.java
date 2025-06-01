@@ -39,7 +39,7 @@ public class AccountController {
     private final PageMapper pageMapper;
 
     @GetMapping("/user/{user}")
-    @PreAuthorize("@authService.hasAdminAccount(authentication)")
+    @PreAuthorize("@authService.isAdmin(authentication)")
     public ResponseEntity<AccountResponse> getByUser(
         @PathVariable("user") String user
     ) {
@@ -59,7 +59,7 @@ public class AccountController {
     }
 
     @GetMapping
-    @PreAuthorize("@authService.hasAdminAccount(authentication)")
+    @PreAuthorize("@authService.isAdmin(authentication)")
     public ResponseEntity<PageResponse<AccountResponse>> getAll(
         @RequestParam(name = "search", required = false) String search,
         @RequestParam(name = "number", required = false, defaultValue = "0") int number,
@@ -71,7 +71,7 @@ public class AccountController {
     }
 
     @PostMapping
-    @PreAuthorize("@authService.hasAdminAccount(authentication)")
+    @PreAuthorize("@authService.isAdmin(authentication)")
     public ResponseEntity<AccountResponse> create(
         @RequestBody @Valid CreateAccountRequest req
     ) {
@@ -82,7 +82,7 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@authService.hasAdminAccount(authentication)")
+    @PreAuthorize("@authService.isAdmin(authentication)")
     public ResponseEntity<AccountResponse> update(
         @PathVariable("id") String id,
         @RequestBody @Valid UpdateAccountRequest req
@@ -94,7 +94,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@authService.hasAdminAccount(authentication)")
+    @PreAuthorize("@authService.isAdmin(authentication)")
     public ResponseEntity<AccountResponse> deleteById(
         @PathVariable("id") String id
     ) {

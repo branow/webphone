@@ -240,7 +240,7 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(get("/api/accounts"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.hasAdminAccount(any())).thenReturn(false);
+                    when(service.isAdmin(any())).thenReturn(false);
                 }
             ),
             Arguments.of(
@@ -253,7 +253,7 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(get("/api/accounts/user/user1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(false);
                 }
             ),
@@ -262,7 +262,7 @@ public class WebSecurityConfigTest {
                     .header("Content-Type", "application/json")
                     .content(RestUtils.toJson(getCreateAccountRequest())),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(false);
                 }
             ),
@@ -271,14 +271,14 @@ public class WebSecurityConfigTest {
                     .header("Content-Type", "application/json")
                     .content(RestUtils.toJson(getUpdateAccountRequest())),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(false);
                 }
             ),
             Arguments.of(
                 withJwt(delete("/api/accounts/account1"), "user"),
                 (Consumer<AuthService>) (service) -> {
-                    when(service.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(service.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(false);
                 }
             )
@@ -390,7 +390,7 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(get("/api/accounts"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(true);
                     when(map.accountService.getAll(null, PageRequest.of(0, 50)))
                         .thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 50), 1));
@@ -408,7 +408,7 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(get("/api/accounts/user/user1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(true);
                     when(map.accountService.getByUser("user1"))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
@@ -419,7 +419,7 @@ public class WebSecurityConfigTest {
                     .header("Content-Type", "application/json")
                     .content(RestUtils.toJson(getCreateAccountRequest())),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(true);
                     when(map.accountService.create(any()))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
@@ -430,7 +430,7 @@ public class WebSecurityConfigTest {
                     .header("Content-Type", "application/json")
                     .content(RestUtils.toJson(getUpdateAccountRequest())),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(true);
                     when(map.accountService.update(any()))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
@@ -439,7 +439,7 @@ public class WebSecurityConfigTest {
             Arguments.of(
                 withJwt(delete("/api/accounts/account1"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.hasAdminAccount(any(JwtAuthenticationToken.class)))
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(true);
                 }
             )

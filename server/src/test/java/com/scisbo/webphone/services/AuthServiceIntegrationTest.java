@@ -153,7 +153,18 @@ public class AuthServiceIntegrationTest extends EmbeddedMongoDbAbstractIT {
             scenario(requester(user(), active()), owner(preset(), true), true),
             scenario(requester(user(), active()), owner(usual(), true), false),
 
+            scenario(requester(admin(), none()), owner(), false),
+            scenario(requester(admin(), none()), owner(preset(), false), true),
+            scenario(requester(admin(), none()), owner(preset(), true), true),
+            scenario(requester(admin(), none()), owner(usual(), true), false),
+
+            scenario(requester(admin(), inactive()), owner(), true),
+            scenario(requester(admin(), inactive()), owner(preset(), false), true),
+            scenario(requester(admin(), inactive()), owner(preset(), true), true),
+            scenario(requester(admin(), inactive()), owner(usual(), true), false),
+
             scenario(requester(admin(), active()), owner(), true),
+            scenario(requester(admin(), active()), owner(preset(), false), true),
             scenario(requester(admin(), active()), owner(preset(), true), true),
             scenario(requester(admin(), active()), owner(usual(), true), false)
         );
@@ -176,22 +187,33 @@ public class AuthServiceIntegrationTest extends EmbeddedMongoDbAbstractIT {
             scenario(requester(user(), active()), owner(preset(), true), false),
             scenario(requester(user(), active()), owner(usual(), true), false),
 
+            scenario(requester(admin(), none()), owner(), false),
+            scenario(requester(admin(), none()), owner(preset(), false), true),
+            scenario(requester(admin(), none()), owner(preset(), true), true),
+            scenario(requester(admin(), none()), owner(usual(), false), false),
+
+            scenario(requester(admin(), inactive()), owner(), true),
+            scenario(requester(admin(), inactive()), owner(preset(), false), true),
+            scenario(requester(admin(), inactive()), owner(preset(), true), true),
+            scenario(requester(admin(), inactive()), owner(usual(), false), false),
+
             scenario(requester(admin(), active()), owner(), true),
+            scenario(requester(admin(), active()), owner(preset(), false), true),
             scenario(requester(admin(), active()), owner(preset(), true), true),
-            scenario(requester(admin(), active()), owner(usual(), true), false)
+            scenario(requester(admin(), active()), owner(usual(), false), false)
         );
     }
 
     @ParameterizedTest(name = "[{index}] requester={0}, expected={1}")
     @MethodSource("provideTestHasAdminAccount")
-    public void testHasAdminAccount(Requester requester, boolean expected) {
+    public void testIsAdmin(Requester requester, boolean expected) {
         if (requester.account != null) {
             this.template.insert(requester.account);
         }
         var role = requester.auth.getTokenAttributes().get("preferred_username");
         var account = requester.account();
         var message = String.format("role=%s, account=%s", role, account);
-        var actual = this.service.hasAdminAccount(requester.auth);
+        var actual = this.service.isAdmin(requester.auth);
         assertEquals(expected, actual, message);
     }
 
@@ -200,8 +222,8 @@ public class AuthServiceIntegrationTest extends EmbeddedMongoDbAbstractIT {
             Arguments.of(requester(user(), none()), false),
             Arguments.of(requester(user(), inactive()), false),
             Arguments.of(requester(user(), active()), false),
-            Arguments.of(requester(admin(), none()), false),
-            Arguments.of(requester(admin(), inactive()), false),
+            Arguments.of(requester(admin(), none()), true),
+            Arguments.of(requester(admin(), inactive()), true),
             Arguments.of(requester(admin(), active()), true)
         );
     }
