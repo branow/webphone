@@ -9,6 +9,7 @@ const emptySipAccount: SipAccount = {
   username: "",
   password: "",
   domain: "",
+  proxy: "",
 }
 
 interface SipAccountError {
@@ -28,7 +29,7 @@ export function useSipAccountForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setError(prev => ({ ...prev, connection: connectionError}))
+    setError(prev => ({ ...prev, connection: connectionError?.message}))
   }, [connectionError])
 
   useEffect(() => {
@@ -95,6 +96,7 @@ export function useSipAccountForm() {
           username: data.username,
           password: data.password,
           domain: data.domain,
+          proxy: data.proxy,
         });
         updateError({ file: undefined })
       } catch (e) {

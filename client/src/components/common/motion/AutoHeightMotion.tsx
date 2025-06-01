@@ -27,6 +27,7 @@ const AutoHeightMotion: FC<Props> = ({  children, duration }) => {
       style={{ overflow: "hidden" }}
     >
       <div ref={ref}>
+        <div></div>
         {children}
       </div>
     </motion.div>

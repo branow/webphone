@@ -1,6 +1,7 @@
 {
   "ui": {
     "loading": {
+      "authenticating": "Authentiating",
       "connecting": "Connecting",
       "cleaning": "Cleaning",
       "calling": "Calling",
@@ -76,8 +77,8 @@
       "mobile": "mobile"
     },
     "errors": {
-      "emptyName": "Name is mandatory",
-      "emptyNumber": "Number is mandatory",
+      "emptyName": "Name is required",
+      "emptyNumber": "Number is required",
       "emptyNumbers": "Contat must have at least one number",
       "shortName": "Name must contain at least {{min}} characters",
       "longBio": "Bio must not contain more than {{max}} characters",
@@ -92,34 +93,56 @@
   },
 
   "account": {
+    "title": "Account",
     "fields": {
       "username": "Username",
       "password": "Password",
-      "domain": "Domain"
+      "domain": "Domain",
+      "proxy": "Proxy"
     },
     "messages": {
+      "createAccount": "Please create account to continue",
+      "defaultAccountWarning": "You are using a temporary account with limited functionality and unstable behavior. Please contact your administrator to obtain a permanent one.",
+      "noAccountWarning": "You are currently in account-less mode. Please create an account to access the full-featured webphone.",
+      "noAccount": "No Account",
       "success": "You connected successfully!"
     },
     "errors": {
-      "emptyUsername": "Username is mandatory",
-      "emptyPassword": "Password is mandatory",
-      "emptyDomain": "Domain is mandatory",
+      "emptyUsername": "Username is required",
+      "emptyPassword": "Password is required",
+      "emptyDomain": "Domain is required",
+      "emptyProxy": "Proxy is required",
       "emptyFile": "Empty file",
       "longUsername": "Username must be shorter than {{max}} characters",
       "longPassword": "Password must be shorter than {{max}} characters",
       "longDomain": "Domain must be shorter than {{max}} characters",
+      "longProxy": "Proxy must be shorter than {{max}} characters",
       "readFile": "Failed to read file",
       "uploadFile": "Failed to upload file",
-      "connectionFailed": "Cannot establish connection to the server, please check entered domain.",
-      "registrationFailed": "Registration failed: invalid username or password"
+      "connection": "Unable to connect to the PBX server. Please contact your administrator.",
+      "registration": "Failed to register the SIP user on the PBX server. Please contact your administrator."
+    },
+    "types": {
+      "admin": "Admin",
+      "default": "Default"
     }
   },
 
   "errors": {
+    "account": {
+      "title": "Account Not Found",
+      "message": "We couldn’t find your account. Please contact your administrator or try again later."
+    },
+    "auth": {
+      "title": "Authentication Initialization Failed",
+      "message": "Third-party cookies may be blocked, or the authentication service is unavailable. Please check your browser settings or try again later.",
+      "retryLogin": "Retry Login"
+    },
     "404": {
       "title": "404 So Sorry!",
       "message": "The page you are looking for cannot be found."
     },
+    "retry": "Retry",
     "takeMeHome": "Take Me Home"
   },
 
@@ -144,8 +167,8 @@
         }
       },
       "missing": {
-        "name": "Name is mandatory",
-        "number": "Number is mandatory"
+        "name": "Name is required",
+        "number": "Number is required"
       },
       "empty": {
         "numbers": "At least one number required"

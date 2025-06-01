@@ -1,19 +1,16 @@
 import { useEffect, useState, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { TFunction } from "i18next";
 import { UA } from "jssip";
 import { RTCSessionEvent } from "jssip/lib/UA";
 import { IncomingAckEvent, IncomingEvent, OutgoingAckEvent, OutgoingEvent, RTCSession } from "jssip/lib/RTCSession";
 import { IncomingRequest, OutgoingRequest } from "jssip/lib/SIPMessage";
 import { ConnectionState, IncomingCallHandler, CallInfo, SipAccount, init, CallState, CallDirection, Call, ConnectionStateWrapper, Session, CallStateWrapper, getCallOriginator } from "../lib/sip";
-import { d } from "../lib/i18n";
 import { log, warn } from "../util/log";
 
 interface Return {
   account: SipAccount | null;
   setAccount: (a: SipAccount) => void;
   connection: ConnectionStateWrapper;
-  connectionError?: string;
+  connectionError?: Error;
   calls: Call[];
   makeCall: (number: string) => void;
   onIncomingCall: (handler: IncomingCallHandler) => void;
@@ -25,10 +22,9 @@ interface Return {
 }
 
 export function useSip(): Return {
-  const { t } = useTranslation();
   const [account, setAccount] = useState<SipAccount | null>(null);
   const [connection, setConnection] = useState(ConnectionState.DISCONNECTED);
-  const [connectionError, setConnectionError] = useState<string>();
+  const [connectionError, setConnectionError] = useState<Error>();
   const [calls, setCalls] = useState(new Map<string, Session>());
   const handleIncomingCallRef = useRef<IncomingCallHandler>();
   const uaRef = useRef<UA>();
@@ -36,7 +32,7 @@ export function useSip(): Return {
   useEffect(() => {
     if (!account) return;
 
-    setConnectionError("");
+    setConnectionError(undefined);
 
     uaRef.current = init(account);
 
@@ -55,7 +51,9 @@ export function useSip(): Return {
     ua.on("disconnected", (e) => {
       log("DISCONNECTED", e);
       setConnection(ConnectionState.DISCONNECTED);
-      setConnectionError(localizeConnectionFailedReason(t, e.reason) || t(d.account.errors.connectionFailed));
+      const error = Error(e.reason || "PBX Server Disconnected");
+      if (e.code) error.name = String(e.code);
+      setConnectionError(error);
       if (e.error) ua.stop();
     });
 
@@ -73,11 +71,9 @@ export function useSip(): Return {
       log("REGISTRATION_FAILED", e);
       setConnection(ConnectionState.DISCONNECTED);
 
-      if (e.response.status_code === 403) {
-        setConnectionError(t(d.account.errors.registrationFailed));
-      } else {
-        setConnectionError(localizeRegistrationFailedReason(t, e.response.reason_phrase));
-      }
+      const error = new Error(e.response.reason_phrase);
+      error.name = e.cause || String(e.response.status_code);
+      setConnectionError(error);
     });
 
     ua.on("newRTCSession", (e: RTCSessionEvent) => {
@@ -299,12 +295,4 @@ function mapCalls(calls: Map<string, Session>): Call[] {
 
 function mapCall(callInfo: CallInfo): Call {
   return { ...callInfo, state: new CallStateWrapper(callInfo.state) }
-}
-
-function localizeConnectionFailedReason(_t: TFunction<'translation', undefined>, reason?: string): string | undefined {
-  return reason;
-}
-
-function localizeRegistrationFailedReason(_t: TFunction<'translation', undefined>, reason?: string): string | undefined {
-  return reason;
 }

@@ -1,6 +1,7 @@
 {
   "ui": {
     "loading": {
+      "authenticating": "Autenticando",
       "connecting": "Conectando",
       "cleaning": "Limpiando",
       "calling": "Llamando",
@@ -92,34 +93,56 @@
   },
 
   "account": {
+    "title": "Cuenta",
     "fields": {
       "username": "Usuario",
       "password": "Contraseña",
-      "domain": "Dominio"
+      "domain": "Dominio",
+      "proxy": "Proxy"
     },
     "messages": {
+      "createAccount": "Por favor, crea una cuenta para continuar",
+      "defaultAccountWarning": "Estás utilizando una cuenta temporal con funcionalidad limitada y comportamiento inestable. Por favor, contacta con tu administrador para obtener una permanente.",
+      "noAccountWarning": "Estás utilizando el modo sin cuenta. Por favor, crea una cuenta para acceder al teléfono web con todas las funciones.",
+      "noAccount": "Sin cuenta",
       "success": "¡Conexión exitosa!"
     },
     "errors": {
       "emptyUsername": "Usuario obligatorio",
       "emptyPassword": "Contraseña obligatoria",
       "emptyDomain": "Dominio obligatorio",
+      "emptyProxy": "El proxy es obligatorio",
       "emptyFile": "Archivo vacío",
       "longUsername": "El usuario debe tener menos de {{max}} caracteres",
       "longPassword": "La contraseña debe tener menos de {{max}} caracteres",
       "longDomain": "El dominio debe tener menos de {{max}} caracteres",
+      "longProxy": "El proxy debe tener menos de {{max}} caracteres",
       "readFile": "Error al leer archivo",
       "uploadFile": "Error al subir archivo",
-      "connectionFailed": "No se puede conectar al servidor, verifica el dominio.",
-      "registrationFailed": "Error de registro: usuario o contraseña inválidos"
+      "connection": "No se puede conectar al servidor PBX. Por favor, contacte con su administrador.",
+      "registration": "No se pudo registrar el usuario SIP en el servidor PBX. Por favor, contacte con su administrador."
+    },
+    "types": {
+      "admin": "Administrador",
+      "default": "Predeterminado"
     }
   },
 
   "errors": {
+    "account": {
+      "title": "Cuenta no encontrada",
+      "message": "No se pudo encontrar tu cuenta. Por favor, contacta con tu administrador o inténtalo de nuevo más tarde."
+    },
+    "auth": {
+      "title": "Error al iniciar la autenticación",
+      "message": "Es posible que las cookies de terceros estén bloqueadas o que el servicio de autenticación no esté disponible. Verifica la configuración de tu navegador o inténtalo más tarde.",
+      "retryLogin": "Reintentar inicio de sesión"
+    },
     "404": {
       "title": "404 ¡Lo sentimos!",
       "message": "La página no fue encontrada."
     },
+    "retry": "Reintentar",
     "takeMeHome": "Llévame al inicio"
   },
 

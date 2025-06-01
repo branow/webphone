@@ -1,21 +1,16 @@
-import { FC, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { useTranslation } from "react-i18next";
+import { FC, useContext, useState } from "react";
 import { styled } from "@linaria/react";
 import { BsMicFill, BsMicMuteFill, BsVolumeUpFill, BsVolumeMuteFill } from "react-icons/bs";
 import { IoIosKeypad } from "react-icons/io";
 import { CallContext } from "../../../context/CallContext";
 import TransparentRoundButton from "../../../components/common/button/TransparentRoundButton";
-import PendingPane from "../../../components/common/motion/PendingPane";
 import HangUpButton from "../../../components/call/HangUpButton";
 import KeypadPane from "./KeypadPane";
 import { useAudioVisualizer } from "../../../hooks/useAudioVisualizer";
 import { useAudio } from "../../../hooks/useAudio";
 import { useVolume } from "../../../hooks/useVolume";
 import { useTheme } from "../../../hooks/useTheme";
-import { d } from "../../../lib/i18n";
 import { font } from "../../../styles";
-import { Paths } from "../../../routes";
 
 const Container = styled.div`
   display: flex;

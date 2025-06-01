@@ -5,27 +5,9 @@ import { styled } from "@linaria/react";
 import TransparentRoundButton from "./TransparentRoundButton";
 import { useTheme } from "../../../hooks/useTheme";
 
-const container = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
-const DeleteButtonContainer = styled.div<{ size: number, color: string, colorHover: string, }>`
-  & svg {
-    font-size: ${p => p.size}px;
-    max-width: ${p => p.size}px;
-    max-height: ${p => p.size}px;
-    color: ${p => p.color};
-    transition: all ease-in-out 0.15s;
-  }
-
-  &:hover svg {
-    color: ${p => p.colorHover};
-  }
-
-  &:active svg {
-    color: ${p => p.color};
+const cssButton = css`
+  &:not(:disabled):active {
     animation: rotate 0.1s ease-in-out 0s 2;
   }
 
@@ -39,6 +21,12 @@ const DeleteButtonContainer = styled.div<{ size: number, color: string, colorHov
   }
 `;
 
+const InnerContainer = styled.div<{ size: number }>`
+  font-size: ${p => p.size}px;
+  max-width: ${p => p.size}px;
+  max-height: ${p => p.size}px;
+`;
+
 interface Props {
   size: number;
   remove: () => void;
@@ -49,16 +37,18 @@ const DeleteButton: FC<Props> = ({ size, remove, disabled }) => {
   const th = useTheme();
 
   return (
-    <DeleteButtonContainer size={size} color={th.colors.red} colorHover={th.colors.redHover}>
-      <TransparentRoundButton
-        className={container}
-        onClick={remove}
-        disabled={disabled}
-        style={{ padding: `${size / 2.5}px` }}
-      >
+    <TransparentRoundButton
+      className={cssButton}
+      onClick={remove}
+      disabled={disabled}
+      color={th.colors.red}
+      colorHover={th.colors.redHover}
+      style={{ padding: `${size / 2.5}px` }}
+    >
+      <InnerContainer size={size}>
         <BsFillTrash3Fill size={size} />
-      </TransparentRoundButton>
-    </DeleteButtonContainer>
+      </InnerContainer>
+    </TransparentRoundButton>
   );
 }
 

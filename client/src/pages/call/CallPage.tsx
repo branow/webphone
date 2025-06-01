@@ -13,22 +13,35 @@ const CallPage: FC = () => {
   const { calls, connection, makeCall } = useContext(SipContext);
 
   useEffect(() => {
-    if (!connection.isConnected()) { navigate(Paths.Account()); return; }
-    if (number) { makeCall( number); }
-  }, [connection.isConnected(), number]);
+    if (!connection.isConnected()) {
+      navigate(Paths.Dialpad());
+      return;
+    }
+    if (number) {
+      makeCall( number);
+    }
+  }, [connection.isConnected, number]);
 
   useEffect(() => {
     const call = calls.find(c => !c.state.isEnded() && c.number === number);
-    if (call) navigate(Paths.CallActive({ id: call.id }));
+    if (call) {
+      navigate(Paths.CallActive({ id: call.id }));
+    }
   }, [calls]);
-
-  if (!number) {
-    return <NotFoundPage />
-  }
 
   const { t } = useTranslation();
 
-  return <PendingPane label={t(d.ui.loading.calling)} message={t(d.ui.loading.wait)} />;
+  return (
+    <>
+      {number && (
+        <PendingPane
+          label={t(d.ui.loading.calling)}
+          message={t(d.ui.loading.wait)}
+        />
+      )}
+      {!number && <NotFoundPage />}
+    </>
+  );
 };
 
 export default CallPage;

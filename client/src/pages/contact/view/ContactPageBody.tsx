@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useContext, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
@@ -14,6 +14,7 @@ import HistoryApi from "../../../services/history";
 import { d } from "../../../lib/i18n";
 import { font, size } from "../../../styles";
 import { Paths } from "../../../routes";
+import { AccountContext } from "../../../context/AccountContext";
 
 const Container = styled.div`
   overflow-y: auto;
@@ -46,13 +47,14 @@ interface Props {
 }
 
 const ContactPageBody: FC<Props> = ({ contact }) => {
-  const th = useTheme();
-  const { t } = useTranslation();
-
   const navigate = useNavigate();
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const { user } = useContext(AccountContext);
 
   const call = (number: string) => navigate(Paths.Call({ number: number }));
+
+  const th = useTheme();
+  const { t } = useTranslation();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
     <Container ref={scrollRef}>
@@ -78,7 +80,7 @@ const ContactPageBody: FC<Props> = ({ contact }) => {
         <InfinitePages
           scrollRef={scrollRef}
           queryKey={HistoryApi.QueryKeys.historyByContact(contact.id, 30)}
-          queryFunc={(page) => HistoryApi.getAllByContact(contact.id, { number: page, size: 30 })}
+          queryFunc={(page) => HistoryApi.getAllByContact(user, contact.id, { number: page, size: 30 })}
         >
           {(records) => <CallRecords records={records} />}
         </InfinitePages>

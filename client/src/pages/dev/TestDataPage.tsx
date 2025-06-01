@@ -1,12 +1,18 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import HistoryApi, { Record, CreateRecord, CallStatus } from "../../services/history";
 import ContactApi, { ContactDetails, Number, NumberType, CreateContact } from "../../services/contacts";
 import PhotoApi from "../../services/photos";
+import { AccountContext } from "../../context/AccountContext";
 
 const TestDataPage: FC = () => {
+  const { user, account } = useContext(AccountContext);
+
   const handleGenerate = () => {
-    createModels(10).then(m => console.log(m));
+    createModels(user, 10).then(m => console.log(m));
   }
+
+  if (!account) return <p>The page is not accessible without account</p>;
+  if (account.isDefault) return <p>The page is not accessible for default account</p>;
 
   return (
     <div>
@@ -37,38 +43,38 @@ interface Model {
   records: Record[];
 }
 
-async function createModels(n: number): Promise<Model[]> {
+async function createModels(user: string, n: number): Promise<Model[]> {
   const models: Model[] = [];
   for (let i = 0; i < n; i++) {
-    createModel().then(model => models.push(model));
+    createModel(user).then(model => models.push(model));
   }
   return models;
 }
 
-async function createModel(): Promise<Model> {
-  const contact = await createContact();
+async function createModel(user: string): Promise<Model> {
+  const contact = await createContact(user);
   const n = randBoolean(0.75) ? randNumber({ max: 10 }) :
       (randBoolean(0.75) ? randNumber({ max: 20 }) :
       (randBoolean(0.5) ? randNumber({ max: 50 }) : randNumber({ max: 100 })));
 
   const records = [];
   for (let i = 0; i < n; i++) {
-    records.push(await createRecord(contact));
+    records.push(await createRecord(user, contact));
   }
 
   for (let i = 0; i < randNumber({ max: 5 }); i++) {
-    records.push(await createRecord());
+    records.push(await createRecord(user));
   }
 
   return { contact, records };
 }
 
-async function createContact(): Promise<ContactDetails> {
-  return ContactApi.create(await generateContact());
+async function createContact(user: string): Promise<ContactDetails> {
+  return ContactApi.create(user, await generateContact());
 }
 
-async function createRecord(contact?: ContactDetails): Promise<Record> {
-  return HistoryApi.create(generateRecord(contact));
+async function createRecord(user: string, contact?: ContactDetails): Promise<Record> {
+  return HistoryApi.create(user, generateRecord(contact));
 }
 
 
@@ -150,6 +156,5 @@ function randNumber({ min, max } : { min?: number, max: number }): number {
   min = min || 0;
   return Math.ceil(Math.random() * (max - min)) + min
 }
-
 
 export default TestDataPage;

@@ -5,7 +5,7 @@ export type SipContextType = {
   account: SipAccount | null;
   setAccount: (a: SipAccount) => void;
   connection: ConnectionStateWrapper;
-  connectionError?: string;
+  connectionError?: Error;
   calls: Call[];
   makeCall: (number: string) => void;
   onIncomingCall: (handler: IncomingCallHandler) => void;

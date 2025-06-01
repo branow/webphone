@@ -40,12 +40,12 @@ export const QueryKeys = {
   }
 }
 
-export async function getAll({ number, size }: PageOptions): Promise<Page<Record>> {
-  const { token, subject } = await Auth().ensureAuthentication();
+export async function getAll(user: string, { number, size }: PageOptions): Promise<Page<Record>> {
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/history/user/${subject}`)
+      .path(`/api/history/user/${user}`)
       .param("number", number)
       .param("size", size))
     .get().bearer(token).fetch();
@@ -61,13 +61,15 @@ async function wait(time: number) {
 }
 
 export async function getAllByContact(
-  contactId: string, { number, size }: PageOptions
+  user: string,
+  contactId: string,
+  { number, size }: PageOptions,
 ): Promise<Page<Record>> {
-  const { token, subject } = await Auth().ensureAuthentication();
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/history/user/${subject}/contact/${contactId}`)
+      .path(`/api/history/user/${user}/contact/${contactId}`)
       .param("number", number)
       .param("size", size))
     .get().bearer(token).fetch();
@@ -77,12 +79,12 @@ export async function getAllByContact(
     .handle(async res => mapRecordPage(await res.json<Page<Record>>()));
 }
 
-export async function create(record: CreateRecord): Promise<Record> {
-  const { token, subject } = await Auth().ensureAuthentication();
+export async function create(user: string, record: CreateRecord): Promise<Record> {
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/history/user/${subject}`))
+      .path(`/api/history/user/${user}`))
     .post().bearer(token).bodyJson(record).fetch();
   return await response
     .any(logRequestResponse)
@@ -103,12 +105,12 @@ export async function remove(id: string): Promise<void> {
     .process();
 }
 
-export async function removeAll(): Promise<void> {
-  const { token, subject } = await Auth().ensureAuthentication();
+export async function removeAll(user: string): Promise<void> {
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/history/user/${subject}`))
+      .path(`/api/history/user/${user}`))
     .delete().bearer(token).fetch();
   return await response
     .any(logRequestResponse)

@@ -1,10 +1,12 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { styled } from "@linaria/react";
 import DeleteButton from "../common/button/DeleteButton";
 import CallButton from "../call/CallButton";
 import RecordUnrolledContent from "./RecordUnrolledContent";
+import { SipContext } from "../../context/SipContext";
+import { AccountContext } from "../../context/AccountContext";
 import HistoryApi, { Record } from "../../services/history";
 import { extractPhoneNumber } from "../../util/format";
 import { Paths } from "../../routes";
@@ -33,6 +35,8 @@ interface Props {
 
 const RecordUnrolled: FC<Props> = ({ record }) => {
   const navigate = useNavigate();
+  const { account } = useContext(AccountContext);
+  const { connection } = useContext(SipContext);
   const queryClient = useQueryClient();
 
   const removing = useMutation({
@@ -53,11 +57,15 @@ const RecordUnrolled: FC<Props> = ({ record }) => {
   return (
     <Container>
       <DeleteButtonContainer>
-        <DeleteButton size={18} remove={remove} />
+        <DeleteButton size={18} remove={remove} disabled={account?.isDefault} />
       </DeleteButtonContainer>
       <RecordUnrolledContent record={record} />
       <CallButtonContainer>
-        <CallButton size={40} onClick={() => call()} />
+        <CallButton
+          size={40}
+          onClick={() => call()}
+          disabled={!connection.isConnected()}
+        />
       </CallButtonContainer>
     </Container>
   );

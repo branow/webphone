@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { styled } from "@linaria/react";
 import NumberTypeLabel from "./NumberTypeLabel";
 import CallButton from "../call/CallButton";
@@ -6,6 +6,7 @@ import { useTheme } from "../../hooks/useTheme";
 import { Number } from "../../services/contacts";
 import { formatPhoneNumber } from "../../util/format";
 import { font } from "../../styles";
+import { SipContext } from "../../context/SipContext";
 
 const Container = styled.div`
   width: 100%;
@@ -32,6 +33,7 @@ interface Props {
 }
 
 const ContactNumber: FC<Props> = ({ number, call, fontSize = font.size.s }) => {
+  const { connection } = useContext(SipContext);
   const th = useTheme();
 
   return (
@@ -41,7 +43,7 @@ const ContactNumber: FC<Props> = ({ number, call, fontSize = font.size.s }) => {
         <NumberContainer color={th.colors.title} fontSize={fontSize}>
           {formatPhoneNumber(number.number)}
         </NumberContainer>
-        {call && <CallButton size={fontSize * 2} />}
+        {call && <CallButton size={fontSize * 2} disabled={!connection.isConnected()} />}
       </LeftContainer>
     </Container>
   );

@@ -5,6 +5,7 @@ export interface SipAccount {
   readonly username: string;
   readonly password: string;
   readonly domain: string;
+  readonly proxy: string;
 }
 
 export class StateWrapper<T> {
@@ -93,7 +94,7 @@ export interface Call {
 export type IncomingCallHandler = (id: string) => void;
 
 export function init(account: SipAccount): UA {
-  const socket = new WebSocketInterface(`wss://${account.domain}:8089/ws`);
+  const socket = new WebSocketInterface(`wss://${account.proxy}`);
 
   const configuration = {
     sockets: [socket],
