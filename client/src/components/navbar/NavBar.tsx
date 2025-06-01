@@ -3,6 +3,7 @@ import { styled } from "@linaria/react";
 import NavBarTitle from "./NavBarTitle";
 import SettingButton from "./SettingButton";
 import { useTheme } from "../../hooks/useTheme";
+import ErrorWarning from "./ErrorWarning";
 
 const NavBarContainer = styled.div<{ bg: string }>`
   position: relative;
@@ -20,6 +21,7 @@ const NavBar: FC = () => {
 
   return (
     <NavBarContainer bg={th.colors.surface1}>
+      <ErrorWarning />
       <NavBarTitle />
       <SettingButton />
     </NavBarContainer>

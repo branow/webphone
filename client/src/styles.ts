@@ -19,6 +19,8 @@ export interface Theme {
     iconLight: string;
     iconGray: string;
 
+    yellow: string;
+    yellowHover: string;
     green: string;
     greenHover: string;
     blue: string;
@@ -48,6 +50,8 @@ export const LightTheme: Theme = {
     iconDark: "#aaa",
     iconGray: "#ccc",
 
+    yellow: "#ffd15b",
+    yellowHover: "#fdbd19",
     green: "#5fdd5a",
     greenHover: "#38bf2a",
     blue: "#03a9f4",
@@ -73,7 +77,7 @@ export const font = {
 
 export const size = {
   phone: { h: 580, w: 300, },
-  navbar: { h: 60, },
+  navbar: { h: 50, },
   tabs: { h: 50, },
   contacts: { top: { h: 50, }, },
   contact: { top: { h: 50, }, },

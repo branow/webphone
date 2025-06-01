@@ -2,7 +2,6 @@ import { FC, ReactNode } from "react";
 import { Outlet } from "react-router";
 import { styled } from "@linaria/react";
 import NavBar from "../navbar/NavBar";
-import PhoneContainer from "./PhoneContainer";
 import SipEventsHandler from "../sip/SipEventsHandler";
 import { size } from "../../styles";
 
@@ -20,7 +19,7 @@ interface Props {
 
 const PhoneLayout: FC<Props> = ({ children }) => {
   return (
-    <PhoneContainer>
+    <>
       <SipEventsHandler />
       <NavBarContainer>
         <NavBar />
@@ -29,7 +28,7 @@ const PhoneLayout: FC<Props> = ({ children }) => {
         <Outlet />
         {children}
       </MainContainer>
-    </PhoneContainer>
+    </>
   );
 }
 

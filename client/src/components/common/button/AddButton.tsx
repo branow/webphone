@@ -40,6 +40,7 @@ const Button = styled.button<ButtonProps>`
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
   size: number;
+  disabled?: boolean;
 }
 
 const AddButton: FC<Props> = (props) => {

@@ -25,6 +25,7 @@ export default i18n;
 export const d = {
   ui: {
     loading: {
+      authenticating: "ui.loading.authenticating",
       connecting: "ui.loading.connecting",
       cleaning: "ui.loading.cleaning",
       calling: "ui.loading.calling",
@@ -116,34 +117,56 @@ export const d = {
   },
 
   account: {
+    title: "account.title",
     fields: {
       username: "account.fields.username",
       password: "account.fields.password",
       domain: "account.fields.domain",
+      proxy: "account.fields.proxy",
     },
     messages: {
+      createAccount: "account.messages.createAccount",
+      defaultAccountWarning: "account.messages.defaultAccountWarning",
+      noAccountWarning: "account.messages.noAccountWarning",
+      noAccount: "account.messages.noAccount",
       success: "account.messages.success",
     },
     errors: {
       emptyUsername: "account.errors.emptyUsername",
       emptyPassword: "account.errors.emptyPassword",
       emptyDomain: "account.errors.emptyDomain",
+      emptyProxy: "account.errors.emptyProxy",
       emptyFile: "account.errors.emptyFile",
       longUsername: "account.errors.longUsername",
       longPassword: "account.errors.longPassword",
       longDomain: "account.errors.longDomain",
+      longProxy: "account.errors.longProxy",
       readFile: "account.errors.readFile",
       uploadFile: "account.errors.uploadFile",
-      connectionFailed: "account.errots.connectionFailed",
-      registrationFailed: "account.errots.registrationFailed"
+      connection: "account.errors.connection",
+      registration: "account.errors.registration"
+    },
+    types: {
+      admin: "account.types.admin",
+      default: "account.types.default",
     },
   },
 
   errors: {
+    account: {
+      title: "errors.account.title",
+      message: "errors.account.message",
+    },
+    auth: {
+      title: "errors.auth.title",
+      message: "errors.auth.message",
+      retryLogin: "errors.auth.retryLogin",
+    },
     e404: {
       title: "errors.404.title",
       message: "errors.404.message",
     },
+    retry: "errors.retry",
     takeMeHome: "errors.takeMeHome",
   },
 

@@ -1,11 +1,12 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
 import FadeMotion from "../../../components/common/motion/FadeMotion";
 import PendingPane from "../../../components/common/motion/PendingPane";
 import ContactForm from "../../../components/contact/form/ContactForm";
-import ContactApi, { ContactDetails } from "../../../services/contacts";
+import { AccountContext } from "../../../context/AccountContext";
 import { useSaveContact } from "../../../hooks/useSaveContact";
+import ContactApi, { ContactDetails } from "../../../services/contacts";
 import { d } from "../../../lib/i18n";
 
 const emptyContact: ContactDetails = {
@@ -15,9 +16,10 @@ const emptyContact: ContactDetails = {
 }
 
 const CreateContactPage: FC = () => {
+  const { user } = useContext(AccountContext);
   const { contact, save, isPending, error } = useSaveContact({
     initContact: emptyContact,
-    saveContact: (contact: ContactDetails) => ContactApi.create({ ...contact })
+    saveContact: (contact: ContactDetails) => ContactApi.create(user, contact),
   });
 
   const { t } = useTranslation();

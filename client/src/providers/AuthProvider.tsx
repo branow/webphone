@@ -1,62 +1,51 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode } from "react";
+import { AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import FadeMotion from "../components/common/motion/FadeMotion";
+import PendingPane from "../components/common/motion/PendingPane";
+import AuthenticationFailedPage from "../pages/errors/AuthenticationFailedPage";
+import { useAuth } from "../hooks/useAuth";
 import { AuthContext } from "../context/AuthContext";
-import { Auth } from "../services/auth";
+import { Auth, Role } from "../services/auth";
+import { d } from "../lib/i18n";
 
 interface Props {
   children: ReactNode;
 }
 
 const AuthProvider: FC<Props> = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState<boolean | undefined>();
-  const [error, setError] = useState<string | null>();
+  const { authenticated, user, error } = useAuth();
 
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash.startsWith("#")) {
-      const hashParams = new URLSearchParams(hash.substring(1));
-      const error = hashParams.get("error");
-      if (error) {
-        setError(`Authentication error: ${error}`);
-        setAuthenticated(false);
-        return;
-      }
-    }
-
-    Auth().login()
-      .then(auth => {
-        setAuthenticated(auth);
-        if (!auth) {
-          setError("Login failed. Thired-party cookies might be blocked.");
-        }
-      })
-      .catch(error => {
-        console.error("Keycloak init error:", error);
-        setAuthenticated(false);
-        setError("Authentication initialization failed.");
-      });
-  }, [])
-
-  if (error) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100vw", height: "100vh"  }}>
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 15 }}>
-          <h2>Authentication Error</h2>
-          <div>{error}</div>
-          <div>Make sure third-party cookies are enabled in your browser.</div>
-          <button onClick={() => Auth().login()}>Retry Login</button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!authenticated) {
-    return <></>;
-  }
+  const { t } = useTranslation();
 
   return (
-    <AuthContext.Provider value={{ authenticated }}>
-      {children}
-    </AuthContext.Provider>
+    <AnimatePresence mode="wait">
+      {authenticated && user && (
+        <FadeMotion key="auth">
+          <AuthContext.Provider value={{
+            authenticated,
+            user: user.id,
+            username: user.username,
+            isAdmin: user.role === Role.Admin,
+            role: user.role
+          }}>
+            {children}
+          </AuthContext.Provider>
+        </FadeMotion>
+      )}
+      {!authenticated && (
+        <FadeMotion key="notAuth">
+          <AnimatePresence mode="wait">
+            {error && (
+              <FadeMotion key="error">
+                <AuthenticationFailedPage login={() => Auth().login()} />
+              </FadeMotion>
+            )}
+            {!error && <PendingPane key="loading" label={t(d.ui.loading.authenticating)} />}
+          </AnimatePresence>
+        </FadeMotion>
+      )}
+    </AnimatePresence>
   );
 };
 

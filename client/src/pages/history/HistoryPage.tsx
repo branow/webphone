@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
@@ -11,6 +11,7 @@ import HistoryPageTop from "./HistoryPageTop";
 import HistoryPageBody from "./HistoryPageBody";
 import HistoryApi from "../../services/history";
 import { d } from "../../lib/i18n.ts";
+import { AccountContext } from "../../context/AccountContext.ts";
 
 const Container = styled.div`
   position: relative;
@@ -24,20 +25,22 @@ const Container = styled.div`
 
 const HistoryPage: FC = () => {
   const { t } = useTranslation();
+  const { account } = useContext(AccountContext);
   const queryClient = useQueryClient();
+
   const cleaning = useMutation({
     mutationFn: HistoryApi.removeAll,
     onSuccess: () => {
       queryClient.invalidateQueries({
         predicate: HistoryApi.QueryKeys.predicate
       });
-    }
+    },
   })
 
   return (
     <Container>
       <HistoryPageTop
-        clean={() => cleaning.mutate()}
+        clean={() => cleaning.mutate(account?.user || "")}
         cleanDisabled={cleaning.isPending || cleaning.isError}
       />
       <AnimatePresence mode="wait">

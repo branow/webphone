@@ -195,7 +195,9 @@ interface ApiError {
 
 function buildError(error?: ApiError): Error {
   console.warn(error?.message || "Unexpected error response!");
-  return new Error(localizeError(error));
+  const errObj = new Error(localizeError(error));
+  errObj.name = error?.type ?? "Error";
+  return errObj;
 }
 
 function localizeError(error?: ApiError): string {

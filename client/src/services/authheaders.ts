@@ -1,15 +1,16 @@
-import { Authentication, AuthService } from "../services/auth";
+import { Authentication, AuthService, Role, User } from "../services/auth";
 
 const URL = import.meta.env.WEBPHONE_AUTH_HEADERS_URL;
 
 const auth = {
   subject: "",
+  username: "",
   token: "",
   groups: "",
 }
 
 export function AuthHeadersService(): AuthService {
-  return { init, login, ensureAuthentication }
+  return { init, login, ensureAuthentication, user }
 }
 
 async function init(): Promise<boolean> {
@@ -31,6 +32,15 @@ async function ensureAuthentication(): Promise<Authentication> {
   };
 }
 
+async function user(): Promise<User> {
+  if (!await login()) throw new Error("Cannot ensure authentication");
+  return {
+    id: auth.subject,
+    username: auth.username,
+    role: auth.username === Role.Admin ? Role.Admin : Role.User,
+  };
+} 
+
 function isAuthenticated(): boolean {
   if (!auth.token) return false;
   try {
@@ -45,6 +55,7 @@ function isAuthenticated(): boolean {
 async function fetchAuth(): Promise<boolean> {
   const res = await fetch(URL);
   auth.subject = res.headers.get("X-User")!;
+  auth.username = res.headers.get("X-Preferred-Username")!;
   auth.groups = res.headers.get("X-Groups")!;
   auth.token = res.headers.get("X-Access-Token")!;
   return isAuthenticated();

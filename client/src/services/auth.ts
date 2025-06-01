@@ -8,9 +8,21 @@ export interface Authentication {
   subject: string;
 }
 
+export enum Role {
+  Admin="admin",
+  User="user",
+}
+
+export interface User {
+  id: string;
+  username: string;
+  role: Role;
+}
+
 export interface AuthService {
   init: () => Promise<boolean>;
   login: () => Promise<boolean>;
+  user: () => Promise<User>;
   ensureAuthentication: () => Promise<Authentication>;
 }
 
@@ -22,6 +34,5 @@ export function Auth(): AuthService {
 }
 
 function init(): AuthService {
-  console.log("url:" + useAuthHeaders);
   return useAuthHeaders ? AuthHeadersService() : KeycloakService();
 }

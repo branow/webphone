@@ -1,11 +1,11 @@
 import Keycloak from "keycloak-js";
+import { Authentication, AuthService, Role, User } from "../services/auth";
 import { CONTEXT_PATH } from "../routes";
-import { Authentication, AuthService } from "../services/auth";
 
 let keycloak: Keycloak;
 
 export function KeycloakService(): AuthService {
-  return { init, login, ensureAuthentication }
+  return { init, login, ensureAuthentication, user }
 }
 
 async function init(): Promise<boolean> {
@@ -47,6 +47,28 @@ async function ensureAuthentication(): Promise<Authentication> {
     token: keycloak.token!,
     subject: keycloak.subject!,
   };
+}
+
+interface KeycloakUser {
+  sub: string;
+  email_verified: boolean;
+  name?: string;
+  preferred_username?: string;
+  given_name?: string;
+  family_name?: string;
+  email?: string;
+}
+
+async function user(): Promise<User> {
+  await login();
+
+  const user = (await keycloak.loadUserInfo()) as KeycloakUser;
+
+  return {
+    id: user.sub,
+    username: user.preferred_username!,
+    role: user.preferred_username === Role.Admin ? Role.Admin : Role.User,
+  }
 }
 
 function currentUrl(): string {

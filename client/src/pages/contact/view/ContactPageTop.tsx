@@ -9,6 +9,7 @@ import { useTheme } from "../../../hooks/useTheme";
 import { font, size } from "../../../styles";
 import { PageSwitcherContext } from "../../../context/PageSwitcherContext";
 import { Paths } from "../../../routes";
+import { AccountContext } from "../../../context/AccountContext";
 
 const Container = styled.div`
   height: ${size.contact.top.h}px;
@@ -40,6 +41,7 @@ interface Props {
 
 const ContactPageTop: FC<Props> = ({ edit, remove }) => {
   const navigate = useNavigate();
+  const { account } = useContext(AccountContext);
   const { previous } = useContext(PageSwitcherContext);
 
   const back = () => {
@@ -70,6 +72,7 @@ const ContactPageTop: FC<Props> = ({ edit, remove }) => {
       <Right>
         <TransparentRoundButton
           onClick={edit}
+          disabled={account?.isDefault}
           color={th.colors.blue}
           colorHover={th.colors.blueHover}
           colorActive={th.colors.blue}
@@ -80,6 +83,7 @@ const ContactPageTop: FC<Props> = ({ edit, remove }) => {
         </TransparentRoundButton>
         <TransparentRoundButton
           onClick={remove}
+          disabled={account?.isDefault}
           color={th.colors.red}
           colorHover={th.colors.redHover}
           colorActive={th.colors.red}

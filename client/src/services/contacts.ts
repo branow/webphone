@@ -55,12 +55,12 @@ export async function get(id: string): Promise<ContactDetails> {
     .handle((res) => res.json<ContactDetails>())
 }
 
-export async function getAll({ query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
-  const { token, subject } = await Auth().ensureAuthentication();
+export async function getAll(user: string, { query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/contacts/user/${subject}`)
+      .path(`/api/contacts/user/${user}`)
       .param("search", query)
       .param("number", number)
       .param("size", size))
@@ -71,12 +71,12 @@ export async function getAll({ query, number, size }: QueryPageOptions): Promise
     .handle((res) => res.json<Page<Contact>>())
 }
 
-export async function create(contact: CreateContact): Promise<ContactDetails> {
-  const { token, subject } = await Auth().ensureAuthentication();
+export async function create(user: string, contact: CreateContact): Promise<ContactDetails> {
+  const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/contacts/user/${subject}`))
+      .path(`/api/contacts/user/${user}`))
     .post().bearer(token).bodyJson(contact).fetch();
   return response
     .any(logRequestResponse)
@@ -110,35 +110,6 @@ export async function remove(id: string): Promise<void> {
     .process();
 }
 
-export async function getFeatureCodes({ query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
-  const { token, subject } = await Auth().ensureAuthentication();
-  const response = await new RequestBuilder()
-    .url(u => u
-      .origin(BACKEND_ORIGIN)
-      .path(`/api/contacts/user/${subject}/feature-codes`)
-      .param("search", query)
-      .param("number", number)
-      .param("size", size))
-    .get().bearer(token).fetch();
-  return response
-    .any(logRequestResponse)
-    .error(handleApiError)
-    .handle((res) => res.json<Page<Contact>>())
-}
-
-export async function createBatch(contacts: CreateContact[]): Promise<Page<Contact>> {
-  const { token, subject } = await Auth().ensureAuthentication();
-  const response = await new RequestBuilder()
-    .url(u => u
-      .origin(BACKEND_ORIGIN)
-      .path(`/api/contacts/user/${subject}/batch`))
-    .post().bearer(token).bodyJson(contacts).fetch();
-  return response
-    .any(logRequestResponse)
-    .error(handleApiError)
-    .handle((res) => res.json<Page<Contact>>())
-}
-
 export default {
   QueryKeys,
   get,
@@ -146,6 +117,4 @@ export default {
   create,
   update,
   remove,
-  getFeatureCodes,
-  createBatch,
 };

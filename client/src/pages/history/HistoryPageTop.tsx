@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import DeleteButton from "../../components/common/button/DeleteButton.tsx";
-import { useTheme } from "../../hooks/useTheme.ts";
+import DeleteButton from "../../components/common/button/DeleteButton";
+import { useTheme } from "../../hooks/useTheme";
 import { d } from "../../lib/i18n";
 import { font, size } from "../../styles";
 
@@ -40,7 +40,11 @@ const HistoryPageTop: FC<Props> = ({ clean, cleanDisabled }) => {
     <Container>
       <Title color={th.colors.textDisabled}>{t(d.history.title)}</Title>
       <CleanButtonContainer>
-        <DeleteButton size={font.size.xl} remove={clean} disabled={cleanDisabled} />
+        <DeleteButton
+          size={font.size.xl}
+          remove={clean}
+          disabled={cleanDisabled}
+        />
       </CleanButtonContainer>
     </Container>
   );

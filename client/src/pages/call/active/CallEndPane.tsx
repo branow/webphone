@@ -6,8 +6,9 @@ import { styled } from "@linaria/react";
 import ScaleButton from "../../../components/common/button/ScaleButton";
 import DurationInMs from "../../../components/call/DurationInMs";
 import { useTheme } from "../../../hooks/useTheme";
+import { AccountContext } from "../../../context/AccountContext";
 import { CallContext } from "../../../context/CallContext";
-import HistoryApi, { CallStatus } from "../../../services/history";
+import HistoryApi, { CallStatus, CreateRecord } from "../../../services/history";
 import { CallOriginator, Call } from "../../../lib/sip";
 import { d } from "../../../lib/i18n";
 import DTMFAudio from "../../../util/dtmf.js";
@@ -62,6 +63,7 @@ const CallEndPane: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const { account } = useContext(AccountContext);
 
   const { call } = useContext(CallContext) as { call: Call };
 
@@ -80,7 +82,7 @@ const CallEndPane: FC = () => {
   }, [])
 
   const { mutate } = useMutation({
-    mutationFn: HistoryApi.create,
+    mutationFn: (record: CreateRecord) => HistoryApi.create(account!.user, record),
     onSuccess: () => {
       queryClient.invalidateQueries({ predicate: HistoryApi.QueryKeys.predicate });
     }

@@ -1,19 +1,16 @@
-import { FC, useEffect, useContext } from "react";
-import { useNavigate } from "react-router";
-import { useTranslation } from "react-i18next";
+import { FC, useContext } from "react";
 import { AnimatePresence } from "framer-motion";
 import { styled } from "@linaria/react";
 import FadeMotion from "../../../components/common/motion/FadeMotion";
 import Photo from "../../../components/contact/photo/Photo";
+import NotFoundPage from "../../errors/NotFoundPage";
 import CallWaitPane from "./CallWaitPane";
 import CallActivePane from "./CallActivePane";
 import CallEndPane from "./CallEndPane";
 import { useTheme } from "../../../hooks/useTheme";
 import { CallContext } from "../../../context/CallContext";
-import { d } from "../../../lib/i18n";
-import { Paths } from "../../../routes";
+import { formatPhoneNumber } from "../../../util/format";
 import { font } from "../../../styles";
-import PendingPane from "../../../components/common/motion/PendingPane";
 
 const Container = styled.div`
   width: 100%;
@@ -39,25 +36,19 @@ const Number = styled.div<{ color: string }>`
 `;
 
 const CallActivePageContent: FC = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const th = useTheme();
+
   const { call } = useContext(CallContext);
 
-  useEffect(() => {
-    if (!call) { navigate(Paths.Dialpad()); }
-  }, [call]);
-
   if (!call) {
-    return <PendingPane label={t(d.ui.loading.redirecting)} />
+    return <NotFoundPage />
   }
-
-  const th = useTheme();
 
   return (
     <Container>
       <Top>
         <Photo size={140} />
-        <Number color={th.colors.text}>{"123412432"}</Number>
+        <Number color={th.colors.text}>{formatPhoneNumber(call.number)}</Number>
       </Top>
       <AnimatePresence mode="wait">
         {call.state.isOnProgress() && (

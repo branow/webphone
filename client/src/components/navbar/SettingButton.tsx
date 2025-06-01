@@ -4,12 +4,21 @@ import { FaGear } from "react-icons/fa6";
 import { css } from "@linaria/core";
 import TransparentRoundButton from "../common/button/TransparentRoundButton";
 import { useTheme } from "../../hooks/useTheme";
-import { font } from "../../styles";
+import { font, size } from "../../styles";
+import { styled } from "@linaria/react";
+
+const Container = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: ${size.navbar.h}px;
+  width: ${size.navbar.h}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const button = css`
-  position: absolute;
-  right: 5px;
-  padding: 7px;
   font-size: ${font.size.xl}px;
 
   &:active {
@@ -30,13 +39,15 @@ const SettingButton: FC = () => {
   };
 
   return (
-    <TransparentRoundButton
-      className={button}
-      style={{ color: th.colors.iconDark }}
-      onClick={handleOnClick}
-    >
-      <FaGear />
-    </TransparentRoundButton>
+    <Container>
+      <TransparentRoundButton
+        className={button}
+        style={{ color: th.colors.iconDark }}
+        onClick={handleOnClick}
+      >
+        <FaGear />
+      </TransparentRoundButton>
+    </Container>
   );
 };
 
