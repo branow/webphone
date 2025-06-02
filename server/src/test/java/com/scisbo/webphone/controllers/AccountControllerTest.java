@@ -62,15 +62,29 @@ public class AccountControllerTest {
     }
 
     @Test
-    public void testGetByUser() throws Exception {
-        var user = "userId";
+    public void testGet() throws Exception {
+        var id = "accountId";
         var account = this.mapper.mapAccountDto(TestObjectsUtils.accounts().getFirst());
         var response = RestUtils.toJson(this.mapper.mapAccountResponse(account));
 
-        when(this.service.getByUser(user)).thenReturn(account);
+        when(this.service.get(id)).thenReturn(account);
 
         this.mockMvc
-            .perform(get("/api/accounts/user/{user}", user))
+            .perform(get("/api/accounts/{id}", id))
+            .andExpect(status().isOk())
+            .andExpect(content().string(response));
+    }
+
+    @Test
+    public void testGetActiveByUser() throws Exception {
+        var user = "user";
+        var account = this.mapper.mapAccountDto(TestObjectsUtils.accounts().getFirst());
+        var response = RestUtils.toJson(this.mapper.mapAccountResponse(account));
+
+        when(this.service.getActiveByUser(user)).thenReturn(account);
+
+        this.mockMvc
+            .perform(get("/api/accounts/user/{user}/active", user))
             .andExpect(status().isOk())
             .andExpect(content().string(response));
     }

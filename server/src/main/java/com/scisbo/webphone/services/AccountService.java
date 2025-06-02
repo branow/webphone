@@ -29,17 +29,17 @@ public class AccountService {
     private final HistoryService historyService;
 
     /**
-     * Retrieves the account for the specified user.
+     * Retrieves the account by its identifier.
      *
-     * @param user the user identifier
+     * @param id the account's identifier
      * @return a {@link AccountDto} object
-     * @throws EntityNotFoundException if no account is found by the specified user
+     * @throws EntityNotFoundException if no account is found by the specified id
      * */
-    @LogBefore("Retrieving account with user=#{#user}")
+    @LogBefore("Retrieving account with id=#{#id}")
     @LogAfter("Retrieved account with ID=#{#result.getId()}")
     @LogError("Failed to retrieve account [#{#error.toString()}]")
-    public AccountDto getByUser(String user) {
-        return this.mapper.mapAccountDto(this.repository.getByUser(user));
+    public AccountDto get(String id) {
+        return this.mapper.mapAccountDto(this.repository.getById(id));
     }
 
     /**

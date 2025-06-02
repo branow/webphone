@@ -251,7 +251,7 @@ public class WebSecurityConfigTest {
                 }
             ),
             Arguments.of(
-                withJwt(get("/api/accounts/user/user1"), "user"),
+                withJwt(get("/api/accounts/account1"), "user"),
                 (Consumer<AuthService>) (service) -> {
                     when(service.isAdmin(any(JwtAuthenticationToken.class)))
                         .thenReturn(false);
@@ -397,20 +397,20 @@ public class WebSecurityConfigTest {
                 }
             ),
             Arguments.of(
+                withJwt(get("/api/accounts/account1"), "user"),
+                (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
+                        .thenReturn(true);
+                    when(map.accountService.get("account1"))
+                        .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
+                }
+            ),
+            Arguments.of(
                 withJwt(get("/api/accounts/user/user1/active"), "user"),
                 (Consumer<ServiceMap>) (map) -> {
                     when(map.authService.canRetrieveActiveAccount(any(JwtAuthenticationToken.class), eq("user1")))
                         .thenReturn(true);
                     when(map.accountService.getActiveByUser("user1"))
-                        .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
-                }
-            ),
-            Arguments.of(
-                withJwt(get("/api/accounts/user/user1"), "user"),
-                (Consumer<ServiceMap>) (map) -> {
-                    when(map.authService.isAdmin(any(JwtAuthenticationToken.class)))
-                        .thenReturn(true);
-                    when(map.accountService.getByUser("user1"))
                         .thenReturn(AccountDto.builder().sip(SipDto.builder().build()).build());
                 }
             ),

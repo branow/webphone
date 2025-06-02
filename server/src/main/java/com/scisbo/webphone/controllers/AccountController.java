@@ -38,12 +38,12 @@ public class AccountController {
     private final AccountMapper mapper;
     private final PageMapper pageMapper;
 
-    @GetMapping("/user/{user}")
+    @GetMapping("/{id}")
     @PreAuthorize("@authService.isAdmin(authentication)")
-    public ResponseEntity<AccountResponse> getByUser(
-        @PathVariable("user") String user
+    public ResponseEntity<AccountResponse> get(
+        @PathVariable("id") String id
     ) {
-        AccountDto account = this.service.getByUser(user);
+        AccountDto account = this.service.get(id);
         AccountResponse res = this.mapper.mapAccountResponse(account);
         return ResponseEntity.ok(res);
     }

@@ -50,11 +50,11 @@ public class AccountServiceTest {
     private HistoryService historyService;
 
     @Test
-    public void testGetByUser() {
+    public void testGet() {
         var account = TestObjectsUtils.accounts().getFirst();
-        when(this.accountRepository.getByUser(account.getUser())).thenReturn(account);
+        when(this.accountRepository.getById(account.getId())).thenReturn(account);
         var expected = this.accountMapper.mapAccountDto(account);
-        var actual = this.accountService.getByUser(account.getUser());
+        var actual = this.accountService.get(account.getId());
         assertEquals(expected, actual);
     }
 
