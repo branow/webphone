@@ -15,7 +15,7 @@ interface SaveContact {
   photo?: File;
 }
 
-export function useSaveContact({ initContact, saveContact: saveFunc }: Props) {
+export function useSaveContact({ initContact, saveContact }: Props) {
   const [contact, setContact] = useState<ContactDetails>(initContact);
 
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export function useSaveContact({ initContact, saveContact: saveFunc }: Props) {
         contactCopy.photo = uploaded.id;
       }
 
-      const saved = await saveFunc(contactCopy);
+      const saved = await saveContact(contactCopy);
       return saved;
     },
     onSuccess: (data) => {

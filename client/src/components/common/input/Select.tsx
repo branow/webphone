@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import { styled } from "@linaria/react";
-import Option from "./Option";
 import AutoHeightMotion from "../motion/AutoHeightMotion";
 
 const Container = styled.div`
@@ -60,3 +59,17 @@ const Select = <T,>({ options, render, init, getKey, onSelect } : SelectProps<T>
 };
 
 export default Select;
+
+interface OptionProps<T> {
+  value: T;
+  render: (t: T) => ReactNode;
+  onSelect: (t: T) => void;
+}
+
+const Option = <T,>({ value, render, onSelect } : OptionProps<T>) => {
+  return (
+    <div className="option" onClick={() => onSelect(value)}>
+      {render(value)}
+    </div>
+  );
+};

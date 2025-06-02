@@ -35,8 +35,8 @@ const ErrorProvider: FC<Props> = ({ children }) => {
     }
 
     const message = connectionError.name === "Rejected"
-      ? t(d.account.errors.registration)
-      : t(d.account.errors.connection);
+      ? t(d.sip.errors.registration)
+      : t(d.sip.errors.connection);
 
     add(key, {
       priority: 29,

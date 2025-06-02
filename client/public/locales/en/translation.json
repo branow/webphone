@@ -25,7 +25,8 @@
       "dialpad": "Dialpad",
       "history": "History",
       "contacts": "Contacts",
-      "account": "Account"
+      "accounts": "Accounts",
+      "admin": "Admin"
     },
     "search": {
       "placeholder": "Search..."
@@ -94,37 +95,59 @@
 
   "account": {
     "title": "Account",
+    "mode": {
+      "user": "User",
+      "self": "Self",
+      "default": "Default"
+    },
     "fields": {
+      "info": "Info",
+      "active": "Active",
+      "inactive": "Inactive",
+      "user": "User",
       "username": "Username",
-      "password": "Password",
-      "domain": "Domain",
-      "proxy": "Proxy"
+      "sipCredentials": "SIP Credentials",
+      "sipUsername": "SIP Username",
+      "sipPassword": "SIP Password",
+      "sipDomain": "SIP Domain",
+      "sipProxy": "SIP Proxy"
     },
     "messages": {
+      "deleteWarning": "Are you sure you want to delete the account <bold>{{name}}<bold/>?",
       "createAccount": "Please create account to continue",
       "defaultAccountWarning": "You are using a temporary account with limited functionality and unstable behavior. Please contact your administrator to obtain a permanent one.",
       "noAccountWarning": "You are currently in account-less mode. Please create an account to access the full-featured webphone.",
       "noAccount": "No Account",
+      "noAccounts": "No Accounts Yet",
       "success": "You connected successfully!"
     },
     "errors": {
+      "emptyUser": "User identifier is required",
       "emptyUsername": "Username is required",
-      "emptyPassword": "Password is required",
-      "emptyDomain": "Domain is required",
-      "emptyProxy": "Proxy is required",
-      "emptyFile": "Empty file",
+      "emptySipUsername": "SIP Username is required",
+      "emptySipPassword": "SIP Password is required",
+      "emptySipDomain": "SIP Domain is required",
+      "emptySipProxy": "SIP Proxy is required",
+      "longUser": "User identifier must be shorter than {{max}} characters",
       "longUsername": "Username must be shorter than {{max}} characters",
-      "longPassword": "Password must be shorter than {{max}} characters",
-      "longDomain": "Domain must be shorter than {{max}} characters",
-      "longProxy": "Proxy must be shorter than {{max}} characters",
-      "readFile": "Failed to read file",
-      "uploadFile": "Failed to upload file",
-      "connection": "Unable to connect to the PBX server. Please contact your administrator.",
-      "registration": "Failed to register the SIP user on the PBX server. Please contact your administrator."
+      "longSipUsername": "SIP Username must be shorter than {{max}} characters",
+      "longSipPassword": "SIP Password must be shorter than {{max}} characters",
+      "longSipDomain": "SIP Domain must be shorter than {{max}} characters",
+      "longSipProxy": "SIP Proxy must be shorter than {{max}} characters"
     },
     "types": {
       "admin": "Admin",
       "default": "Default"
+    }
+  },
+
+  "sip": {
+    "messages": {
+      "success": "You connected successfully!"
+    },
+    "errors": {
+      "connection": "Unable to connect to the PBX server. Please contact your administrator.",
+      "registration": "Failed to register the SIP user on the PBX server. Please contact your administrator."
     }
   },
 
@@ -159,6 +182,10 @@
           "id": "Contact already exists with id '{{value}}'",
           "name": "Contact already exists with name '{{value}}'",
           "number": "Contact already exists with number '{{value}}'"
+        },
+        "account": {
+          "user": "Account already exists for user '{{value}}'",
+          "sipUsername": "Account already exists with SIP username '{{value}}'"
         }
       },
       "entityNotFound": {
@@ -183,6 +210,7 @@
 
   "settings": {
     "title": "Settings",
+    "moveToAdmin": "Move to Admin Dashboard",
     "general": "General",
     "theme": "Theme",
     "language": "Language",
@@ -195,6 +223,13 @@
     "title": "History",
     "messages": {
       "noHistory": "No Call History Yet"
+    }
+  },
+
+  "admin": {
+    "title": "Admin Dashboard",
+    "messages": {
+      "comingSoon": "Coming Soon"
     }
   }
 }

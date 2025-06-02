@@ -7,8 +7,9 @@ import { size } from "../../styles";
 export enum Tab {
   DIALPAD = "dialpad",
   HISTORY = "history",
-  ACCOUNT = "account",
   CONTACTS = "contacts",
+  ACCOUNTS = "accounts",
+  ADMIN = "admin",
 }
 
 const NavTabsContainer = styled.div<{ bg: string }>`

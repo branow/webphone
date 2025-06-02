@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router";
 import PhoneLayout from "./components/phone/PhoneLayout";
-import SipAccountPage from "./pages/account/SipAccountPage";
 import HistoryPage from "./pages/history/HistoryPage";
 import ContactsPage from "./pages/contacts/ContactsPage";
 import ContactPage from "./pages/contact/view/ContactPage";
@@ -14,6 +13,11 @@ import NotFoundPage from "./pages/errors/NotFoundPage";
 import TestDataPage from "./pages/dev/TestDataPage";
 import PageSwitcher from "./pages/PageSwitcher";
 import { ReactNode } from "react";
+import AccountsPage from "./pages/accounts/AccountsPage";
+import AccountPage from "./pages/account/view/AccountPage";
+import CreateAccountPage from "./pages/account/create/CreateAccountPage";
+import UpdateAccountPage from "./pages/account/update/UpdateAccountPage";
+import AdminPage from "./pages/admin/AdminPage";
 
 export const Paths = {
   Dialpad: () => "/dialpad",
@@ -24,8 +28,12 @@ export const Paths = {
   ContactUpdate: ({ id }: { id: string }) => `/contact/update/${id}`,
   Call: ({ number }: { number: string }) => `/call/number/${number}`,
   CallActive: ({ id }: { id: string }) => `/call/session/${id}`,
-  Account: () => "/account",
+  Accounts: () => "/accounts",
+  AccountView: ({ id }: { id: string }) => `/account/view/${id}`,
+  AccountCreate: () => "/account/create",
+  AccountUpdate: ({ id }: { id: string }) => `/account/update/${id}`,
   Settings: () => "/settings",
+  Admin: () => "/admin",
 }
 
 export interface Route {
@@ -83,16 +91,40 @@ export const routes: Route[] = [
     element: <CallActivePage />,
   },
   {
-    key: "account",
-    paths: [Paths.Account()],
+    key: "accounts",
+    paths: [Paths.Accounts()],
     element: <PageSwitcher />,
-    page: <SipAccountPage />,
+    page: <AccountsPage />,
+  },
+  {
+    key: "account",
+    paths: [Paths.AccountView({ id: ":id" })],
+    element: <PageSwitcher />,
+    page: <AccountPage />,
+  },
+  {
+    key: "account-create",
+    paths: [Paths.AccountCreate()],
+    element: <PageSwitcher />,
+    page: <CreateAccountPage />,
+  },
+  {
+    key: "account-update",
+    paths: [Paths.AccountUpdate({ id: ":id" })],
+    element: <PageSwitcher />,
+    page: <UpdateAccountPage />,
   },
   {
     key: "settings",
     paths: [Paths.Settings()],
     element: <PageSwitcher />,
     page: <SettingPage />,
+  },
+  {
+    key: "admin",
+    paths: [Paths.Admin()],
+    element: <PageSwitcher />,
+    page: <AdminPage />,
   },
 ];
 

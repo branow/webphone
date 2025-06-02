@@ -220,15 +220,20 @@ function localizeError(error?: ApiError): string {
 
   if (error.type === "error.entity.already.exists") {
     const entity = error.details?.entity;
+    let key;
     if (entity === "contact") {
-      let key;
       switch (error.details?.fieldName) {
         case "id": key = d.backend.errors.entityExists.contact.id; break;
         case "name": key = d.backend.errors.entityExists.contact.name; break;
         case "number": key = d.backend.errors.entityExists.contact.number; break;
       }
-      if (key) return i18n.t(key, { value: error.details?.fieldValue });
+    } else if (entity === "account") {
+      switch (error.details?.fieldName) {
+        case "user": key = d.backend.errors.entityExists.account.user; break;
+        case "sip username": key = d.backend.errors.entityExists.account.sipUsername; break;
+      }
     }
+    if (key) return i18n.t(key, { value: error.details?.fieldValue });
   }
 
   if (error.type === "error.entity.not.found") {

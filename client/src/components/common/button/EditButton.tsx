@@ -1,25 +1,9 @@
 import { FC } from "react";
-import { BsFillTrash3Fill } from "react-icons/bs";
-import { css } from "@linaria/core";
+import { styled } from "@linaria/react";
+import { MdEdit } from "react-icons/md";
 import TransparentRoundButton from "./TransparentRoundButton";
 import { useTheme } from "../../../hooks/useTheme";
 import { font } from "../../../styles";
-import { styled } from "@linaria/react";
-
-
-const cssButton = css`
-  &:not(:disabled):active {
-    animation: rotate 0.1s ease-in-out 0s 2;
-  }
-
-  @keyframes rotate {
-    from {
-      transform: rotate(-5deg);
-    }
-    to {
-      transform: rotate(5deg);
-    }
-`;
 
 const IconContainer = styled.div<{ size: number }>`
   width: ${p => p.size}px;
@@ -30,13 +14,13 @@ const IconContainer = styled.div<{ size: number }>`
 `;
 
 interface Props {
-  remove: () => void;
+  edit: () => void;
+  disabled?: boolean;
   btnSize?: number;
   iconSize?: number;
-  disabled?: boolean;
 }
 
-const DeleteButton: FC<Props> = ({ remove, btnSize, iconSize, disabled }) => {
+const EditButton: FC<Props> = ({ edit, disabled, iconSize, btnSize }) => {
   const th = useTheme();
 
   iconSize = iconSize || font.size.xl;
@@ -44,18 +28,17 @@ const DeleteButton: FC<Props> = ({ remove, btnSize, iconSize, disabled }) => {
 
   return (
     <TransparentRoundButton
-      className={cssButton}
-      onClick={remove}
+      onClick={edit}
       disabled={disabled}
-      color={th.colors.red}
-      colorHover={th.colors.redHover}
+      color={th.colors.blue}
+      colorHover={th.colors.blueHover}
+      colorActive={th.colors.blue}
     >
       <IconContainer size={btnSize}>
-        <BsFillTrash3Fill size={iconSize} />
+        <MdEdit size={font.size.xl} />
       </IconContainer>
     </TransparentRoundButton>
   );
-}
+};
 
-export default DeleteButton;
-
+export default EditButton;

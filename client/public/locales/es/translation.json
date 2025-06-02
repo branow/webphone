@@ -25,7 +25,8 @@
       "dialpad": "Teclado",
       "history": "Historial",
       "contacts": "Contactos",
-      "account": "Cuenta"
+      "accounts": "Cuentas",
+      "admin": "Admin"
     },
     "search": {
       "placeholder": "Buscar..."
@@ -94,33 +95,45 @@
 
   "account": {
     "title": "Cuenta",
+    "mode": {
+      "user": "Usuario",
+      "self": "Propio",
+      "default": "Predeterminado"
+    },
     "fields": {
-      "username": "Usuario",
-      "password": "Contraseña",
-      "domain": "Dominio",
-      "proxy": "Proxy"
+      "info": "Información",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "user": "Usuario",
+      "username": "Nombre de usuario",
+      "sipCredentials": "Credenciales SIP",
+      "sipUsername": "Nombre de usuario SIP",
+      "sipPassword": "Contraseña SIP",
+      "sipDomain": "Dominio SIP",
+      "sipProxy": "Proxy SIP"
     },
     "messages": {
       "createAccount": "Por favor, crea una cuenta para continuar",
+      "deleteWarning": "¿Estás seguro de que deseas eliminar la cuenta <bold>{{name}}</bold>?",
       "defaultAccountWarning": "Estás utilizando una cuenta temporal con funcionalidad limitada y comportamiento inestable. Por favor, contacta con tu administrador para obtener una permanente.",
       "noAccountWarning": "Estás utilizando el modo sin cuenta. Por favor, crea una cuenta para acceder al teléfono web con todas las funciones.",
       "noAccount": "Sin cuenta",
+      "noAccounts": "Aún no hay cuentas",
       "success": "¡Conexión exitosa!"
     },
     "errors": {
-      "emptyUsername": "Usuario obligatorio",
-      "emptyPassword": "Contraseña obligatoria",
-      "emptyDomain": "Dominio obligatorio",
-      "emptyProxy": "El proxy es obligatorio",
-      "emptyFile": "Archivo vacío",
-      "longUsername": "El usuario debe tener menos de {{max}} caracteres",
-      "longPassword": "La contraseña debe tener menos de {{max}} caracteres",
-      "longDomain": "El dominio debe tener menos de {{max}} caracteres",
-      "longProxy": "El proxy debe tener menos de {{max}} caracteres",
-      "readFile": "Error al leer archivo",
-      "uploadFile": "Error al subir archivo",
-      "connection": "No se puede conectar al servidor PBX. Por favor, contacte con su administrador.",
-      "registration": "No se pudo registrar el usuario SIP en el servidor PBX. Por favor, contacte con su administrador."
+      "emptyUser": "Se requiere el identificador de usuario",
+      "emptyUsername": "Se requiere el nombre de usuario",
+      "emptySipUsername": "Se requiere el nombre de usuario SIP",
+      "emptySipPassword": "Se requiere la contraseña SIP",
+      "emptySipDomain": "Se requiere el dominio SIP",
+      "emptySipProxy": "Se requiere el proxy SIP",
+      "longUser": "El identificador de usuario debe tener menos de {{max}} caracteres",
+      "longUsername": "El nombre de usuario debe tener menos de {{max}} caracteres",
+      "longSipUsername": "El nombre de usuario SIP debe tener menos de {{max}} caracteres",
+      "longSipPassword": "La contraseña SIP debe tener menos de {{max}} caracteres",
+      "longSipDomain": "El dominio SIP debe tener menos de {{max}} caracteres",
+      "longSipProxy": "El proxy SIP debe tener menos de {{max}} caracteres"
     },
     "types": {
       "admin": "Administrador",
@@ -159,6 +172,10 @@
           "id": "Ya existe un contacto con ID '{{value}}'",
           "name": "Ya existe un contacto con nombre '{{value}}'",
           "number": "Ya existe un contacto con número '{{value}}'"
+        },
+        "account": {
+          "user": "Ya existe una cuenta para el usuario '{{value}}'",
+          "sipUsername": "Ya existe una cuenta con el nombre de usuario SIP '{{value}}'"
         }
       },
       "entityNotFound": {
@@ -183,6 +200,7 @@
 
   "settings": {
     "title": "Ajustes",
+    "moveToAdmin": "Ir al Panel de Administración",
     "general": "General",
     "theme": "Tema",
     "language": "Idioma",
@@ -195,6 +213,13 @@
     "title": "Historial",
     "messages": {
       "noHistory": "Aún no hay historial de llamadas"
+    }
+  },
+
+  "admin": {
+    "title": "Panel de Administración",
+    "messages": {
+      "comingSoon": "Próximamente"
     }
   }
 }

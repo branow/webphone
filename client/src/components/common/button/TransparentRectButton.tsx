@@ -38,8 +38,7 @@ const StyledTransparentRectButton = styled.button<StyledTransparentRectButtonPro
 
   &:disabled {
     color: ${props => props.colorDisabled};
-    background-color: ${props => props.bgDisabled};
-    box-shadow: 0 0 4px 2px ${props => props.bgDisabled};
+    cursor: auto;
   }
 `;
 

@@ -43,9 +43,9 @@ export const LightTheme: Theme = {
     bgDisabled: "rgba(0, 0, 0, 0.05)",
     
     text: "#333",
-    textDisabled: "#eee",
-    title: "#777",
-    subtitle: "#999",
+    textDisabled: "#ddd",
+    title: "#888",
+    subtitle: "#aaa",
     iconLight: "#fff",
     iconDark: "#aaa",
     iconGray: "#ccc",
@@ -83,6 +83,8 @@ export const size = {
   contact: { top: { h: 50, }, },
   history: { top: { h: 50, }, },
   setting: { top: { h: 50, }, },
+  account: { top: { h: 50, }, },
+  admin: { top: { h: 50, }, },
 }
 
 const pulsatingShaking = css`

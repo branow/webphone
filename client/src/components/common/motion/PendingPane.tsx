@@ -14,17 +14,19 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Label = styled.div<{ size: number, color: string }>`
+const Label = styled.div<{ size: number, color1: string, color2: string }>`
   text-transform: uppercase;
   width: fit-content;
   font-size: ${p => p.size}px;
   font-weight: bold;
   line-height: 1.5;
+  letter-spacing: -5px;
+  overflow: hidden;
 
   color: #0000;
   background:
-    radial-gradient(1.13em at 50% 1.6em, ${p => p.color} 105%,#0000 101%) calc(50% - 1.6em) 0/3.2em 100% text,
-    radial-gradient(1.13em at 50% -0.8em, #0000 99%, ${p => p.color} 101%) 50% .8em/3.2em 100% repeat-x  text;
+    radial-gradient(1.13em at 50% 1.6em, ${p => p.color2} 105%, ${p => p.color1} 101%) calc(50% - 1.6em) 0/3.2em 100% text,
+    radial-gradient(1.13em at 50% -0.8em, #0000 99%, ${p => p.color2} 101%) 50% .8em/3.2em 100% repeat-x  text;
   animation: l9 2s linear infinite;
 
   @keyframes l9 {
@@ -64,7 +66,13 @@ const PendingPane: FC<Props> = ({ label, message, size }) => {
             ease: "easeInOut",
           }}
         >
-          <Label size={lSize} color={th.colors.greenHover}>{label}</Label>
+          <Label
+            size={lSize}
+            color1={th.colors.green}
+            color2={th.colors.greenHover}
+          >
+            {label}
+          </Label>
           {message && <Message size={mSize} color={th.colors.subtitle}>{message}</Message>}
         </motion.div>
       </Container>
