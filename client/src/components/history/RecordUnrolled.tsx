@@ -57,7 +57,7 @@ const RecordUnrolled: FC<Props> = ({ record }) => {
   return (
     <Container>
       <DeleteButtonContainer>
-        <DeleteButton size={18} remove={remove} disabled={account?.isDefault} />
+        <DeleteButton iconSize={18} remove={remove} disabled={account?.isDefault} />
       </DeleteButtonContainer>
       <RecordUnrolledContent record={record} />
       <CallButtonContainer>

@@ -29,8 +29,8 @@ function isAccessDenied(error: Error | null) {
 
 function useUserAccount(userId: string, enabled: boolean) {
   const { data, isPending, error, refetch } = useQuery({
-    queryKey: AccountApi.QueryKeys.account(userId!),
-    queryFn: () => AccountApi.getActive(userId!),
+    queryKey: AccountApi.QueryKeys.accountActive(userId),
+    queryFn: () => AccountApi.getActive(userId),
     enabled: enabled,
     retry: 1,
   });

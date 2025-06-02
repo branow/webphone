@@ -9,9 +9,9 @@ import PendingPane from "../../components/common/motion/PendingPane";
 import NavTabs, { Tab } from "../../components/navtabs/NavTabs";
 import HistoryPageTop from "./HistoryPageTop";
 import HistoryPageBody from "./HistoryPageBody";
+import { AccountContext } from "../../context/AccountContext.ts";
 import HistoryApi from "../../services/history";
 import { d } from "../../lib/i18n.ts";
-import { AccountContext } from "../../context/AccountContext.ts";
 
 const Container = styled.div`
   position: relative;
@@ -41,7 +41,7 @@ const HistoryPage: FC = () => {
     <Container>
       <HistoryPageTop
         clean={() => cleaning.mutate(account?.user || "")}
-        cleanDisabled={cleaning.isPending || cleaning.isError}
+        cleanDisabled={account?.isDefault || cleaning.isPending || cleaning.isError}
       />
       <AnimatePresence mode="wait">
         {!cleaning.isPending && (

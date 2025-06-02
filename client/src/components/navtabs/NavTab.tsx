@@ -49,7 +49,8 @@ function path(tab: Tab): string {
     [Tab.DIALPAD]: "/dialpad",
     [Tab.HISTORY]: "/history",
     [Tab.CONTACTS]: "/contacts",
-    [Tab.ACCOUNT]: "/account",
+    [Tab.ACCOUNTS]: "/accounts",
+    [Tab.ADMIN]: "/admin",
   }[tab];
 }
 

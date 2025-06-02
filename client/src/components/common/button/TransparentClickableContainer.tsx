@@ -18,6 +18,7 @@ const StyledTransparentClickableContainer = styled.div<StyledTransparentClickabl
   color: ${props => props.color};
   background-color: #0000;
   transition: all ease-in-out 0.3s;
+  overflow: hidden;
 
   &:not(:disabled):hover {
     background-color: ${props => props.hoverBg};

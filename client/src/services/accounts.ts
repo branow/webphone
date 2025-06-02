@@ -1,5 +1,5 @@
 import { Query } from "@tanstack/react-query";
-import { RequestBuilder, BACKEND_ORIGIN, logRequestResponse, handleApiError } from "./backend.ts";
+import { RequestBuilder, BACKEND_ORIGIN, logRequestResponse, handleApiError, QueryPageOptions, Page } from "./backend.ts";
 import { Auth } from "./auth";
 
 export type Sip = {
@@ -24,9 +24,26 @@ export type CreateAccount = {
   sip: Sip;
 }
 
+export type UpdateAccount = CreateAccount & { id: string; };
+
 export const QueryKeys = {
+  accounts: (query: string, size = 25): string[] => ["account", query, `${size}`],
   account: (id: string): string[] => ["account", id],
+  accountActive: (user: string): string[] => ["account", "active", user],
   predicate: (query: Query) => { return query.queryKey.includes("account"); }
+}
+
+export async function get(id: string): Promise<Account> {
+  const { token } = await Auth().ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/accounts/${id}`))
+    .get().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Account>())
 }
 
 export async function getActive(user: string): Promise<Account> {
@@ -42,17 +59,20 @@ export async function getActive(user: string): Promise<Account> {
     .handle((res) => res.json<Account>())
 }
 
-export async function get(user: string): Promise<Account> {
+export async function getAll({ query, number, size }: QueryPageOptions): Promise<Page<Account>> {
   const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
       .origin(BACKEND_ORIGIN)
-      .path(`/api/accounts/user/${user}`))
+      .path(`/api/accounts`)
+      .param("search", query)
+      .param("number", number)
+      .param("size", size))
     .get().bearer(token).fetch();
   return response
     .any(logRequestResponse)
     .error(handleApiError)
-    .handle((res) => res.json<Account>())
+    .handle((res) => res.json<Page<Account>>())
 }
 
 export async function create(account: CreateAccount): Promise<Account> {
@@ -68,9 +88,38 @@ export async function create(account: CreateAccount): Promise<Account> {
     .handle((res) => res.json<Account>())
 }
 
+export async function update(contact: UpdateAccount): Promise<Account> {
+  const { token } = await Auth().ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/accounts/${contact.id}`))
+    .put().bearer(token).bodyJson(contact).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Account>())
+}
+
+export async function remove(id: string): Promise<void> {
+  const { token } = await Auth().ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/accounts/${id}`))
+    .delete().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .process();
+}
+
 export default {
   QueryKeys,
-  getActive,
   get,
+  getActive,
+  getAll,
   create,
+  update,
+  remove,
 }

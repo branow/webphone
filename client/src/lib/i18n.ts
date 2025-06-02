@@ -49,7 +49,8 @@ export const d = {
       dialpad: "ui.tabs.dialpad",
       history: "ui.tabs.history",
       contacts: "ui.tabs.contacts",
-      account: "ui.tabs.account",
+      accounts: "ui.tabs.accounts",
+      admin: "ui.tabs.admin",
     },
     search: {
       placeholder: "ui.search.placeholder",
@@ -118,37 +119,58 @@ export const d = {
 
   account: {
     title: "account.title",
+    mode: {
+      user: "account.mode.user",
+      self: "account.mode.self",
+      default: "account.mode.default",
+    },
     fields: {
+      info: "account.fields.info",
+      active: "account.fields.active",
+      inactive: "account.fields.inactive",
+      user: "account.fields.user",
       username: "account.fields.username",
-      password: "account.fields.password",
-      domain: "account.fields.domain",
-      proxy: "account.fields.proxy",
+      sipCredentials: "account.fields.sipCredentials",
+      sipUsername: "account.fields.sipUsername",
+      sipPassword: "account.fields.sipPassword",
+      sipDomain: "account.fields.sipDomain",
+      sipProxy: "account.fields.sipProxy",
     },
     messages: {
+      deleteWarning: "account.messages.deleteWarning",
       createAccount: "account.messages.createAccount",
       defaultAccountWarning: "account.messages.defaultAccountWarning",
       noAccountWarning: "account.messages.noAccountWarning",
       noAccount: "account.messages.noAccount",
-      success: "account.messages.success",
+      noAccounts: "account.messages.noAccounts",
     },
     errors: {
+      emptyUser: "account.errors.emptyUser",
       emptyUsername: "account.errors.emptyUsername",
-      emptyPassword: "account.errors.emptyPassword",
-      emptyDomain: "account.errors.emptyDomain",
-      emptyProxy: "account.errors.emptyProxy",
-      emptyFile: "account.errors.emptyFile",
+      emptySipUsername: "account.errors.emptySipUsername",
+      emptySipPassword: "account.errors.emptySipPassword",
+      emptySipDomain: "account.errors.emptySipDomain",
+      emptySipProxy: "account.errors.emptySipProxy",
+      longUser: "account.errors.longUser",
       longUsername: "account.errors.longUsername",
-      longPassword: "account.errors.longPassword",
-      longDomain: "account.errors.longDomain",
-      longProxy: "account.errors.longProxy",
-      readFile: "account.errors.readFile",
-      uploadFile: "account.errors.uploadFile",
-      connection: "account.errors.connection",
-      registration: "account.errors.registration"
+      longSipUsername: "account.errors.longSipUsername",
+      longSipPassword: "account.errors.longSipPassword",
+      longSipDomain: "account.errors.longSipDomain",
+      longSipProxy: "account.errors.longSipProxy",
     },
     types: {
       admin: "account.types.admin",
       default: "account.types.default",
+    },
+  },
+
+  sip: {
+    messages: {
+      success: "sip.messages.success",
+    },
+    errors: {
+      connection: "sip.errors.connection",
+      registration: "sip.errors.registration"
     },
   },
 
@@ -184,6 +206,10 @@ export const d = {
           name: "backend.errors.entityExists.contact.name",
           number: "backend.errors.entityExists.contact.number",
         },
+        account: {
+          user: "backend.errors.entityExists.account.user",
+          sipUsername: "backend.errors.entityExists.account.sipUsername",
+        },
       },
       entityNotFound: {
         contact: {
@@ -210,6 +236,7 @@ export const d = {
 
   settings: {
     title: "settings.title",
+    moveToAdmin: "settings.moveToAdmin",
     general: "settings.general",
     theme: "settings.theme",
     language: "settings.language",
@@ -222,6 +249,13 @@ export const d = {
     title: "history.title",
     messages: {
       noHistory:  "history.messages.noHistory",
+    },
+  },
+
+  admin: {
+    title: "admin.title",
+    messages: {
+      commingSoon: "admin.messages.comingSoon",
     },
   },
 };

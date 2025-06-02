@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
-import Select from "../../components/common/select/Select";
+import Select from "../../components/common/input/Select";
 import { d } from "../../lib/i18n";
 import { styled } from "@linaria/react";
 import { font } from "../../styles";
@@ -48,8 +48,6 @@ type LangCode = typeof langs[number];
 const LanguageSetting: FC = () => {
   const { t, i18n } = useTranslation();
   const th = useTheme();
-
-  console.log("l", i18n.languages);
 
   const currentLang = langs.includes(i18n.language as LangCode)
     ? (i18n.language as LangCode)

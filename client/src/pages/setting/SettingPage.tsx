@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
 import ChapterBar from "../../components/common/pane/ChapterBar";
 import Chapter from "../../components/common/pane/Chapter";
+import AdminDashboardLink from "./AdminDashboardLink";
 import SettingPageTop from "./SettingPageTop";
 import GeneralSetting from "./GeneralSetting";
 import { d } from "../../lib/i18n";
@@ -35,6 +36,7 @@ const SettingPage: FC = () => {
     <Container>
       <SettingPageTop />
       <SettingBody>
+        <AdminDashboardLink />
         <Chapter title={t(d.settings.general)}>
           <GeneralSetting />
         </Chapter>

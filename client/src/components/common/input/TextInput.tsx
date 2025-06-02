@@ -35,7 +35,7 @@ const IconContainer = styled.div<{ color: string }>`
   align-items: center;
 `;
 
-const Input = styled.input<{ border: string, color: string }>`
+const Input = styled.input<{ border: string, color: string, colorDisabled: string }>`
   width: 100%;
   padding: 7px 10px;
   box-sizing: border-box;
@@ -49,6 +49,10 @@ const Input = styled.input<{ border: string, color: string }>`
   &:focus {
     outline: 2px solid ${p => p.border};
   }
+
+  &:disabled {
+    color: ${p => p.colorDisabled};
+  }
 `;
 
 interface Props extends HTMLAttributes<HTMLInputElement> {
@@ -59,6 +63,7 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   icon?: (size: number) => ReactNode;
   name?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const TextInput: FC<Props> = (props) => {
@@ -96,6 +101,7 @@ const TextInput: FC<Props> = (props) => {
         <Input
           border={th.colors.surface2}
           color={th.colors.text}
+          colorDisabled={th.colors.textDisabled}
           {...inputProps}
           onChange={handleOnChange}
         />

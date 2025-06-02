@@ -25,7 +25,7 @@ interface Props {
   contacts: Contact[];
 }
 
-const ContactList: FC<Props> = ({ contacts }) => {
+const Contacts: FC<Props> = ({ contacts }) => {
   const th = useTheme();
   const { t } = useTranslation();
 
@@ -43,4 +43,4 @@ const ContactList: FC<Props> = ({ contacts }) => {
   );
 }
 
-export default ContactList;
+export default Contacts;

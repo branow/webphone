@@ -8,14 +8,23 @@ const matrixes = [
   [
     ["settings", "settings", "settings"],
     ["history", "dialpad", "contacts"],
+    ["admin", "admin", "admin"],
   ],
   [
     ["settings", "settings", "settings", "settings"],
     ["contacts", "contact", "contact-update", "contact-create"],
+    ["admin", "admin", "admin", "admin"],
   ],
   [
     ["settings", "settings"],
     ["history", "contact"],
+  ],
+  [
+    ["admin", "accounts"],
+  ],
+  [
+    ["settings", "settings", "settings", "settings"],
+    ["accounts", "account", "account-update", "account-create"],
   ],
 ];
 

@@ -34,7 +34,12 @@ export function useSip(): Return {
 
     setConnectionError(undefined);
 
-    uaRef.current = init(account);
+    try {
+      uaRef.current = init(account);
+    } catch (e) {
+      setConnectionError(e as Error);
+      return;
+    }
 
     const ua = uaRef.current;
 

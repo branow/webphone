@@ -59,7 +59,7 @@ export function useEditContact({ initContact } : Props) {
       numberList: validateNumberList(form.numbers),
       numbers: form.numbers.map(validateNumber),
     };
-    const isError = error.name || error.bio || error.numberList || error.numbers.some(n => !!n);
+    const isError = error.name || error.bio || error.numberList || error.numbers.some(n => !!n );
     setError(isError ? error : undefined);
   }
 

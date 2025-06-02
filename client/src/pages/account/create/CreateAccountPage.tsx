@@ -1,25 +1,30 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
 import FadeMotion from "../../../components/common/motion/FadeMotion";
 import PendingPane from "../../../components/common/motion/PendingPane";
-import ContactForm from "../../../components/contact/form/ContactForm";
-import { AccountContext } from "../../../context/AccountContext";
-import { useSaveContact } from "../../../hooks/useSaveContact";
-import ContactApi, { ContactDetails } from "../../../services/contacts";
+import AccountForm, { Operation } from "../../../components/account/form/AccountForm";
+import { useSaveAccount } from "../../../hooks/useSaveAccount";
+import AccountApi, { Account } from "../../../services/accounts";
 import { d } from "../../../lib/i18n";
 
-const emptyContact: ContactDetails = {
+const emptyAccount: Account = {
   id: "",
-  name: "",
-  numbers: [],
+  user: "",
+  username: "",
+  active: true,
+  sip: {
+    username: "",
+    password: "",
+    domain: "",
+    proxy: "",
+  }
 }
 
-const CreateContactPage: FC = () => {
-  const { user } = useContext(AccountContext);
-  const { contact, save, isPending, error } = useSaveContact({
-    initContact: emptyContact,
-    saveContact: (contact: ContactDetails) => ContactApi.create(user, contact),
+const CreateAccountPage: FC = () => {
+  const { account, save, isPending, error } = useSaveAccount({
+    initAccount: emptyAccount,
+    saveAccount: AccountApi.create,
   });
 
   const { t } = useTranslation();
@@ -34,10 +39,11 @@ const CreateContactPage: FC = () => {
       )}
       {!isPending && (
         <FadeMotion key="contact">
-          <ContactForm
-            contact={contact}
+          <AccountForm
+            account={account}
             save={save}
             savingError={error ?? undefined}
+            operation={Operation.Create}
           />
         </FadeMotion>
       )}
@@ -45,4 +51,4 @@ const CreateContactPage: FC = () => {
   );
 }
 
-export default CreateContactPage;
+export default CreateAccountPage;
