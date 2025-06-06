@@ -115,6 +115,8 @@ var AudioVisualizer = (function () {
             //analyser.getByteTimeDomainData(dataArray);
             analyser.getFloatTimeDomainData(dataArray);
             
+            canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
             canvasCtx.fillStyle = options.fillStyle || '#56585a';
             canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
         
