@@ -37,6 +37,7 @@ export function useSip(): Return {
     try {
       uaRef.current = init(account);
     } catch (e) {
+      console.warn(e);
       setConnectionError(e as Error);
       return;
     }

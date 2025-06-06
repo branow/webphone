@@ -7,25 +7,28 @@ import AuthProvider from "./providers/AuthProvider";
 import SipProvider from "./providers/SipProvider";
 import ErrorProvider from "./providers/ErrorProvider";
 import { router } from "./routes";
+import ThemeProvider from "./providers/ThemeProvider";
 
 const queryClient = new QueryClient();
 
 const App: FC = () => {
   return (
     <div className="app">
-      <PhoneContainer>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <SipProvider>
-              <AccountProvider>
-                <ErrorProvider>
-                  <RouterProvider router={router} />
-                </ErrorProvider>
-              </AccountProvider>
-            </SipProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </PhoneContainer>
+      <ThemeProvider>
+        <PhoneContainer>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <SipProvider>
+                <AccountProvider>
+                  <ErrorProvider>
+                    <RouterProvider router={router} />
+                  </ErrorProvider>
+                </AccountProvider>
+              </SipProvider>
+            </AuthProvider>
+          </QueryClientProvider>
+        </PhoneContainer>
+      </ThemeProvider>
     </div>
   );
 };

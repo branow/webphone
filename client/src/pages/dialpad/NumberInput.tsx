@@ -14,7 +14,8 @@ const StyledNumberInput = styled.input<{ color: string, phColor: string }>`
   width: 180px;
   font-size: ${font.size.xl}px;
   border: none;
-  color: ${p => p.color}
+  color: ${p => p.color};
+  background-color: #0000;
 
   &:focus-visible {
     outline: none;
@@ -26,12 +27,12 @@ const StyledNumberInput = styled.input<{ color: string, phColor: string }>`
 
   /* Firefox */
   &::placeholder {
-    color: ${p => p.phColor}
+    color: ${p => p.phColor};
   }
 
   /* Edge 12 - 18 */
   &::-ms-input-placeholder {
-    color: ${p => p.phColor}
+    color: ${p => p.phColor};
   }
 `;
 

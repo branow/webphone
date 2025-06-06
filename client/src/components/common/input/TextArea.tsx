@@ -30,6 +30,7 @@ const Area = styled.textarea<{ raws: number, border: string, color: string }>`
   border-radius: 5px;
   border-bottom: 2px solid ${p => p.border};
   color: ${p => p.color};
+  background-color: #0000;
   font-size: ${font.size.m}px;
 
   &:focus {

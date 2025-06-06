@@ -28,6 +28,11 @@ export interface Theme {
     red: string;
     redHover: string;
     gray: string;
+
+    navbar: {
+      color1: string;
+      color2: string;
+    };
   };
 }
 
@@ -59,6 +64,46 @@ export const LightTheme: Theme = {
     red: "#f44336",
     redHover: "#d32f2f",
     gray: "#888",
+
+    navbar: {
+      color1: "#553c9a",
+      color2: "#ee4b2b",
+    }
+  },
+}
+
+export const DarkTheme: Theme = {
+  colors: {
+    background: "#26262c",
+    surface1: "#3a3b43",
+    surface2: "#33333a",
+
+    bgHover: "rgba(0, 0, 0, 0.07)",
+    bgActive: "rgba(0, 0, 0, 0.15)",
+    bgDisabled: "rgba(0, 0, 0, 0.05)",
+
+    text: "#eee",
+    textDisabled: "#555",
+    title: "#888",
+    subtitle: "#777",
+    iconLight: "#ddd",
+    iconDark: "#888",
+    iconGray: "#aaa",
+
+    yellow: "#ffd15b",
+    yellowHover: "#fdbd19",
+    green: "#009619",
+    greenHover: "#007813",
+    blue: "#03a9f4",
+    blueHover: "#28769c",
+    red: "#f44336",
+    redHover: "#d32f2f",
+    gray: "#888",
+
+    navbar: {
+      color1: "#4c2a85",
+      color2: "#c14f2b",
+    }
   },
 }
 

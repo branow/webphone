@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router";
 import { css } from "@linaria/core";
+import { useTheme } from "../../hooks/useTheme";
 import { font } from "../../styles";
 
 const title = css`
@@ -9,12 +10,19 @@ const title = css`
   font-weight: bold;
   color: transparent;
   background-clip: text;
-  background-image: radial-gradient(ellipse, #553c9a, #ee4b2b);
 `;
 
 const NavBarTitle: FC = () => {
+  const th = useTheme();
+
   return (
-    <Link className={title} to="/dialpad">
+    <Link
+      className={title}
+      to="/dialpad"
+      style={{
+        backgroundImage: `radial-gradient(ellipse, ${th.colors.navbar.color1}, ${th.colors.navbar.color2})`
+      }}
+    >
       Webphone
     </Link>
   );

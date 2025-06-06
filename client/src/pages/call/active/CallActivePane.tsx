@@ -51,7 +51,7 @@ const KeypadContainer = styled.div`
 `;
 
 const audioVisualizerOptions = {
-  fillStyle: "#fff",
+  fillStyle: "#0000",
   strokeStyle: "#22c65b",
   lineWidth: 3,
 }
