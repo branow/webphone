@@ -1,5 +1,7 @@
 package com.scisbo.webphone.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -68,9 +70,25 @@ public class ContactController {
         @PathVariable("userId") String userId,
         @RequestBody @Valid CreateContactRequest request
     ) {
-        CreateContactDto contact = this.mapper.mapCreateContactDto(request, userId);
-        ContactDetailsDto createdContact = this.service.create(contact);
+        CreateContactDto contact = this.mapper.mapCreateContactDto(request);
+        ContactDetailsDto createdContact = this.service.create(userId, contact);
         ContactDetailsResponse res = this.mapper.mapContactDetailsResponse(createdContact);
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    }
+
+    @PostMapping("/user/{userId}/batch")
+    @PreAuthorize("@authService.canCreateContact(authentication, #userId)")
+    public ResponseEntity<List<ContactDetailsResponse>> create(
+        @PathVariable("userId") String userId,
+        @RequestBody @Valid List<CreateContactRequest> request
+    ) {
+        List<CreateContactDto> contacts = request.stream()
+            .map(this.mapper::mapCreateContactDto)
+            .toList();
+        List<ContactDetailsDto> created = this.service.create(userId, contacts);
+        List<ContactDetailsResponse> res = created.stream()
+            .map(this.mapper::mapContactDetailsResponse)
+            .toList();
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

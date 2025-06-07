@@ -59,6 +59,7 @@ public class ContactServiceTest {
     @MockitoBean
     private PhotoRepository photoRepository;
 
+
     @Test
     public void testGetByUser_withKeyword() {
         String user = "f96a24d5-f4c7-418a-81b1-54e29d8dc7b0";
@@ -130,37 +131,11 @@ public class ContactServiceTest {
     }
 
     @Test
-    public void testCreate_withoutPhoto() {
+    public void testCreate() {
         List<Contact> contacts = TestObjectsUtils.contacts();
 
         String user = UUID.randomUUID().toString();
         CreateContactDto createContact = CreateContactDto.builder()
-            .user(user)
-            .name("contact123")
-            .numbers(List.of(
-                NumberDto.builder().type("work").number("1111").build(),
-                NumberDto.builder().type("home").number("2222").build()
-            ))
-            .build();
-
-        Contact contact = this.mapper.mapContact(createContact);
-
-        when(this.repository.findByUser(user)).thenReturn(contacts);
-
-        ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
-        ContactDetailsDto actual = this.service.create(createContact);
-
-        assertEquals(expected, actual);
-        verify(this.repository).insert(contact);
-    }
-
-    @Test
-    public void testCreate_withPhoto() {
-        List<Contact> contacts = TestObjectsUtils.contacts();
-
-        String user = UUID.randomUUID().toString();
-        CreateContactDto createContact = CreateContactDto.builder()
-            .user(user)
             .name("contact123")
             .photo("photot123")
             .numbers(List.of(
@@ -170,14 +145,13 @@ public class ContactServiceTest {
             .build();
 
         Photo photo = Photo.builder().id(createContact.getPhoto()).build();
-
-        Contact contact = this.mapper.mapContact(createContact);
+        Contact contact = this.mapper.mapContact(createContact, user);
 
         when(this.repository.findByUser(user)).thenReturn(contacts);
         when(this.photoRepository.getById(photo.getId())).thenReturn(photo);
 
         ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
-        ContactDetailsDto actual = this.service.create(createContact);
+        ContactDetailsDto actual = this.service.create(user, createContact);
 
         assertEquals(expected, actual);
         contact.setPhoto(expected.getPhoto());
@@ -191,7 +165,6 @@ public class ContactServiceTest {
 
         String user = UUID.randomUUID().toString();
         CreateContactDto createContact = CreateContactDto.builder()
-            .user(user)
             .name(contacts.get(5).getName())
             .numbers(List.of(
                 NumberDto.builder().type("work").number("1111").build(),
@@ -201,7 +174,8 @@ public class ContactServiceTest {
 
         when(this.repository.findByUser(user)).thenReturn(contacts);
 
-        assertThrows(EntityAlreadyExistsException.class, () -> this.service.create(createContact));
+        assertThrows(EntityAlreadyExistsException.class,
+            () -> this.service.create(user, createContact));
     }
 
     @Test
@@ -210,7 +184,6 @@ public class ContactServiceTest {
 
         String user = UUID.randomUUID().toString();
         CreateContactDto createContact = CreateContactDto.builder()
-            .user(user)
             .name("contact123")
             .numbers(List.of(
                 NumberDto.builder().type("work").number("1111").build(),
@@ -223,7 +196,141 @@ public class ContactServiceTest {
 
         when(this.repository.findByUser(user)).thenReturn(contacts);
 
-        assertThrows(EntityAlreadyExistsException.class, () -> this.service.create(createContact));
+        assertThrows(EntityAlreadyExistsException.class,
+            () -> this.service.create(user, createContact));
+    }
+
+    @Test
+    public void testCreateBatch() {
+        List<Contact> contacts = TestObjectsUtils.contacts();
+
+        String user = UUID.randomUUID().toString();
+        List<CreateContactDto> dtos = List.of(
+            CreateContactDto.builder()
+                .name("contact1")
+                .numbers(List.of(
+                    NumberDto.builder().type("work").number("1111").build()
+                )).build(),
+            CreateContactDto.builder()
+                .name("contact2")
+                .numbers(List.of(
+                    NumberDto.builder().type("home").number("2222").build()
+                )).build()
+        );
+
+        List<Contact> newContacts = dtos.stream()
+            .map(dto -> this.mapper.mapContact(dto, user))
+            .toList();
+        when(this.repository.insert(newContacts)).thenReturn(newContacts);
+        when(this.repository.findByUser(user)).thenReturn(contacts);
+
+        List<ContactDetailsDto> expected = newContacts.stream()
+            .map(this.mapper::mapContactDetailsDto)
+            .toList();
+        List<ContactDetailsDto> actual = this.service.create(user, dtos);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCreateBatch_withDuplicateNamesInBatch_throwsException() {
+        String user = UUID.randomUUID().toString();
+        List<CreateContactDto> dtos = List.of(
+            CreateContactDto.builder()
+                .name("contact1")
+                .numbers(List.of(
+                    NumberDto.builder().type("work").number("1111").build()
+                )).build(),
+            CreateContactDto.builder()
+                .name("contact1")
+                .numbers(List.of(
+                    NumberDto.builder().type("home").number("2222").build()
+                )).build()
+        );
+
+        assertThrows(EntityAlreadyExistsException.class,
+            () -> this.service.create(user, dtos));
+
+        List<Contact> newContacts = dtos.stream()
+            .map(dto -> this.mapper.mapContact(dto, user))
+            .toList();
+        newContacts.forEach(contact -> verify(this.repository, never()).insert(contact));
+    }
+
+    @Test
+    public void testCreateBatch_withDuplicateNumbersInBatch_throwsException() {
+        String user = UUID.randomUUID().toString();
+        List<CreateContactDto> dtos = List.of(
+            CreateContactDto.builder()
+                .name("contact1")
+                .numbers(List.of(
+                    NumberDto.builder().type("work").number("1111").build()
+                )).build(),
+            CreateContactDto.builder()
+                .name("contact2")
+                .numbers(List.of(
+                    NumberDto.builder().type("home").number("1111").build()
+                )).build()
+        );
+
+        assertThrows(EntityAlreadyExistsException.class,
+            () -> this.service.create(user, dtos));
+
+        List<Contact> newContacts = dtos.stream()
+            .map(dto -> this.mapper.mapContact(dto, user))
+            .toList();
+        newContacts.forEach(contact -> verify(this.repository, never()).insert(contact));
+    }
+
+    @Test
+    public void testCreateBatch_withDuplicateNamesInRepo_throwsException() {
+        List<Contact> contacts = TestObjectsUtils.contacts();
+        String user = UUID.randomUUID().toString();
+        List<CreateContactDto> dtos = List.of(
+            CreateContactDto.builder()
+                .name(contacts.stream().findAny().orElseThrow().getName())
+                .numbers(List.of(
+                    NumberDto.builder().type("work").number("1111").build()
+                )).build()
+        );
+  
+        when(this.repository.findByUser(user)).thenReturn(contacts);
+
+        assertThrows(EntityAlreadyExistsException.class,
+            () -> this.service.create(user, dtos));
+
+        List<Contact> newContacts = dtos.stream()
+            .map(dto -> this.mapper.mapContact(dto, user))
+            .toList();
+        newContacts.forEach(contact -> verify(this.repository, never()).insert(contact));
+    }
+
+    @Test
+    public void testCreateBatch_withDuplicateNumbersInRepo_throwsException() {
+        List<Contact> contacts = TestObjectsUtils.contacts();
+        String user = UUID.randomUUID().toString();
+        List<CreateContactDto> dtos = List.of(
+            CreateContactDto.builder()
+                .name("contact1")
+                .numbers(List.of(
+                    NumberDto.builder()
+                        .type("work")
+                        .number(contacts.stream()
+                            .findAny().orElseThrow().getNumbers().stream()
+                            .findAny().orElseThrow().getNumber())
+                    .build()
+                )).build()
+        );
+
+        when(this.repository.findByUser(user)).thenReturn(contacts);
+
+        assertThrows(EntityAlreadyExistsException.class,
+            () -> this.service.create(user, dtos));
+
+        List<Contact> newContacts = dtos.stream()
+            .map(dto -> this.mapper.mapContact(dto, user))
+            .toList();
+        newContacts.forEach(contact -> verify(this.repository, never()).insert(contact));
     }
 
     @Test
