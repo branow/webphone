@@ -37,12 +37,14 @@ import com.scisbo.webphone.models.Photo;
 import com.scisbo.webphone.models.converters.NumberTypeConverter;
 import com.scisbo.webphone.repositories.ContactRepository;
 import com.scisbo.webphone.repositories.PhotoRepository;
+import com.scisbo.webphone.utils.validation.EntityValidator;
 
 @SpringJUnitConfig({
     ContactService.class,
     ContactMapper.class,
     PageMapper.class,
     NumberTypeConverter.class,
+    EntityValidator.class,
 })
 @ExtendWith(MockitoExtension.class)
 public class ContactServiceTest {

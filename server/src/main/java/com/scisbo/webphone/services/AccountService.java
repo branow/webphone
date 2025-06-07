@@ -2,10 +2,16 @@ package com.scisbo.webphone.services;
 
 import static com.scisbo.webphone.repositories.AccountRepository.ENTITY_NAME;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.scisbo.webphone.utils.validation.EntityValidator;
 import com.scisbo.webphone.dtos.service.AccountDto;
 import com.scisbo.webphone.dtos.service.CreateAccountDto;
 import com.scisbo.webphone.dtos.service.UpdateAccountDto;
@@ -27,6 +33,8 @@ public class AccountService {
     private final AccountRepository repository;
     private final ContactService contactService;
     private final HistoryService historyService;
+    private final EntityValidator validator;
+
 
     /**
      * Retrieves the account by its identifier.
@@ -109,7 +117,7 @@ public class AccountService {
     @LogError("Failed to udpate account [#{#error.toString()}]")
     public AccountDto update(UpdateAccountDto updateDto) {
         var updateAccount = this.mapper.mapAccount(updateDto);
-        validateUpdatedAccount(updateAccount);
+        validateUpdateAccount(updateAccount);
 
         var account = this.repository.getById(updateDto.getId());
         account.setUsername(updateAccount.getUsername());
@@ -138,32 +146,27 @@ public class AccountService {
     }
 
     private void validateNewAccount(Account account) {
-        checkUserUniqueness(account);
-        checkSipUsernameUniqueness(account);
+        List<Account> accounts = this.repository.findAll();
+        accounts.add(account);
+        checkUniqueUser(accounts);
+        checkUniqueSipUsername(accounts);
     }
 
-    private void validateUpdatedAccount(Account account) {
-        checkSipUsernameUniqueness(account);
+    private void validateUpdateAccount(Account account) {
+        List<Account> accounts = this.repository.findAll().stream()
+            .filter(a -> !Objects.equals(a.getId(), account.getId()))
+            .collect(Collectors.toList());
+        accounts.add(account);
+        checkUniqueSipUsername(accounts);
     }
 
-    private void checkUserUniqueness(Account account) {
-        this.repository.findAllByUser(account.getUser())
-            .stream()
-            .filter(a -> !a.getId().equals(account.getId()))
-            .findAny()
-            .ifPresent(a -> {
-                throw new EntityAlreadyExistsException(ENTITY_NAME, "user", account.getUser());
-            });
+    private void checkUniqueUser(List<Account> accounts) {
+        this.validator.validateUniqueField(accounts, Account::getUser, "user", ENTITY_NAME);
     }
 
-    private void checkSipUsernameUniqueness(Account account) {
-        this.repository.findAllBySipUsername(account.getSip().getUsername())
-            .stream()
-            .filter(a -> !a.getId().equals(account.getId()))
-            .findAny()
-            .ifPresent(a -> {
-                throw new EntityAlreadyExistsException(ENTITY_NAME, "sip username", account.getSip().getUsername());
-            });
+    private void checkUniqueSipUsername(List<Account> accounts) {
+        Function<Account, String> extractor = (account) -> account.getSip().getUsername();
+        this.validator.validateUniqueField(accounts, extractor, "user", ENTITY_NAME);
     }
 
 }
