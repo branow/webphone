@@ -25,12 +25,14 @@ import com.scisbo.webphone.mappers.AccountMapper;
 import com.scisbo.webphone.models.Account;
 import com.scisbo.webphone.models.Sip;
 import com.scisbo.webphone.repositories.AccountRepository;
+import com.scisbo.webphone.utils.validation.EntityValidator;
 
 @SpringJUnitConfig({
     AccountService.class,
     AccountMapper.class,
     ContactService.class,
     HistoryService.class,
+    EntityValidator.class,
 })
 public class AccountServiceTest {
 
@@ -105,10 +107,7 @@ public class AccountServiceTest {
 
         var account = this.accountMapper.mapAccount(createAccount);
 
-        when(this.accountRepository.findAllByUser(createAccount.getUser()))
-            .thenReturn(List.of());
-        when(this.accountRepository.findAllBySipUsername(createAccount.getSip().getUsername()))
-            .thenReturn(List.of());
+        when(this.accountRepository.findAll()).thenReturn(TestObjectsUtils.accounts());
         when(this.accountRepository.save(account)).thenReturn(account);
 
         var expected = this.accountMapper.mapAccountDto(account);
@@ -118,8 +117,9 @@ public class AccountServiceTest {
 
     @Test
     public void testCreate_repetitiveUser() {
+        var accounts = TestObjectsUtils.accounts();
         var createAccount = CreateAccountDto.builder()
-            .user("user")
+            .user(accounts.stream().findAny().orElseThrow().getUser())
             .username("username")
             .active(false)
             .sip(SipDto.builder()
@@ -132,10 +132,7 @@ public class AccountServiceTest {
 
         var account = this.accountMapper.mapAccount(createAccount);
 
-        when(this.accountRepository.findAllByUser(createAccount.getUser()))
-            .thenReturn(List.of(TestObjectsUtils.accounts().getFirst()));
-        when(this.accountRepository.findAllBySipUsername(createAccount.getSip().getUsername()))
-            .thenReturn(List.of());
+        when(this.accountRepository.findAll()).thenReturn(accounts);
 
         assertThrows(EntityAlreadyExistsException.class,
             () -> this.accountService.create(createAccount));
@@ -145,12 +142,13 @@ public class AccountServiceTest {
 
     @Test
     public void testCreate_repetitiveSipUsername() {
+        var accounts = TestObjectsUtils.accounts();
         var createAccount = CreateAccountDto.builder()
             .user("user")
             .username("username")
             .active(false)
             .sip(SipDto.builder()
-                .username("username")
+                .username(accounts.stream().findAny().orElseThrow().getSip().getUsername())
                 .password("password")
                 .domain("domain")
                 .proxy("proxy")
@@ -159,10 +157,7 @@ public class AccountServiceTest {
 
         var account = this.accountMapper.mapAccount(createAccount);
 
-        when(this.accountRepository.findAllByUser(createAccount.getUser()))
-            .thenReturn(List.of());
-        when(this.accountRepository.findAllBySipUsername(createAccount.getSip().getUsername()))
-            .thenReturn(List.of(TestObjectsUtils.accounts().getFirst()));
+        when(this.accountRepository.findAll()).thenReturn(accounts);
 
         assertThrows(EntityAlreadyExistsException.class,
             () -> this.accountService.create(createAccount));
@@ -172,6 +167,7 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdate() {
+        var accounts = TestObjectsUtils.accounts();
         var updateAccount = UpdateAccountDto.builder()
             .id("id")
             .username("username2")
@@ -210,10 +206,8 @@ public class AccountServiceTest {
                 .build())
             .build();
 
-        when(this.accountRepository.getById(updateAccount.getId()))
-            .thenReturn(account);
-        when(this.accountRepository.findAllBySipUsername(updateAccount.getSip().getUsername()))
-            .thenReturn(List.of());
+        when(this.accountRepository.findAll()).thenReturn(accounts);
+        when(this.accountRepository.getById(updateAccount.getId())).thenReturn(account);
         when(this.accountRepository.save(updatedAccount)).thenReturn(updatedAccount);
 
         var expected = this.accountMapper.mapAccountDto(updatedAccount);
@@ -223,12 +217,13 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdate_repetitiveSipUsername() {
+        var accounts = TestObjectsUtils.accounts();
         var updateAccount = UpdateAccountDto.builder()
             .id("id")
             .username("username2")
             .active(false)
             .sip(SipDto.builder()
-                .username("username2")
+                .username(accounts.stream().findAny().orElseThrow().getSip().getUsername())
                 .password("password2")
                 .domain("domain2")
                 .proxy("proxy2")
@@ -248,11 +243,9 @@ public class AccountServiceTest {
                 .build())
             .build();
 
+        when(this.accountRepository.findAll()).thenReturn(accounts);
         when(this.accountRepository.getById(updateAccount.getId()))
             .thenReturn(account);
-        when(this.accountRepository.findAllBySipUsername(updateAccount.getSip().getUsername()))
-            .thenReturn(List.of(TestObjectsUtils.accounts().getFirst()));
-
         assertThrows(EntityAlreadyExistsException.class,
             () -> this.accountService.update(updateAccount));
 

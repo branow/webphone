@@ -2,8 +2,11 @@ package com.scisbo.webphone.services;
 
 import static com.scisbo.webphone.repositories.ContactRepository.ENTITY_NAME;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
-import com.scisbo.webphone.dtos.service.NumberDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
 import com.scisbo.webphone.exceptions.EntityNotFoundException;
@@ -24,6 +26,7 @@ import com.scisbo.webphone.models.Contact;
 import com.scisbo.webphone.models.Number;
 import com.scisbo.webphone.repositories.ContactRepository;
 import com.scisbo.webphone.repositories.PhotoRepository;
+import com.scisbo.webphone.utils.validation.EntityValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +37,7 @@ public class ContactService {
     private final ContactRepository repository;
     private final ContactMapper mapper;
     private final PhotoRepository photoRepository;
+    private final EntityValidator validator;
 
 
     /**
@@ -93,11 +97,13 @@ public class ContactService {
     }
 
     private void validateNewContact(CreateContactDto createDto, String user) {
-        List<Contact> contacts = this.repository.findByUser(user);
         Contact contact = this.mapper.mapContact(createDto, user);
-        checkNameUniqueness(contact, contacts);
-        checkNumberUniqueness(contact, contacts);
         checkPhotoExisting(contact.getPhoto());
+
+        List<Contact> contacts = this.repository.findByUser(user);
+        contacts.add(contact);
+        validateUniqueName(contacts);
+        validateUniqueNumbers(contacts);
     }
 
     /**
@@ -132,44 +138,16 @@ public class ContactService {
 
     private void validateNewContacts(List<CreateContactDto> createContactDtos, String user) {
         if (createContactDtos.isEmpty()) return;
-        createContactDtos.forEach(createContactDto -> checkNameUniqueness(createContactDto, createContactDtos));
-        createContactDtos.forEach(createContactDto -> checkNumberUniqueness(createContactDto, createContactDtos));
 
-        List<Contact> contacts = this.repository.findByUser(user);
         List<Contact> createContacts = createContactDtos.stream()
             .map(createContactDto -> this.mapper.mapContact(createContactDto, user))
             .toList();
-        createContacts.forEach(contact -> checkNameUniqueness(contact, contacts));
-        createContacts.forEach(contact -> checkNumberUniqueness(contact, contacts));
         createContacts.forEach(contact -> checkPhotoExisting(contact.getPhoto()));
-    }
 
-    private void checkNameUniqueness(CreateContactDto contact, List<CreateContactDto> contacts) {
-        long count = contacts.stream()
-            .filter((oldContact) -> oldContact.getName().equals(contact.getName()))
-            .count();
-        if (count > 1) {
-            throw new EntityAlreadyExistsException(ENTITY_NAME, "name", contact.getName());
-        }
-    }
-
-    private void checkNumberUniqueness(CreateContactDto newContact, List<CreateContactDto> contacts) {
-        List<String> newNumbers = newContact.getNumbers().stream()
-            .map(NumberDto::getNumber)
-            .toList();
-
-        long count = 0;
-        for (CreateContactDto contact : contacts) {
-            for (String newNumber : newNumbers) {
-                count += contact.getNumbers().stream()
-                    .map(NumberDto::getNumber)
-                    .filter(number -> Objects.equals(newNumber, number))
-                    .count();
-                if (count > 1) {
-                    throw new EntityAlreadyExistsException(ENTITY_NAME, "number", newNumber);
-                }
-            }
-        }
+        List<Contact> contacts = this.repository.findByUser(user);
+        contacts.addAll(createContacts);
+        validateUniqueName(contacts);
+        validateUniqueNumbers(contacts);
     }
 
     /**
@@ -204,13 +182,14 @@ public class ContactService {
     }
 
     private void validateUpdatedContact(Contact contact) {
+        checkPhotoExisting(contact.getPhoto());
+
         List<Contact> contacts = this.repository.findByUser(contact.getUser()).stream()
             .filter(c -> !Objects.equals(c.getId(), contact.getId()))
-            .toList();
-
-        checkNameUniqueness(contact, contacts);
-        checkNumberUniqueness(contact, contacts);
-        checkPhotoExisting(contact.getPhoto());
+            .collect(Collectors.toList());
+        contacts.add(contact);
+        validateUniqueName(contacts);
+        validateUniqueNumbers(contacts);
     }
 
     /**
@@ -243,27 +222,14 @@ public class ContactService {
         this.repository.deleteById(contact.getId());
     }
 
-    private void checkNameUniqueness(Contact contact, List<Contact> contacts) {
-        contacts.stream()
-            .filter((oldContact) -> oldContact.getName().equals(contact.getName()))
-            .findAny()
-            .ifPresent((oldContact) -> {
-                throw new EntityAlreadyExistsException(ENTITY_NAME, "name", contact.getName());
-            });
+    private void validateUniqueName(List<Contact> contacts) {
+        this.validator.validateUniqueField(contacts, Contact::getName, "name", ENTITY_NAME);
     }
 
-    private void checkNumberUniqueness(Contact contact, List<Contact> contacts) {
-        List<String> newNumbers = contact.getNumbers().stream()
-            .map(Number::getNumber)
-            .toList();
-
-        for (Contact oldContact : contacts) {
-            for (String number : newNumbers) {
-                if (oldContact.hasNumber(number)) {
-                    throw new EntityAlreadyExistsException(ENTITY_NAME, "number", number);
-                }
-            }
-        }
+    private void validateUniqueNumbers(List<Contact> contacts) {
+        Function<Contact, Collection<String>> numbersExtractor =
+            (c) -> c.getNumbers().stream().map(Number::getNumber).toList();
+        this.validator.validateUniqueNestedField(contacts, numbersExtractor, "number", ENTITY_NAME);
     }
 
     private void checkPhotoExisting(String photo) {
