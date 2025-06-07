@@ -65,7 +65,7 @@ public class ContactService {
      * Retrieves the contact details DTO by its identifier.
      *
      * @param id the contact's identifier
-     * @returns a {@link ContactDetailsDto} object
+     * @return a {@link ContactDetailsDto} object
      * @throws EntityNotFoundException if no contact is found by the given identifier
      * */
     @LogBefore("Retrieving contact with ID=#{#id}")
@@ -151,21 +151,19 @@ public class ContactService {
     }
 
     /**
-     * Updates the given contact. Fields updated: {@code name}, {@code bio}, 
-     * {@code photo}, {@code numbers}. If {@code photo} has changed and is not 
-     * {@code null}, it treats the new value as an image URL, attempts download it,
-     * and deletes the old photo from the repository.
+     * Updates the given contact. Fields updated: {@code name}, {@code bio},
+     * {@code photo}, {@code numbers}. If the {@code photo} field has changed,
+     * the previous photo will be deleted if present.
      *
      * @param updateDto the update data
      * @return the updated {@link ContactDetailsDto}
      * @throws EntityNotFoundException if no contact exists the given identifier
      * @throws EntityAlreadyExistsException if another contact with the same name 
      *         or number exists
-     * @see PhotoService#download(String)
      * */
     @LogBefore("Updating contact for ID=#{#updateDto.getId()}")
     @LogAfter("Updated contact with ID=#{#result.getId()}")
-    @LogError("Failed to udpate contact [#{#error.toString()}]")
+    @LogError("Failed to update contact [#{#error.toString()}]")
     public ContactDetailsDto update(UpdateContactDto updateDto) {
         Contact oldContact = this.repository.getById(updateDto.getId());
         Contact newContact = this.mapper.mapContact(updateDto);
@@ -192,8 +190,15 @@ public class ContactService {
         validateUniqueNumbers(contacts);
     }
 
+    private void mergeContactData(Contact oldContact, Contact newContact) {
+        oldContact.setName(newContact.getName());
+        oldContact.setBio(newContact.getBio());
+        oldContact.setPhoto(newContact.getPhoto());
+        oldContact.setNumbers(newContact.getNumbers());
+    }
+
     /**
-     * Deletes a contact by its identifier. Also deletes the associated photo, 
+     * Deletes a contact by its identifier. Also deletes the associated photo,
      * if present. If contact does not exist, the method does nothing.
      *
      * @param id the contact's identifier
@@ -222,6 +227,12 @@ public class ContactService {
         this.repository.deleteById(contact.getId());
     }
 
+    private void deletePhotoIfPresent(String photo) {
+        if (photo != null) {
+            this.photoRepository.deleteById(photo);
+        }
+    }
+
     private void validateUniqueName(List<Contact> contacts) {
         this.validator.validateUniqueField(contacts, Contact::getName, "name", ENTITY_NAME);
     }
@@ -236,19 +247,6 @@ public class ContactService {
         if (photo != null) {
             this.photoRepository.getById(photo);
         }
-    }
-
-    private void deletePhotoIfPresent(String photo) {
-        if (photo != null) {
-            this.photoRepository.deleteById(photo);
-        }
-    }
-
-    private void mergeContactData(Contact oldContact, Contact newContact) {
-        oldContact.setName(newContact.getName());
-        oldContact.setBio(newContact.getBio());
-        oldContact.setPhoto(newContact.getPhoto());
-        oldContact.setNumbers(newContact.getNumbers());
     }
 
 }
