@@ -13,7 +13,7 @@ public interface PhotoRepository extends MongoRepository<Photo, String> {
      * Retrieves a photo by its identifier.
      *
      * @param id the photo's identifier
-     * @returns a {@link Photo} object
+     * @return a {@link Photo} object
      * @throws EntityNotFoundException if photo is not found by the given identifier
      * */
     default Photo getById(String id) {

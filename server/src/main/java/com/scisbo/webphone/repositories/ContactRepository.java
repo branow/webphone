@@ -17,7 +17,7 @@ public interface ContactRepository extends MongoRepository<Contact, String>, Cus
      * Retrieves the contact by its identifier.
      *
      * @param id the contact's identifier
-     * @returns a {@link Contact} object
+     * @return a {@link Contact} object
      * @throws EntityNotFoundException if no contact is found by the given identifier
      * */
     default Contact getById(String id) {
@@ -31,7 +31,7 @@ public interface ContactRepository extends MongoRepository<Contact, String>, Cus
      *
      * @param user      the user's identifier
      * @param pageable  the pagination information
-     * @returns a page of {@link Contact} objects
+     * @return a page of {@link Contact} objects
      * */
     Page<Contact> findByUserOrderByName(String user, Pageable pageable);
 
@@ -39,7 +39,7 @@ public interface ContactRepository extends MongoRepository<Contact, String>, Cus
      * Retrieves all contacts for the specified user.
      *
      * @param user      the user's identifier
-     * @returns a list of {@link Contact} objects
+     * @return a list of {@link Contact} objects
      * */
     List<Contact> findByUser(String user);
 

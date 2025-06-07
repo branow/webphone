@@ -34,7 +34,7 @@ public class PhotoService {
      * Retrieves a photo by its identifier.
      *
      * @param id the photo's identifier
-     * @returns a {@link PhotoDto} object
+     * @return a {@link PhotoDto} object
      * @throws EntityNotFoundException if photo is not found by the given identifier
      * */
     @LogBefore("Retrieving photo with ID=#{#id}")

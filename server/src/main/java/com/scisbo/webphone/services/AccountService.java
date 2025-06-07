@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.scisbo.webphone.utils.validation.EntityValidator;
 import com.scisbo.webphone.dtos.service.AccountDto;
 import com.scisbo.webphone.dtos.service.CreateAccountDto;
 import com.scisbo.webphone.dtos.service.UpdateAccountDto;
@@ -22,6 +21,7 @@ import com.scisbo.webphone.log.annotation.LogError;
 import com.scisbo.webphone.mappers.AccountMapper;
 import com.scisbo.webphone.models.Account;
 import com.scisbo.webphone.repositories.AccountRepository;
+import com.scisbo.webphone.utils.validation.EntityValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -87,7 +87,7 @@ public class AccountService {
     /**
      * Creates a new account.
      *
-     * @params createDto the data for the new contact
+     * @param createDto the data for the new contact
      * @return the created {@link AccountDto} object
      * @throws EntityAlreadyExistsException if an account with the same user or
      *         or sip username already exists.
@@ -100,6 +100,13 @@ public class AccountService {
         validateNewAccount(account);
         var savedAccount = this.repository.save(account);
         return this.mapper.mapAccountDto(savedAccount);
+    }
+
+    private void validateNewAccount(Account account) {
+        List<Account> accounts = this.repository.findAll();
+        accounts.add(account);
+        checkUniqueUser(accounts);
+        checkUniqueSipUsername(accounts);
     }
 
     /**
@@ -128,6 +135,14 @@ public class AccountService {
         return this.mapper.mapAccountDto(updatedAccount);
     }
 
+    private void validateUpdateAccount(Account account) {
+        List<Account> accounts = this.repository.findAll().stream()
+            .filter(a -> !Objects.equals(a.getId(), account.getId()))
+            .collect(Collectors.toList());
+        accounts.add(account);
+        checkUniqueSipUsername(accounts);
+    }
+
     /**
      * Deletes an account by its identifier and associated contacts, 
      * history records, photos.
@@ -143,21 +158,6 @@ public class AccountService {
             this.historyService.deleteByUser(account.getUser());
             this.repository.deleteById(id);
         });
-    }
-
-    private void validateNewAccount(Account account) {
-        List<Account> accounts = this.repository.findAll();
-        accounts.add(account);
-        checkUniqueUser(accounts);
-        checkUniqueSipUsername(accounts);
-    }
-
-    private void validateUpdateAccount(Account account) {
-        List<Account> accounts = this.repository.findAll().stream()
-            .filter(a -> !Objects.equals(a.getId(), account.getId()))
-            .collect(Collectors.toList());
-        accounts.add(account);
-        checkUniqueSipUsername(accounts);
     }
 
     private void checkUniqueUser(List<Account> accounts) {

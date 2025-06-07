@@ -17,7 +17,7 @@ public interface HistoryRepository extends MongoRepository<HistoryRecord, String
      * Retrieves the history record by its identifier.
      *
      * @param id the record's identifier
-     * @returns a {@link HistoryRecord} object
+     * @return a {@link HistoryRecord} object
      * @throws EntityNotFoundException if no record is found by the given identifier
      * */
     default HistoryRecord getById(String id) {
@@ -31,7 +31,7 @@ public interface HistoryRepository extends MongoRepository<HistoryRecord, String
      *
      * @param user      the user's identifier
      * @param pageable  the pagination information
-     * @returns a page of {@link HistoryRecord} objects
+     * @return a page of {@link HistoryRecord} objects
      * */
     Page<HistoryRecord> findByUserOrderByStartDateDesc(String user, Pageable pageable);
 
@@ -43,7 +43,7 @@ public interface HistoryRepository extends MongoRepository<HistoryRecord, String
      * @param user      the user's identifier
      * @param numbers   a list of call numbers to match
      * @param pageable  the pagination information
-     * @returns a page of {@link HistoryRecord} objects
+     * @return a page of {@link HistoryRecord} objects
      * */
     Page<HistoryRecord> findByUserAndNumberInOrderByStartDateDesc(String user, List<String> numbers, Pageable pageable);
 

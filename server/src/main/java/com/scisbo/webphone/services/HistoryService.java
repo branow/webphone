@@ -38,7 +38,7 @@ public class HistoryService {
      *
      * @param user      the user's identifier
      * @param pageable  the pagination information
-     * @returns a page of {@link HistoryRecordDto} objects
+     * @return a page of {@link HistoryRecordDto} objects
      * */
     @LogBefore("Retrieving history records for user=#{#user}, page=#{#pageable}")
     @LogAfter("Retrieved history records page: #{#result}")
@@ -63,7 +63,7 @@ public class HistoryService {
      * @param user      the user's identifier
      * @param contactId the contact's identifier
      * @param pageable  the pagination information
-     * @returns a page of {@link HistoryRecordSummaryDto} objects
+     * @return a page of {@link HistoryRecordSummaryDto} objects
      * */
     @LogBefore("Retrieving history summary for user=#{#user}, contact=#{#contact}, page=#{#pageable}")
     @LogAfter("Retrieved history summary page: #{#result}")
