@@ -48,13 +48,12 @@ public class ContactMapper {
             .build();
     }
 
-    public CreateContactDto mapCreateContactDto(CreateContactRequest contact, String user) {
+    public CreateContactDto mapCreateContactDto(CreateContactRequest contact) {
         List<NumberDto> numbers = contact.getNumbers().stream()
             .map(this::mapNumberDto)
             .collect(Collectors.toList());
 
         return CreateContactDto.builder()
-            .user(user)
             .name(contact.getName())
             .bio(contact.getBio())
             .photo(contact.getPhoto())
@@ -125,9 +124,9 @@ public class ContactMapper {
             .build();
     }
 
-    public Contact mapContact(CreateContactDto contact) {
+    public Contact mapContact(CreateContactDto contact, String user) {
         return Contact.builder()
-            .user(contact.getUser())
+            .user(user)
             .name(contact.getName())
             .bio(contact.getBio())
             .photo(contact.getPhoto())

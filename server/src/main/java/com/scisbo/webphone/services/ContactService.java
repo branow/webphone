@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
+import com.scisbo.webphone.dtos.service.NumberDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
 import com.scisbo.webphone.exceptions.EntityAlreadyExistsException;
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.log.annotation.LogAfter;
 import com.scisbo.webphone.log.annotation.LogBefore;
 import com.scisbo.webphone.log.annotation.LogError;
@@ -70,23 +72,104 @@ public class ContactService {
     }
 
     /**
-     * Creates a new contact. If {@code photoUrl} is not null, 
-     * it will attempt to download image from the given URL.
+     * Creates a new contact.
      *
-     * @params createDto the data for the new contact
-     * @returns the created {@link ContactDetailsDto} object
-     * @throws EntityAlreadyExistsException if a contact with the same name or 
-     *         or number already exists.
-     * @see PhotoService#download(String)
+     * @param user      the user creating the contact
+     * @param createDto the data for the new contact
+     * @return the created {@link ContactDetailsDto} object
+     * @throws EntityAlreadyExistsException if a contact with the same name or
+     *         or number already exists
+     * @throws EntityNotFoundException if a photo is present and it does not
+     *         match any existing record in the repository
      * */
-    @LogBefore("Creating contact for user=#{#createDto.getUser()}")
+    @LogBefore("Creating contact for user=#{#user}")
     @LogAfter("Created contact with ID=#{#result.getId()}")
     @LogError("Failed to create contact [#{#error.toString()}]")
-    public ContactDetailsDto create(CreateContactDto createDto) {
-        Contact contact = this.mapper.mapContact(createDto);
-        validateNewContact(contact);
+    public ContactDetailsDto create(String user, CreateContactDto createDto) {
+        validateNewContact(createDto, user);
+        Contact contact = this.mapper.mapContact(createDto, user);
         this.repository.insert(contact);
         return this.mapper.mapContactDetailsDto(contact);
+    }
+
+    private void validateNewContact(CreateContactDto createDto, String user) {
+        List<Contact> contacts = this.repository.findByUser(user);
+        Contact contact = this.mapper.mapContact(createDto, user);
+        checkNameUniqueness(contact, contacts);
+        checkNumberUniqueness(contact, contacts);
+        checkPhotoExisting(contact.getPhoto());
+    }
+
+    /**
+     * Creates a list of contacts for a given user. All contacts are validated before
+     * creation. If validation fails, none of the contacts will be persisted.
+     * However, the persistence operation itself is not transactional, so if 
+     * an exception occurs during insertion, partial persistence is possible.
+     *
+     * @param user       the user creating the contacts
+     * @param createDtos the data for the new contacts
+     * @return the list of successfully created {@link ContactDetailsDto} objects
+     * @throws EntityAlreadyExistsException if a contact with the same name or
+     *         or number already exists
+     * @throws EntityNotFoundException if a photo is present and it does not
+     *         match any existing record in the repository
+     * */
+    @LogBefore("Creating batch of contacts for user=#{#user} size=#{#createDtos.size()}")
+    @LogAfter("Created batch of contacts for user=#{#user} size=#{#result.size()}")
+    @LogError("Failed to create batch of contacts [#{#error.toString()}]")
+    public List<ContactDetailsDto> create(String user, List<CreateContactDto> createDtos) {
+        if (createDtos.isEmpty()) return List.of();
+
+        validateNewContacts(createDtos, user);
+
+        List<Contact> contacts = createDtos.stream()
+            .map(dto -> this.mapper.mapContact(dto, user)).toList();
+
+        return this.repository.insert(contacts).stream()
+            .map(this.mapper::mapContactDetailsDto)
+            .toList();
+    }
+
+    private void validateNewContacts(List<CreateContactDto> createContactDtos, String user) {
+        if (createContactDtos.isEmpty()) return;
+        createContactDtos.forEach(createContactDto -> checkNameUniqueness(createContactDto, createContactDtos));
+        createContactDtos.forEach(createContactDto -> checkNumberUniqueness(createContactDto, createContactDtos));
+
+        List<Contact> contacts = this.repository.findByUser(user);
+        List<Contact> createContacts = createContactDtos.stream()
+            .map(createContactDto -> this.mapper.mapContact(createContactDto, user))
+            .toList();
+        createContacts.forEach(contact -> checkNameUniqueness(contact, contacts));
+        createContacts.forEach(contact -> checkNumberUniqueness(contact, contacts));
+        createContacts.forEach(contact -> checkPhotoExisting(contact.getPhoto()));
+    }
+
+    private void checkNameUniqueness(CreateContactDto contact, List<CreateContactDto> contacts) {
+        long count = contacts.stream()
+            .filter((oldContact) -> oldContact.getName().equals(contact.getName()))
+            .count();
+        if (count > 1) {
+            throw new EntityAlreadyExistsException(ENTITY_NAME, "name", contact.getName());
+        }
+    }
+
+    private void checkNumberUniqueness(CreateContactDto newContact, List<CreateContactDto> contacts) {
+        List<String> newNumbers = newContact.getNumbers().stream()
+            .map(NumberDto::getNumber)
+            .toList();
+
+        long count = 0;
+        for (CreateContactDto contact : contacts) {
+            for (String newNumber : newNumbers) {
+                count += contact.getNumbers().stream()
+                    .map(NumberDto::getNumber)
+                    .filter(number -> Objects.equals(newNumber, number))
+                    .count();
+                if (count > 1) {
+                    throw new EntityAlreadyExistsException(ENTITY_NAME, "number", newNumber);
+                }
+            }
+        }
     }
 
     /**
@@ -120,6 +203,16 @@ public class ContactService {
         return this.mapper.mapContactDetailsDto(oldContact);
     }
 
+    private void validateUpdatedContact(Contact contact) {
+        List<Contact> contacts = this.repository.findByUser(contact.getUser()).stream()
+            .filter(c -> !Objects.equals(c.getId(), contact.getId()))
+            .toList();
+
+        checkNameUniqueness(contact, contacts);
+        checkNumberUniqueness(contact, contacts);
+        checkPhotoExisting(contact.getPhoto());
+    }
+
     /**
      * Deletes a contact by its identifier. Also deletes the associated photo, 
      * if present. If contact does not exist, the method does nothing.
@@ -148,24 +241,6 @@ public class ContactService {
     private void delete(Contact contact) {
         deletePhotoIfPresent(contact.getPhoto());
         this.repository.deleteById(contact.getId());
-    }
-
-    private void validateNewContact(Contact contact) {
-        List<Contact> contacts = this.repository.findByUser(contact.getUser());
-        checkNameUniqueness(contact, contacts);
-        checkNumberUniqueness(contact, contacts);
-        checkPhotoExisting(contact.getPhoto());
-    }
-
-    private void validateUpdatedContact(Contact contact) {
-        List<Contact> contacts = this.repository.findByUser(contact.getUser())
-            .stream()
-            .filter((oldContact) -> !oldContact.getId().equals(contact.getId()))
-            .toList();
-
-        checkNameUniqueness(contact, contacts);
-        checkNumberUniqueness(contact, contacts);
-        checkPhotoExisting(contact.getPhoto());
     }
 
     private void checkNameUniqueness(Contact contact, List<Contact> contacts) {

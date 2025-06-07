@@ -65,8 +65,6 @@ public class ContactMapperTest {
 
     @Test
     public void testMapCreateContactDto() {
-        var user = "user";
-
         var req = CreateContactRequest.builder()
             .name("name")
             .photo("photo")
@@ -77,7 +75,6 @@ public class ContactMapperTest {
             .build();
 
         var expected = CreateContactDto.builder()
-            .user(user)
             .name("name")
             .photo("photo")
             .bio("bio")
@@ -86,7 +83,7 @@ public class ContactMapperTest {
             )
             .build();
 
-        var actual = this.mapper.mapCreateContactDto(req, user);
+        var actual = this.mapper.mapCreateContactDto(req);
         assertEquals(expected, actual);
     }
 
@@ -186,8 +183,8 @@ public class ContactMapperTest {
 
     @Test
     public void testMapContact_create() {
+        var user = "user";
         var dto = CreateContactDto.builder()
-            .user("user")
             .name("name")
             .bio("bio")
             .numbers(List.of(
@@ -196,7 +193,7 @@ public class ContactMapperTest {
             .build();
 
         var expected = Contact.builder()
-            .user("user")
+            .user(user)
             .name("name")
             .bio("bio")
             .numbers(List.of(
@@ -204,7 +201,7 @@ public class ContactMapperTest {
             ))
             .build();
 
-        var actual = this.mapper.mapContact(dto);
+        var actual = this.mapper.mapContact(dto, user);
         assertEquals(expected, actual);
     }
 

@@ -140,12 +140,12 @@ public class ContactControllerTest {
                 NumberRequest.builder().type("home").number("2222").build()
             ))
             .build();
-        var createContactDto = this.mapper.mapCreateContactDto(createContactRequest, user);
-        var contact = this.mapper.mapContact(createContactDto);
+        var createContactDto = this.mapper.mapCreateContactDto(createContactRequest);
+        var contact = this.mapper.mapContact(createContactDto, user);
         var contactDetailsDto = this.mapper.mapContactDetailsDto(contact);
         var contactDetailsResponse = this.mapper.mapContactDetailsResponse(contactDetailsDto);
 
-        when(this.service.create(createContactDto)).thenReturn(contactDetailsDto);
+        when(this.service.create(user, createContactDto)).thenReturn(contactDetailsDto);
 
         var request = RestUtils.toJson(createContactRequest);
         var response = RestUtils.toJson(contactDetailsResponse);
@@ -163,6 +163,54 @@ public class ContactControllerTest {
     @Test
     public void testCreate_hasValidation() throws Exception {
         Method method = controller.getClass().getMethod("create", String.class, CreateContactRequest.class);
+        assertNotNull(method.getParameters()[1].getDeclaredAnnotation(Valid.class));
+    }
+
+    @Test
+    public void testCreateBatch() throws Exception {
+        var user = "userId";
+        var createContactsRequest = List.of(
+            CreateContactRequest.builder()
+                .name("name")
+                .photo("photo123")
+                .bio("bio")
+                .numbers(List.of(
+                    NumberRequest.builder().type("work").number("1111").build(),
+                    NumberRequest.builder().type("home").number("2222").build()
+                ))
+                .build()
+        );
+        var createContactDtos = createContactsRequest.stream()
+            .map(this.mapper::mapCreateContactDto)
+            .toList();
+        var contacts = createContactDtos.stream()
+            .map(createContactDto -> this.mapper.mapContact(createContactDto, user))
+            .toList();
+        var contactDetailsDtos = contacts.stream()
+            .map(this.mapper::mapContactDetailsDto)
+            .toList();
+        var contactDetailsResponse = contactDetailsDtos.stream()
+            .map(this.mapper::mapContactDetailsResponse)
+            .toList();
+
+        when(this.service.create(user, createContactDtos)).thenReturn(contactDetailsDtos);
+
+        var request = RestUtils.toJson(createContactsRequest);
+        var response = RestUtils.toJson(contactDetailsResponse);
+
+        this.mockMvc
+            .perform(
+                post("/api/contacts/user/{user}/batch", user)
+                    .header("Content-Type", "application/json")
+                    .content(request)
+            )
+            .andExpect(status().isCreated())
+            .andExpect(content().string(response));
+    }
+
+    @Test
+    public void testCreateBatch_hasValidation() throws Exception {
+        Method method = controller.getClass().getMethod("create", String.class, List.class);
         assertNotNull(method.getParameters()[1].getDeclaredAnnotation(Valid.class));
     }
 

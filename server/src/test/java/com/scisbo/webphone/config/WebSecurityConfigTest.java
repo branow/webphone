@@ -38,6 +38,7 @@ import com.scisbo.webphone.dtos.controller.request.UpdateAccountRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;
 import com.scisbo.webphone.dtos.service.AccountDto;
 import com.scisbo.webphone.dtos.service.ContactDetailsDto;
+import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.HistoryRecordDto;
 import com.scisbo.webphone.dtos.service.PhotoDto;
 import com.scisbo.webphone.dtos.service.SipDto;
@@ -221,6 +222,15 @@ public class WebSecurityConfigTest {
                 }
             ),
             Arguments.of(
+                withJwt(post("/api/contacts/user/user1/batch"), "user")
+                    .header("Content-Type", "application/json")
+                    .content(RestUtils.toJson(getCreateContactsRequest())),
+                (Consumer<AuthService>) (service) -> {
+                    when(service.canCreateContact(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(false);
+                }
+            ),
+            Arguments.of(
                 withJwt(put("/api/contacts/contact1"), "user")
                     .header("Content-Type", "application/json")
                     .content(RestUtils.toJson(getUpdateContactRequest())),
@@ -356,8 +366,19 @@ public class WebSecurityConfigTest {
                 (Consumer<ServiceMap>) (map) -> {
                     when(map.authService.canCreateContact(any(JwtAuthenticationToken.class), eq("user1")))
                         .thenReturn(true);
-                    when(map.contactService.create(any()))
+                    when(map.contactService.create(eq("user1"), any(CreateContactDto.class)))
                         .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
+                }
+            ),
+            Arguments.of(
+                withJwt(post("/api/contacts/user/user1/batch"), "user")
+                    .header("Content-Type", "application/json")
+                    .content(RestUtils.toJson(getCreateContactsRequest())),
+                (Consumer<ServiceMap>) (map) -> {
+                    when(map.authService.canCreateContact(any(JwtAuthenticationToken.class), eq("user1")))
+                        .thenReturn(true);
+                    when(map.contactService.create(eq("user1"), any(List.class)))
+                        .thenReturn(List.of());
                 }
             ),
             Arguments.of(
@@ -464,6 +485,17 @@ public class WebSecurityConfigTest {
            .status("incoming")
            .startDate(OffsetDateTime.now())
            .build();
+    }
+
+    private static List<CreateContactRequest> getCreateContactsRequest() {
+        return List.of(CreateContactRequest.builder()
+            .name("name")
+            .numbers(List.of(
+                NumberRequest.builder()
+                    .type("work")
+                    .number("1234")
+                    .build()))
+            .build());
     }
 
     private static CreateContactRequest getCreateContactRequest() {
