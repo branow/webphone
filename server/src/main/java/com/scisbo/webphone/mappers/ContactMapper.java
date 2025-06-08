@@ -75,6 +75,7 @@ public class ContactMapper {
 
         return ContactDetailsResponse.builder()
             .id(contact.getId())
+            .user(contact.getUser())
             .name(contact.getName())
             .photo(contact.getPhoto())
             .bio(contact.getBio())
@@ -137,6 +138,7 @@ public class ContactMapper {
     public ContactDetailsDto mapContactDetailsDto(Contact contact) {
         return ContactDetailsDto.builder()
             .id(contact.getId())
+            .user(contact.getUser())
             .name(contact.getName())
             .photo(contact.getPhoto())
             .bio(contact.getBio())

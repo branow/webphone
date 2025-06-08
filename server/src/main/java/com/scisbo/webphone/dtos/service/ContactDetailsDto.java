@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ContactDetailsDto {
     String id;
+    String user;
     String name;
     String bio;
     String photo;

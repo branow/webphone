@@ -220,6 +220,7 @@ public class ContactMapperTest {
 
         var expected = ContactDetailsDto.builder()
             .id("id")
+            .user("user")
             .name("name")
             .photo("photo")
             .bio("bio")
