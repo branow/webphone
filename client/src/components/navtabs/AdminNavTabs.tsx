@@ -1,9 +1,9 @@
 import { FC, useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import NavTabs, { NavTab } from "./NabTabs";
-import { AccountContext } from "../../context/AccountContext";
-import { d } from "../../lib/i18n";
-import { Paths } from "../../routes";
+import NavTabs, { NavTab } from "components/navtabs/NabTabs";
+import { AccountContext } from "context/AccountContext";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
 
 export enum Tab {
   Accounts = "accounts",

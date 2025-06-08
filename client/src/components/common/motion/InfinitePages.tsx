@@ -1,6 +1,6 @@
 import { ReactNode, RefObject } from "react";
-import InfiniteList from "./InfiniteList";
-import { Page } from "../../../services/backend";
+import InfiniteList from "components/common/motion/InfiniteList";
+import { Page } from "services/backend";
 
 interface Props<T> {
   scrollRef: RefObject<HTMLDivElement>;

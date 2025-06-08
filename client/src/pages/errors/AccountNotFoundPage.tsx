@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import ErrorPage from "./ErrorPage";
-import { d } from "../../lib/i18n";
+import ErrorPage from "pages/errors/ErrorPage";
+import { d } from "lib/i18n";
 
 interface Props {
   retry: () => void;

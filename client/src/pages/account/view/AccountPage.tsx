@@ -1,7 +1,7 @@
 import { FC } from "react";
-import NotFoundPage from "../../errors/NotFoundPage";
-import AccountPageLoader from "./AccountPageLoader";
-import { useTransitionAwareParam } from "../../../hooks/useTransitionAwareParam";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import AccountPageLoader from "pages/account/view/AccountPageLoader";
+import { useTransitionAwareParam } from "hooks/useTransitionAwareParam";
 
 const AccountPage: FC = () => {
   const id = useTransitionAwareParam("id");

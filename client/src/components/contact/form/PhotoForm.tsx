@@ -1,11 +1,11 @@
 import { FC, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import ErrorMessage from "../../common/messages/ErrorMessage";
-import FileInput from "../../common/input/FileInput";
-import PhotoInput from "./PhotoInput";
-import { EditableContact } from "../../../hooks/useEditContact";
-import { d } from "../../../lib/i18n";
+import ErrorMessage from "components/common/messages/ErrorMessage";
+import FileInput from "components/common/input/FileInput";
+import PhotoInput from "components/contact/form/PhotoInput";
+import { EditableContact } from "hooks/useEditContact";
+import { d } from "lib/i18n";
 
 const Container = styled.div`
   display: flex;

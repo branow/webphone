@@ -2,13 +2,13 @@ import { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import ErrorBanner from "../../../components/common/messages/ErrorBanner";
-import TransparentRectButton from "../../../components/common/button/TransparentRectButton";
-import PendingPane from "../../../components/common/motion/PendingPane";
-import UpdateAccountFormPage from "./UpdateAccountFormPage";
-import AccountApi from "../../../services/accounts";
-import { d } from "../../../lib/i18n";
+import FadeMotion from "components/common/motion/FadeMotion";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
+import PendingPane from "components/common/motion/PendingPane";
+import UpdateAccountFormPage from "pages/account/update/UpdateAccountFormPage";
+import AccountApi from "services/accounts";
+import { d } from "lib/i18n";
 
 const UpdateAccountFetchingPage: FC<{ id: string }> = ({ id }) => {
   const { data, error, isPending } = useQuery({

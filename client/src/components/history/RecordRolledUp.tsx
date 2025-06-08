@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import StatusIcon from "./StatusIcon";
-import { useTheme } from "../../hooks/useTheme";
-import { Record } from "../../services/history";
-import { formatPhoneNumber } from "../../util/format";
-import { font } from "../../styles";
+import StatusIcon from "components/history/StatusIcon";
+import { useTheme } from "hooks/useTheme";
+import { Record } from "services/history";
+import { formatPhoneNumber } from "util/format";
+import { font } from "styles";
 
 const RecordContainer = styled.div`
   cursor: pointer;

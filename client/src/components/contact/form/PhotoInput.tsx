@@ -2,10 +2,10 @@ import { FC } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { styled } from "@linaria/react";
 import { BsCloudUploadFill, BsFillTrash3Fill } from "react-icons/bs";
-import Hover from "../../common/Hover";
-import Photo from "../photo/Photo";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
+import Hover from "components/common/Hover";
+import Photo from "components/contact/photo/Photo";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 115px;

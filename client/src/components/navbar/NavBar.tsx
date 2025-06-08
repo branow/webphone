@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import NavBarTitle from "./NavBarTitle";
-import SettingButton from "./SettingButton";
-import ErrorWarning from "./ErrorWarning";
-import { useTheme } from "../../hooks/useTheme";
+import NavBarTitle from "components/navbar/NavBarTitle";
+import SettingButton from "components/navbar/SettingButton";
+import ErrorWarning from "components/navbar/ErrorWarning";
+import { useTheme } from "hooks/useTheme";
 
 const NavBarContainer = styled.div<{ bg: string }>`
   position: relative;

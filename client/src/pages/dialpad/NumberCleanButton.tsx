@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { MdBackspace, MdOutlineBackspace } from "react-icons/md";
 import { styled } from "@linaria/react";
-import Hover from "../../components/common/Hover";
-import { useTheme } from "../../hooks/useTheme";
-import { font } from "../../styles";
+import Hover from "components/common/Hover";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 interface Props {
   clean: () => void;

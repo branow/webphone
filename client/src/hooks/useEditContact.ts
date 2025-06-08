@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Number, ContactDetails } from "../services/contacts";
-import { d } from "../lib/i18n";
-import { hex } from "../util/identifier";
-import { validator } from "../util/validator";
+import { Number, ContactDetails } from "services/contacts";
+import { d } from "lib/i18n";
+import { hex } from "util/identifier";
+import { validator } from "util/validator";
 
 export type EditableNumber = Number & { id: string };
 
@@ -73,8 +73,16 @@ export function useEditContact({ initContact } : Props) {
   };
 }
 
-function mapEditableContact(contact: ContactDetails): EditableContact {
+export function mapContactDetails(contact: EditableContact): ContactDetails {
+  return { ...contact, numbers: contact.numbers.map(mapNumber), user: "" };
+}
+
+export function mapEditableContact(contact: ContactDetails): EditableContact {
   return { ...contact, numbers: contact.numbers.map(mapEditableNumber) };
+}
+
+function mapNumber(number: EditableNumber): Number {
+  return { ...number };
 }
 
 function mapEditableNumber(number: Number): EditableNumber {

@@ -1,14 +1,14 @@
 import { FC, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { styled } from "@linaria/react";
-import Keypad, { Key } from "../../components/keypad/Keypad";
-import UserNavTabs, { Tab } from "../../components/navtabs/UserNavTabs";
-import CallButton from "../../components/call/CallButton";
-import NumberInputPane from "./NumberInputPane";
-import { SipContext } from "../../context/SipContext";
-import { AccountContext } from "../../context/AccountContext";
-import { formatPhoneNumber, extractPhoneNumber } from "../../util/format";
-import { Paths } from "../../routes";
+import Keypad, { Key } from "components/keypad/Keypad";
+import UserNavTabs, { Tab } from "components/navtabs/UserNavTabs";
+import CallButton from "components/call/CallButton";
+import NumberInputPane from "pages/dialpad/NumberInputPane";
+import { SipContext } from "context/SipContext";
+import { AccountContext } from "context/AccountContext";
+import { formatPhoneNumber, extractPhoneNumber } from "util/format";
+import { Paths } from "routes";
 
 const Container = styled.div`
   display: flex;

@@ -1,12 +1,12 @@
 import { FC, useContext } from "react";
 import { styled } from "@linaria/react";
-import NumberTypeLabel from "./NumberTypeLabel";
-import CallButton from "../call/CallButton";
-import { useTheme } from "../../hooks/useTheme";
-import { Number } from "../../services/contacts";
-import { formatPhoneNumber } from "../../util/format";
-import { font } from "../../styles";
-import { SipContext } from "../../context/SipContext";
+import NumberTypeLabel from "components/contact/NumberTypeLabel";
+import CallButton from "components/call/CallButton";
+import { useTheme } from "hooks/useTheme";
+import { SipContext } from "context/SipContext";
+import { Number } from "services/contacts";
+import { formatPhoneNumber } from "util/format";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 100%;

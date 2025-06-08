@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import DurationInMs from "../call/DurationInMs";
-import { useTheme } from "../../hooks/useTheme";
-import { Record, CallStatus } from "../../services/history";
-import { d } from "../../lib/i18n";
+import DurationInMs from "components/call/DurationInMs";
+import { useTheme } from "hooks/useTheme";
+import { Record, CallStatus } from "services/history";
+import { d } from "lib/i18n";
 
 interface Props {
   record: Record;

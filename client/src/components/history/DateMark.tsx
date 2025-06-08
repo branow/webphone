@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import i18n from "../../lib/i18n";
-import { font } from "../../styles";
-import { useTheme } from "../../hooks/useTheme";
+import i18n from "lib/i18n";
+import { font } from "styles";
+import { useTheme } from "hooks/useTheme";
 
 const DateMarkContainer = styled.div<{ color: string }>`
   color: ${p => p.color};

@@ -3,14 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import { styled } from "@linaria/react";
-import ErrorBanner from "../../components/common/messages/ErrorBanner";
-import FadeMotion from "../../components/common/motion/FadeMotion";
-import PendingPane from "../../components/common/motion/PendingPane";
-import HistoryPageTop from "./HistoryPageTop";
-import HistoryPageBody from "./HistoryPageBody";
-import { AccountContext } from "../../context/AccountContext.ts";
-import HistoryApi from "../../services/history";
-import { d } from "../../lib/i18n.ts";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import HistoryPageTop from "pages/history/HistoryPageTop";
+import HistoryPageBody from "pages/history/HistoryPageBody";
+import { AccountContext } from "context/AccountContext";
+import HistoryApi from "services/history";
+import { d } from "lib/i18n";
 
 const Container = styled.div`
   position: relative;

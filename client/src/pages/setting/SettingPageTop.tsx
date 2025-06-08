@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { IoIosArrowDown } from "react-icons/io";
 import { styled } from "@linaria/react";
 import { css } from "@linaria/core";
-import TransparentRoundButton from "../../components/common/button/TransparentRoundButton";
-import { PageSwitcherContext } from "../../context/PageSwitcherContext";
-import { useTheme } from "../../hooks/useTheme";
-import { d } from "../../lib/i18n";
-import { Paths } from "../../routes";
-import { font, size } from "../../styles";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { PageSwitcherContext } from "context/PageSwitcherContext";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
+import { font, size } from "styles";
 
 const Container = styled.div`
   position: relative;

@@ -5,8 +5,8 @@ import {
   BsFillTelephoneXFill,
   BsBan,
 } from "react-icons/bs";
-import { useTheme } from "../../hooks/useTheme.ts";
-import { CallStatus } from "../../services/history.ts";
+import { useTheme } from "hooks/useTheme";
+import { CallStatus } from "services/history";
 
 interface Props {
   status: CallStatus;

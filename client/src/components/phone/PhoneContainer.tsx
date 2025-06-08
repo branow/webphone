@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import { styled } from "@linaria/react";
-import { useTheme } from "../../hooks/useTheme";
-import { size } from "../../styles";
+import { useTheme } from "hooks/useTheme";
+import { size } from "styles";
 
 interface Props {
   children: ReactNode;

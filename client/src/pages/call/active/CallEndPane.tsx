@@ -3,17 +3,17 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { styled } from "@linaria/react";
-import ScaleButton from "../../../components/common/button/ScaleButton";
-import DurationInMs from "../../../components/call/DurationInMs";
-import { useTheme } from "../../../hooks/useTheme";
-import { AccountContext } from "../../../context/AccountContext";
-import { CallContext } from "../../../context/CallContext";
-import HistoryApi, { CallStatus, CreateRecord } from "../../../services/history";
-import { CallOriginator, Call } from "../../../lib/sip";
-import { d } from "../../../lib/i18n";
-import DTMFAudio from "../../../util/dtmf.js";
-import { Paths } from "../../../routes";
-import { font } from "../../../styles";
+import ScaleButton from "components/common/button/ScaleButton";
+import DurationInMs from "components/call/DurationInMs";
+import { useTheme } from "hooks/useTheme";
+import { AccountContext } from "context/AccountContext";
+import { CallContext } from "context/CallContext";
+import HistoryApi, { CallStatus, CreateRecord } from "services/history";
+import { CallOriginator, Call } from "lib/sip";
+import { d } from "lib/i18n";
+import DTMFAudio from "util/dtmf.js";
+import { Paths } from "routes";
+import { font } from "styles";
 
 const Container = styled.div`
   height: 100%;

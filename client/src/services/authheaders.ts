@@ -1,4 +1,4 @@
-import { Authentication, AuthService, Role, User } from "../services/auth";
+import { Authentication, AuthService, Role, User } from "services/auth";
 
 const URL = import.meta.env.WEBPHONE_AUTH_HEADERS_URL;
 

@@ -1,13 +1,13 @@
 import { FC, useContext } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import FadeMotion from "../../components/common/motion/FadeMotion";
-import PendingPane from "../../components/common/motion/PendingPane";
-import BackgroundMessage from "../../components/common/messages/BackgroundMessage";
-import ContactsPageMain from "./ContactsPageMain";
-import { useFetchActiveAccount } from "../../hooks/fetch";
-import { AccountContext } from "../../context/AccountContext";
-import { d } from "../../lib/i18n";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import BackgroundMessage from "components/common/messages/BackgroundMessage";
+import ContactsPageMain from "pages/contacts/view/ContactsPageMain";
+import { useFetchActiveAccount } from "hooks/fetch";
+import { AccountContext } from "context/AccountContext";
+import { d } from "lib/i18n";
 
 const ContactsPageLoader: FC<{ user: string }> = ({ user }) => {
   const accountContext = useContext(AccountContext);

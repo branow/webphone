@@ -2,17 +2,17 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { styled } from "@linaria/react";
-import TextInput from "../../common/input/TextInput";
-import TextArea from "../../common/input/TextArea";
-import Chapter from "../../common/pane/Chapter";
-import ControlPane from "../../common/pane/ControlPane";
-import ErrorBanner from "../../common/messages/ErrorBanner";
-import PhotoForm from "../../contact/form/PhotoForm";
-import NumbersForm from "../../contact/form/NumbersForm";
-import { useEditContact } from "../../../hooks/useEditContact";
-import { ContactDetails } from "../../../services/contacts";
-import { d } from "../../../lib/i18n";
-import { font, size } from "../../../styles";
+import TextInput from "components/common/input/TextInput";
+import TextArea from "components/common/input/TextArea";
+import Chapter from "components/common/pane/Chapter";
+import ControlPane from "components/common/pane/ControlPane";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import PhotoForm from "components/contact/form/PhotoForm";
+import NumbersForm from "components/contact/form/NumbersForm";
+import { mapContactDetails, useEditContact } from "hooks/useEditContact";
+import { ContactDetails } from "services/contacts";
+import { d } from "lib/i18n";
+import { font, size } from "styles";
 
 const Container = styled.div`
   height: 100%;
@@ -97,7 +97,7 @@ const ContactForm: FC<Props> = ({ contact, save, savingError }) => {
             key: "save",
             children: t(d.ui.buttons.save),
             disabled: !!error,
-            onClick: () => save(form, photoFile),
+            onClick: () => save(mapContactDetails(form), photoFile),
           },
           {
             key: "cancel",

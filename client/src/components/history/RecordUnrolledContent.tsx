@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import Photo from "../../components/contact/photo/Photo";
-import RecordUnrolledContentInfo from "./RecordUnrolledContentInfo";
-import { Record } from "../../services/history";
+import Photo from "components/contact/photo/Photo";
+import RecordUnrolledContentInfo from "components/history/RecordUnrolledContentInfo";
+import { Record } from "services/history";
 
 const Container = styled.div`
   display: flex;

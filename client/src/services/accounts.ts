@@ -1,6 +1,6 @@
 import { Query } from "@tanstack/react-query";
-import { RequestBuilder, BACKEND_ORIGIN, logRequestResponse, handleApiError, QueryPageOptions, Page } from "./backend.ts";
-import { Auth } from "./auth";
+import { RequestBuilder, BACKEND_ORIGIN, logRequestResponse, handleApiError, QueryPageOptions, Page } from "services/backend";
+import { Auth } from "services/auth";
 
 export type Sip = {
   username: string;

@@ -1,8 +1,8 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { useLocation, matchPath } from "react-router";
-import { Side } from "../components/common/motion/SmoothMotion";
-import { calcSides } from "../util/page-motion";
-import { Route, routes } from "../routes";
+import { Side } from "components/common/motion/SmoothMotion";
+import { calcSides } from "util/page-motion";
+import { Route, routes } from "routes";
 
 const matrixes = [
   [

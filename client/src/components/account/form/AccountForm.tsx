@@ -3,17 +3,17 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { styled } from "@linaria/react";
 import { BsKeyFill, BsPersonFill } from "react-icons/bs";
-import TextInput from "../../common/input/TextInput";
-import Chapter from "../../common/pane/Chapter";
-import ControlPane from "../../common/pane/ControlPane";
-import ErrorBanner from "../../common/messages/ErrorBanner";
-import OptionSet from "../../common/input/OptionSet";
-import Toggler from "../../common/input/Toggler";
-import { mapAccount, Mode, useEditAccount } from "../../../hooks/useEditAccount";
-import { useTheme } from "../../../hooks/useTheme";
-import { Account } from "../../../services/accounts";
-import { d } from "../../../lib/i18n";
-import { font, size } from "../../../styles";
+import TextInput from "components/common/input/TextInput";
+import Chapter from "components/common/pane/Chapter";
+import ControlPane from "components/common/pane/ControlPane";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import OptionSet from "components/common/input/OptionSet";
+import Toggler from "components/common/input/Toggler";
+import { mapAccount, Mode, useEditAccount } from "hooks/useEditAccount";
+import { useTheme } from "hooks/useTheme";
+import { Account } from "services/accounts";
+import { d } from "lib/i18n";
+import { font, size } from "styles";
 
 export enum Operation {
   Create = "create",

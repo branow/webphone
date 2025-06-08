@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import ContactNumber from "./ContactNumber";
-import { Number } from "../../services/contacts";
+import ContactNumber from "components/contact/ContactNumber";
+import { Number } from "services/contacts";
 
 const Container = styled.div`
   display: flex;

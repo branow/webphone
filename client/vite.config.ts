@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 import wyw from "@wyw-in-js/vite";
+import path from "path";
 
 export default defineConfig(() => {
   const expose = [
@@ -29,5 +30,20 @@ export default defineConfig(() => {
         },
       }),
     ],
+
+    resolve: {
+      alias: {
+        components: path.resolve(__dirname, "src/components"),
+        context: path.resolve(__dirname, "src/context"),
+        hooks: path.resolve(__dirname, "src/hooks"),
+        lib: path.resolve(__dirname, "src/lib"),
+        pages: path.resolve(__dirname, "src/pages"),
+        providers: path.resolve(__dirname, "src/providers"),
+        services: path.resolve(__dirname, "src/services"),
+        util: path.resolve(__dirname, "src/util"),
+        styles: path.resolve(__dirname, "src/styles"),
+        routes: path.resolve(__dirname, "src/routes"),
+      },
+    },
   }
 })

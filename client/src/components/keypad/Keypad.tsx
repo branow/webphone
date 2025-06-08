@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import KeypadButton from "./KeypadButton";
-import { font } from "../../styles";
+import KeypadButton from "components/keypad/KeypadButton";
+import { font } from "styles";
 
 const keys: Key[] = [
   { sign: "1", label: "" },

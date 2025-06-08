@@ -1,7 +1,7 @@
 import { FC } from "react";
-import ThemeSetting from "./ThemeSetting";
-import LanguageSetting from "./LanguageSetting";
 import { styled } from "@linaria/react";
+import ThemeSetting from "pages/setting/ThemeSetting";
+import LanguageSetting from "pages/setting/LanguageSetting";
 
 const Container = styled.div`
   display: flex;

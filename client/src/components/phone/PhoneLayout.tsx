@@ -1,9 +1,9 @@
 import { FC, ReactNode } from "react";
 import { Outlet } from "react-router";
 import { styled } from "@linaria/react";
-import NavBar from "../navbar/NavBar";
-import SipEventsHandler from "../sip/SipEventsHandler";
-import { size } from "../../styles";
+import NavBar from "components/navbar/NavBar";
+import SipEventsHandler from "components/sip/SipEventsHandler";
+import { size } from "styles";
 
 const NavBarContainer = styled.div`
   height: ${size.navbar.h}px;

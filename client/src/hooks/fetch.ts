@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import AccountApi, { Account } from "../services/accounts";
+import AccountApi, { Account } from "services/accounts";
 
 type Props<T> = {
   retry?: number;

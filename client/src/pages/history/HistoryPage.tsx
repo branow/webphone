@@ -1,10 +1,10 @@
 import { FC, useContext } from "react";
 import { styled } from "@linaria/react";
-import UserNavTabs, { Tab } from "../../components/navtabs/UserNavTabs";
-import NotFoundPage from "../errors/NotFoundPage.tsx";
-import HistoryPageLoader from "./HistoryPageLoader.tsx";
-import { useTransitionAwareParam } from "../../hooks/useTransitionAwareParam.ts";
-import { AccountContext } from "../../context/AccountContext.ts";
+import UserNavTabs, { Tab } from "components/navtabs/UserNavTabs";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import HistoryPageLoader from "pages/history/HistoryPageLoader";
+import { useTransitionAwareParam } from "hooks/useTransitionAwareParam";
+import { AccountContext } from "context/AccountContext";
 
 const Container = styled.div`
   position: relative;

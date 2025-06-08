@@ -2,8 +2,8 @@ import { FC, useContext } from "react";
 import { css, cx } from "@linaria/core";
 import { styled } from "@linaria/react";
 import { CiLight, CiDark } from "react-icons/ci";
-import { ThemeContext } from "../../context/ThemeContext";
-import { DarkTheme, font, LightTheme } from "../../styles";
+import { ThemeContext } from "context/ThemeContext";
+import { DarkTheme, font, LightTheme } from "styles";
 
 const Container = styled.div<{ size: number, bg: string }>`
   transition: all 0.5s;

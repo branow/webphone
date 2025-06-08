@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import DeleteButton from "../../components/common/button/DeleteButton";
-import { useTheme } from "../../hooks/useTheme";
-import { d } from "../../lib/i18n";
-import { font, size } from "../../styles";
+import DeleteButton from "components/common/button/DeleteButton";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { font, size } from "styles";
 
 const Container = styled.div`
   position: relative;

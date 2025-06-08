@@ -1,6 +1,6 @@
 import { Query } from "@tanstack/react-query";
-import { Page, BACKEND_ORIGIN, PageOptions, RequestBuilder, logRequestResponse, handleApiError } from "./backend.ts";
-import { Auth } from "./auth.ts";
+import { Page, BACKEND_ORIGIN, PageOptions, RequestBuilder, logRequestResponse, handleApiError } from "services/backend";
+import { Auth } from "services/auth";
 
 export enum CallStatus {
   INCOMING = "incoming",

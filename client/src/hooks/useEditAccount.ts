@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { AccountContext } from "../context/AccountContext";
-import { Account } from "../services/accounts";
-import { d } from "../lib/i18n";
-import { validator } from "../util/validator";
+import { AccountContext } from "context/AccountContext";
+import { Account } from "services/accounts";
+import { d } from "lib/i18n";
+import { validator } from "util/validator";
 
 export enum Mode {
   User="user",

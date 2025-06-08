@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import { font } from "../../../styles";
-import { useTheme } from "../../../hooks/useTheme";
 import { css, cx } from "@linaria/core";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const Container = styled.div<{ size: number, bg: string }>`
   transition: all 0.5s;

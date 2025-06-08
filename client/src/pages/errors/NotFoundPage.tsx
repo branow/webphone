@@ -1,9 +1,9 @@
 import { FC } from "react";
 import {useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import ErrorPage from "./ErrorPage";
-import { d } from "../../lib/i18n";
-import { Paths } from "../../routes";
+import ErrorPage from "pages/errors/ErrorPage";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
 
 const NotFoundPage: FC = () => {
   const navigate = useNavigate();

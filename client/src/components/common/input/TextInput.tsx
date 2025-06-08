@@ -1,11 +1,11 @@
 import { FC, ReactNode, ChangeEvent, HTMLAttributes } from "react";
 import { AnimatePresence } from "framer-motion";
 import { styled } from "@linaria/react";
-import AutoHeightMotion from "../motion/AutoHeightMotion";
-import FadeMotion from "../motion/FadeMotion";
-import ErrorMessage from "../messages/ErrorMessage";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
+import AutoHeightMotion from "components/common/motion/AutoHeightMotion";
+import FadeMotion from "components/common/motion/FadeMotion";
+import ErrorMessage from "components/common/messages/ErrorMessage";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 100%;

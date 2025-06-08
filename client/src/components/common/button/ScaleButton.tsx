@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes, ReactNode } from "react";
 import { styled } from "@linaria/react";
-import { useTheme } from "../../../hooks/useTheme";
+import { useTheme } from "hooks/useTheme";
 
 const ButtonContainer = styled.div<{ size: number }>`
   position: relative;

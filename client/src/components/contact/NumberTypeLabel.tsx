@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import NumberTypeIcon from "./NumberTypeIcon";
-import { useTheme } from "../../hooks/useTheme";
-import { NumberType } from "../../services/contacts";
-import { d } from "../../lib/i18n";
+import NumberTypeIcon from "components/contact/NumberTypeIcon";
+import { useTheme } from "hooks/useTheme";
+import { NumberType } from "services/contacts";
+import { d } from "lib/i18n";
 
 const Container = styled.div<{ color: string, fontSize: number }>`
   font-size: ${p => p.fontSize}px;

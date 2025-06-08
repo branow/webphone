@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import PendingPane from "../../../components/common/motion/PendingPane";
-import ContactForm from "../../../components/contact/form/ContactForm";
-import { useSaveContact } from "../../../hooks/useSaveContact";
-import ContactApi, { ContactDetails } from "../../../services/contacts";
-import { d } from "../../../lib/i18n";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import ContactForm from "components/contact/form/ContactForm";
+import { useSaveContact } from "hooks/useSaveContact";
+import ContactApi, { ContactDetails } from "services/contacts";
+import { d } from "lib/i18n";
 
 const emptyContact: ContactDetails = {
   id: "",

@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes, ReactNode } from "react";
 import { css, cx } from "@linaria/core";
-import TransparentRectButton from "./TransparentRectButton";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
 
 const round = css`
   border-radius: 50%;

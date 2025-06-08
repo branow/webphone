@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import { useTheme } from "../../hooks/useTheme";
-import { d } from "../../lib/i18n";
-import { font } from "../../styles";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { font } from "styles";
 
 interface Props {
   number: string,

@@ -1,6 +1,6 @@
-import { styled } from "@linaria/react";
 import { FC, HTMLAttributes, ReactNode } from "react";
-import TransparentRectButton from "../button/TransparentRectButton";
+import { styled } from "@linaria/react";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
 
 const Container = styled.div<{ height: number, size: number }>`
   width: 100%;

@@ -1,9 +1,9 @@
 import { FC, HTMLAttributes } from "react";
 import { ImPhone } from "react-icons/im";
 import { cx } from "@linaria/core";
-import ScaleButton from "../common/button/ScaleButton";
-import { useTheme } from "../../hooks/useTheme";
-import { styles } from "../../styles";
+import ScaleButton from "components/common/button/ScaleButton";
+import { useTheme } from "hooks/useTheme";
+import { styles } from "styles";
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
   size: number;

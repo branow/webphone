@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { d } from "../../lib/i18n";
 import { styled } from "@linaria/react";
-import { font } from "../../styles";
-import { useTheme } from "../../hooks/useTheme";
-import ThemeToggler from "./ThemeToggler";
+import ThemeToggler from "pages/setting/ThemeToggler";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { font } from "styles";
 
 const Container = styled.div`
   display: flex;

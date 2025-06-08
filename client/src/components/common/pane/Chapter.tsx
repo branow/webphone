@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import { styled } from "@linaria/react";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 100%;

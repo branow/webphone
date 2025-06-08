@@ -1,9 +1,9 @@
 import { FC, useRef } from "react";
 import { styled } from "@linaria/react";
-import Contacts from "../../components/contact/Contacts";
-import InfinitePages from "../../components/common/motion/InfinitePages";
-import ContactApi from "../../services/contacts";
-import { size } from "../../styles";
+import Contacts from "components/contact/Contacts";
+import InfinitePages from "components/common/motion/InfinitePages";
+import ContactApi from "services/contacts";
+import { size } from "styles";
 
 const Container = styled.div`
   height: ${size.phone.h - size.navbar.h - size.tabs.h - size.contacts.top.h}px;

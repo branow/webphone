@@ -2,7 +2,7 @@ import { FC } from "react";
 import { IoHomeSharp } from "react-icons/io5";
 import { ImMobile } from "react-icons/im";
 import { MdOutlineWork } from "react-icons/md";
-import { NumberType } from "../../services/contacts.ts";
+import { NumberType } from "services/contacts";
 
 interface Props {
   type: NumberType;

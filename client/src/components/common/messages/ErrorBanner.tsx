@@ -1,8 +1,8 @@
 import { styled } from "@linaria/react";
 import { FC } from "react";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
-import FadeMotion from "../motion/FadeMotion";
+import FadeMotion from "components/common/motion/FadeMotion";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const Container = styled.div<{ color: string, size: number }>`
   width: 100%;

@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { Link } from "react-router";
 import { styled } from "@linaria/react";
-import StatusMessage from "./StatusMessage";
-import { useTheme } from "../../hooks/useTheme";
-import { Record, Contact } from "../../services/history";
-import { formatPhoneNumber } from "../../util/format";
-import { font } from "../../styles";
-import { Paths } from "../../routes";
+import StatusMessage from "components/history/StatusMessage";
+import { useTheme } from "hooks/useTheme";
+import { Record, Contact } from "services/history";
+import { formatPhoneNumber } from "util/format";
+import { font } from "styles";
+import { Paths } from "routes";
 
 const Container = styled.div`
   display: flex;

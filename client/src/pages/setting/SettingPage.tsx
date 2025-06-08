@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import ChapterBar from "../../components/common/pane/ChapterBar";
-import Chapter from "../../components/common/pane/Chapter";
-import AdminDashboardLink from "./AdminDashboardLink";
-import SettingPageTop from "./SettingPageTop";
-import GeneralSetting from "./GeneralSetting";
-import { d } from "../../lib/i18n";
-import { size } from "../../styles";
+import ChapterBar from "components/common/pane/ChapterBar";
+import Chapter from "components/common/pane/Chapter";
+import AdminDashboardLink from "pages/setting/AdminDashboardLink";
+import SettingPageTop from "pages/setting/SettingPageTop";
+import GeneralSetting from "pages/setting/GeneralSetting";
+import { d } from "lib/i18n";
+import { size } from "styles";
 
 const Container = styled.div`
   width: 100%;

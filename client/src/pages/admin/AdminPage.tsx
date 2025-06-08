@@ -1,13 +1,13 @@
 import { FC, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import AdminNavTabs, { Tab } from "../../components/navtabs/AdminNavTabs";
-import BackgroundMessage from "../../components/common/messages/BackgroundMessage";
-import NotFoundPage from "../errors/NotFoundPage";
-import { AccountContext } from "../../context/AccountContext";
-import { useTheme } from "../../hooks/useTheme";
-import { d } from "../../lib/i18n";
-import { font, size } from "../../styles";
+import AdminNavTabs, { Tab } from "components/navtabs/AdminNavTabs";
+import BackgroundMessage from "components/common/messages/BackgroundMessage";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import { AccountContext } from "context/AccountContext";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { font, size } from "styles";
 
 const Container = styled.div`
   position: relative;

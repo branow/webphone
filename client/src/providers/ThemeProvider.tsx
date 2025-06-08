@@ -1,7 +1,7 @@
 import { FC, ReactNode, useState, useEffect, useCallback } from "react";
-import { ThemeContext } from "../context/ThemeContext";
-import { DarkTheme, LightTheme, Theme } from "../styles";
-import Storage from "../lib/storage";
+import { ThemeContext } from "context/ThemeContext";
+import { DarkTheme, LightTheme, Theme } from "styles";
+import Storage from "lib/storage";
 
 interface Props {
   children: ReactNode;

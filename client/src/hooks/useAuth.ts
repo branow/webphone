@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { User, Auth }  from "../services/auth";
+import { User, Auth }  from "services/auth";
 
 export function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);

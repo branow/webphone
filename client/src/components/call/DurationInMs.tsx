@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { d } from "../../lib/i18n";
+import { d } from "lib/i18n";
 
 interface Props {
   date1: Date;

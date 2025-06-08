@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { styled } from "@linaria/react";
-import TransparentRectButton from "../button/TransparentRectButton";
-import { useTheme } from "../../../hooks/useTheme";
 import { css } from "@linaria/core";
-import { font } from "../../../styles";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const Container = styled.div`
   height: 100%;

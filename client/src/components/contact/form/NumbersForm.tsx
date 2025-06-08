@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { FaPlus } from "react-icons/fa";
 import { styled } from "@linaria/react";
-import ErrorMessage from "../../common/messages/ErrorMessage";
-import NumberForm from "../../contact/form/NumberForm";
-import { EditableNumber } from "../../../hooks/useEditContact";
-import { useTheme } from "../../../hooks/useTheme";
-import { NumberType } from "../../../services/contacts";
-import { hex } from "../../../util/identifier";
-import AutoHeightMotion from "../../common/motion/AutoHeightMotion";
+import ErrorMessage from "components/common/messages/ErrorMessage";
+import AutoHeightMotion from "components/common/motion/AutoHeightMotion";
+import NumberForm from "components/contact/form/NumberForm";
+import { EditableNumber } from "hooks/useEditContact";
+import { useTheme } from "hooks/useTheme";
+import { NumberType } from "services/contacts";
+import { hex } from "util/identifier";
 
 const Container = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { styled } from "@linaria/react";
-import AutoHeightMotion from "../motion/AutoHeightMotion";
+import AutoHeightMotion from "components/common/motion/AutoHeightMotion";
 
 const Container = styled.div`
   display: flex;

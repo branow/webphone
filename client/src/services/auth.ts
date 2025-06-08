@@ -1,5 +1,5 @@
-import { KeycloakService } from "../lib/keycloak";
-import { AuthHeadersService } from "./authheaders";
+import { KeycloakService } from "lib/keycloak";
+import { AuthHeadersService } from "services/authheaders";
 
 const useAuthHeaders = import.meta.env.WEBPHONE_AUTH_HEADERS_URL;
 

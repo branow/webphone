@@ -1,9 +1,9 @@
 import { FC, useRef } from "react";
 import { styled } from "@linaria/react";
-import InfinitePages from "../../components/common/motion/InfinitePages";
-import CallRecords from "../../components/history/CallRecords";
-import HistoryApi from "../../services/history";
-import { size } from "../../styles";
+import InfinitePages from "components/common/motion/InfinitePages";
+import CallRecords from "components/history/CallRecords";
+import HistoryApi from "services/history";
+import { size } from "styles";
 
 const Container = styled.div`
   height: ${ size.phone.h - size.navbar.h - size.tabs.h - size.history.top.h }px;
