@@ -43,7 +43,13 @@ const ContactNumber: FC<Props> = ({ number, call, fontSize = font.size.s }) => {
         <NumberContainer color={th.colors.title} fontSize={fontSize}>
           {formatPhoneNumber(number.number)}
         </NumberContainer>
-        {call && <CallButton size={fontSize * 2} disabled={!connection.isConnected()} />}
+        {call && (
+          <CallButton
+            onClick={() => call(number.number)}
+            size={fontSize * 2}
+            disabled={!connection.isConnected()}
+          />
+        )}
       </LeftContainer>
     </Container>
   );

@@ -5,11 +5,11 @@ import { IoIosArrowBack } from "react-icons/io";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
 import TransparentRoundButton from "../../../components/common/button/TransparentRoundButton";
+import { PageSwitcherContext } from "../../../context/PageSwitcherContext";
+import { AccountContext } from "../../../context/AccountContext";
 import { useTheme } from "../../../hooks/useTheme";
 import { font, size } from "../../../styles";
-import { PageSwitcherContext } from "../../../context/PageSwitcherContext";
 import { Paths } from "../../../routes";
-import { AccountContext } from "../../../context/AccountContext";
 
 const Container = styled.div`
   height: ${size.contact.top.h}px;
@@ -35,19 +35,23 @@ const IconContainer = styled.div`
 `;
 
 interface Props {
+  user: string;
   edit: () => void;
   remove: () => void;
 }
 
-const ContactPageTop: FC<Props> = ({ edit, remove }) => {
+const ContactPageTop: FC<Props> = ({ user, edit, remove }) => {
   const navigate = useNavigate();
   const { account } = useContext(AccountContext);
   const { previous } = useContext(PageSwitcherContext);
 
   const back = () => {
-    const forms = [Paths.ContactCreate(), Paths.ContactUpdate({ id: ":id" })]
+    const forms = [
+      Paths.ContactCreate({ user: ":user" }),
+      Paths.ContactUpdate({ id: ":id" })
+    ]
     if (previous && forms.includes(previous.path)) {
-      navigate(Paths.Contacts());
+      navigate(Paths.Contacts({ user }));
     } else {
       navigate(-1);
     }

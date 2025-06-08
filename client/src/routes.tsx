@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { createBrowserRouter } from "react-router";
 import PhoneLayout from "./components/phone/PhoneLayout";
 import HistoryPage from "./pages/history/HistoryPage";
@@ -12,7 +13,6 @@ import SettingPage from "./pages/setting/SettingPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 import TestDataPage from "./pages/dev/TestDataPage";
 import PageSwitcher from "./pages/PageSwitcher";
-import { ReactNode } from "react";
 import AccountsPage from "./pages/accounts/AccountsPage";
 import AccountPage from "./pages/account/view/AccountPage";
 import CreateAccountPage from "./pages/account/create/CreateAccountPage";
@@ -21,10 +21,10 @@ import AdminPage from "./pages/admin/AdminPage";
 
 export const Paths = {
   Dialpad: () => "/dialpad",
-  Contacts: () => "/contacts",
-  History: () => "/history",
+  Contacts: ({ user }: { user: string }) => `/contacts/${user}`,
+  History: ({ user }: { user: string }) => `/history/${user}`,
   ContactView: ({ id }: { id: string }) => `/contact/view/${id}`,
-  ContactCreate: () => "/contact/create",
+  ContactCreate: ({ user }: { user: string }) => `/contact/create/${user}`,
   ContactUpdate: ({ id }: { id: string }) => `/contact/update/${id}`,
   Call: ({ number }: { number: string }) => `/call/number/${number}`,
   CallActive: ({ id }: { id: string }) => `/call/session/${id}`,
@@ -52,7 +52,7 @@ export const routes: Route[] = [
   },
   {
     key: "contacts",
-    paths: [Paths.Contacts()],
+    paths: [Paths.Contacts({ user: ":user" })],
     element: <PageSwitcher />,
     page: <ContactsPage />,
   },
@@ -64,7 +64,7 @@ export const routes: Route[] = [
   },
   {
     key: "contact-create",
-    paths: [Paths.ContactCreate()],
+    paths: [Paths.ContactCreate({ user: ":user" })],
     element: <PageSwitcher />,
     page: <CreateContactPage />,
   },
@@ -76,7 +76,7 @@ export const routes: Route[] = [
   },
   {
     key: "history",
-    paths: [Paths.History()],
+    paths: [Paths.History({ user: ":user" })],
     element: <PageSwitcher />,
     page: <HistoryPage />,
   },

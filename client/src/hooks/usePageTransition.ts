@@ -11,6 +11,13 @@ const matrixes = [
     ["admin", "admin", "admin"],
   ],
   [
+    ["history", "account", "contacts"],
+  ],
+  [
+    ["setting"],
+    ["account"],
+  ],
+  [
     ["settings", "settings", "settings", "settings"],
     ["contacts", "contact", "contact-update", "contact-create"],
     ["admin", "admin", "admin", "admin"],
@@ -20,7 +27,9 @@ const matrixes = [
     ["history", "contact"],
   ],
   [
-    ["admin", "accounts"],
+    ["settings", "settings"],
+    ["dialpad", "dialpad", "dialpad"],
+    ["features", "admin", "accounts"],
   ],
   [
     ["settings", "settings", "settings", "settings"],

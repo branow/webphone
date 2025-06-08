@@ -38,7 +38,7 @@ const ContactPageContent: FC<Props> = ({ contact }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ predicate: ContactApi.QueryKeys.predicate });
       queryClient.invalidateQueries({ predicate: HistoryApi.QueryKeys.predicate });
-      navigate(Paths.Contacts());
+      navigate(Paths.Contacts({ user: contact.user }));
     }
   });
 
@@ -50,6 +50,7 @@ const ContactPageContent: FC<Props> = ({ contact }) => {
   return (
     <Container>
       <ContactPageTop
+        user={contact.user}
         edit={edit}
         remove={() => setIsRemoving(true)}
       />

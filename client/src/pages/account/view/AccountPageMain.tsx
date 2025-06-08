@@ -15,18 +15,22 @@ import HistoryApi from "../../../services/history";
 import AccountApi, { Account } from "../../../services/accounts";
 import { d } from "../../../lib/i18n";
 import { Paths } from "../../../routes";
+import UserNavTabs, { Tab } from "../../../components/navtabs/UserNavTabs";
+import { size } from "../../../styles";
 
-const Container = styled.div`
+const Container = styled.div<{ height: number }>`
   width: 100%;
-  height: 100%;
+  height: ${p => p.height}px;
 `;
 
 interface Props {
   account: Account;
 }
 
-const AccountPageContent: FC<Props> = ({ account }) => {
+const AccountPageMain: FC<Props> = ({ account }) => {
   const { t } = useTranslation();
+
+  const isDefault = account.user === "default";
 
   const navigate = useNavigate();
   const edit = () => navigate(Paths.AccountUpdate({ id: account.id }));
@@ -50,34 +54,39 @@ const AccountPageContent: FC<Props> = ({ account }) => {
   };
 
   return (
-    <Container>
-      <AccountPageTop
-        edit={edit}
-        remove={() => setIsRemoving(true)}
-      />
-      <AnimatePresence>
-        {!removing.isPending && (
-          <FadeMotion>
-            <ErrorBanner error={removing.error} />
-            <AccountPageBody account={account} />
-          </FadeMotion>
-        )}
-        {removing.isPending && (
-          <PendingPane
-            label={t(d.ui.loading.deleting)}
-            message={t(d.ui.loading.wait)}
+    <>
+      <Container height={size.phone.h - size.navbar.h - size.account.top.h - (isDefault ? size.tabs.h : 0)}>
+        <AccountPageTop
+          edit={edit}
+          remove={() => setIsRemoving(true)}
+        />
+        <AnimatePresence>
+          {!removing.isPending && (
+            <FadeMotion>
+              <ErrorBanner error={removing.error} />
+              <AccountPageBody account={account} />
+            </FadeMotion>
+          )}
+          {removing.isPending && (
+            <PendingPane
+              label={t(d.ui.loading.deleting)}
+              message={t(d.ui.loading.wait)}
+            />
+          )}
+        </AnimatePresence>
+        {isRemoving && (
+          <DeleteAccountWindow
+            accountName={account.username}
+            close={() => setIsRemoving(false)}
+            remove={remove}
           />
         )}
-      </AnimatePresence>
-      {isRemoving && (
-        <DeleteAccountWindow
-          accountName={account.username}
-          close={() => setIsRemoving(false)}
-          remove={remove}
-        />
+      </Container>
+      {isDefault && (
+        <UserNavTabs user={account.user} tabs={[Tab.History, Tab.Contacts]} />
       )}
-    </Container>
+    </>
   );
 }
 
-export default AccountPageContent;
+export default AccountPageMain;

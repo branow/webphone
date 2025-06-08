@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { styled } from "@linaria/react";
-import NavTabs, { Tab } from "../../components/navtabs/NavTabs";
+import AdminNavTabs, { Tab } from "../../components/navtabs/AdminNavTabs";
 import AccountsPageTop from "./AccountsPageTop";
 import AccountsPageBody from "./AccountsPageBody";
 
@@ -16,7 +16,7 @@ const AccountsPage: FC = () => {
     <Container>
       <AccountsPageTop setQuery={setQuery} />
       <AccountsPageBody query={query} />
-      <NavTabs tabs={[Tab.ADMIN]} />
+      <AdminNavTabs tabs={[Tab.Admin]} />
     </Container>
   )
 };

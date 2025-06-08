@@ -26,6 +26,7 @@
       "history": "History",
       "contacts": "Contacts",
       "accounts": "Accounts",
+      "account": "Account",
       "admin": "Admin"
     },
     "search": {
@@ -231,5 +232,12 @@
     "messages": {
       "comingSoon": "Coming Soon"
     }
+  },
+
+  "features": {
+    "errors": {
+      "noDefaultAccount": "Please make sure that a default account has been created and activated."
+    }
   }
+
 }

@@ -2,10 +2,11 @@ import { FC, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { styled } from "@linaria/react";
 import Keypad, { Key } from "../../components/keypad/Keypad";
-import NavTabs, { Tab } from "../../components/navtabs/NavTabs";
+import UserNavTabs, { Tab } from "../../components/navtabs/UserNavTabs";
 import CallButton from "../../components/call/CallButton";
 import NumberInputPane from "./NumberInputPane";
 import { SipContext } from "../../context/SipContext";
+import { AccountContext } from "../../context/AccountContext";
 import { formatPhoneNumber, extractPhoneNumber } from "../../util/format";
 import { Paths } from "../../routes";
 
@@ -20,6 +21,7 @@ const DialPadPage: FC = () => {
   const navigate = useNavigate();
   const [number, setNumber] = useState("");
   const { connection } = useContext(SipContext);
+  const { account } = useContext(AccountContext);
 
   const handleCall = () => {
     navigate(Paths.Call({ number: extractPhoneNumber(number) }));
@@ -42,7 +44,7 @@ const DialPadPage: FC = () => {
         onClick={handleCall}
         disabled={!connection.isConnected() || !number}
       />
-      <NavTabs tabs={[Tab.HISTORY, Tab.CONTACTS]} />
+      <UserNavTabs user={account?.user || "undefined"} tabs={[Tab.History, Tab.Contacts]} />
     </Container>
   );
 };

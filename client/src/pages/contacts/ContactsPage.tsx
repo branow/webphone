@@ -1,8 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useContext } from "react";
 import { styled } from "@linaria/react";
-import NavTabs, { Tab } from "../../components/navtabs/NavTabs";
-import ContactsPageTop from "./ContactsPageTop";
-import ContactsPageBody from "./ContactsPageBody";
+import UserNavTabs, { Tab } from "../../components/navtabs/UserNavTabs";
+import NotFoundPage from "../errors/NotFoundPage";
+import ContactsPageLoader from "./CotnactsPageLoader";
+import { useTransitionAwareParam } from "../../hooks/useTransitionAwareParam";
+import { AccountContext } from "../../context/AccountContext";
 
 const Container = styled.div`
   height: 100%;
@@ -10,16 +12,20 @@ const Container = styled.div`
 `;
 
 const ContactsPage: FC = () => {
-  const [query, setQuery] = useState<string>("");
+  const { account } = useContext(AccountContext);
+  const user = useTransitionAwareParam("user");
+
+  if (!user) return <NotFoundPage />;
 
   return (
     <Container>
-      <ContactsPageTop setQuery={setQuery} />
-      <ContactsPageBody query={query} />
-      <NavTabs tabs={[Tab.DIALPAD, Tab.HISTORY]} />
+      <ContactsPageLoader user={user} />
+      <UserNavTabs
+        user={user}
+        tabs={[(user !== account?.user ? Tab.Account : Tab.Dialpad), Tab.History]}
+      />
     </Container>
-  )
+  );
 };
 
 export default ContactsPage;
-
