@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import TransparentRectButton from "../../../components/common/button/TransparentRectButton";
-import Window from "../../../components/common/pane/Window";
-import { useTheme } from "../../../hooks/useTheme";
-import { d } from "../../../lib/i18n";
-import { font } from "../../../styles";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
+import Window from "components/common/pane/Window";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 225px;

@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useParams } from "react-router";
-import CallActivePageContent from "./CallActivePageContent";
-import NotFoundPage from "../../errors/NotFoundPage";
-import CallProvider from "../../../providers/CallProvider";
+import CallActivePageContent from "pages/call/active/CallActivePageContent";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import CallProvider from "providers/CallProvider";
 
 const CallActivePage: FC = () => {
   const { id } = useParams<{ id: string }>();

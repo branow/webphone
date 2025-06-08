@@ -1,15 +1,15 @@
 import { FC, useContext } from "react";
 import { useNavigate } from "react-router";
-import { styled } from "@linaria/react";
 import { IoIosArrowBack } from "react-icons/io";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
-import TransparentRoundButton from "../../../components/common/button/TransparentRoundButton";
-import { PageSwitcherContext } from "../../../context/PageSwitcherContext";
-import { AccountContext } from "../../../context/AccountContext";
-import { useTheme } from "../../../hooks/useTheme";
-import { font, size } from "../../../styles";
-import { Paths } from "../../../routes";
+import { styled } from "@linaria/react";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { PageSwitcherContext } from "context/PageSwitcherContext";
+import { AccountContext } from "context/AccountContext";
+import { useTheme } from "hooks/useTheme";
+import { font, size } from "styles";
+import { Paths } from "routes";
 
 const Container = styled.div`
   height: ${size.contact.top.h}px;

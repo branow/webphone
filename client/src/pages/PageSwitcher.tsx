@@ -1,7 +1,7 @@
 import { FC } from "react";
-import SmoothMotion from "../components/common/motion/SmoothMotion";
-import { usePageTransition } from "../hooks/usePageTransition";
-import { PageSwitcherContext } from "../context/PageSwitcherContext";
+import SmoothMotion from "components/common/motion/SmoothMotion";
+import { usePageTransition } from "hooks/usePageTransition";
+import { PageSwitcherContext } from "context/PageSwitcherContext";
 
 const PageSwitcher: FC = () => {
   const { cur, prev } = usePageTransition();

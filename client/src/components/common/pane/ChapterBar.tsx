@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useTheme } from "../../../hooks/useTheme";
+import { useTheme } from "hooks/useTheme";
 import { styled } from "@linaria/react";
 
 const Bar = styled.div<{ border: string }>`

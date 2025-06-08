@@ -1,19 +1,19 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { styled } from "@linaria/react";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import PendingPane from "../../../components/common/motion/PendingPane";
-import ErrorBanner from "../../../components/common/messages/ErrorBanner";
-import DeleteContactWindow from "./DeleteContactWindow";
-import ContactPageTop from "./ContactPageTop";
-import ContactPageBody from "./ContactPageBody";
-import ContactApi, { ContactDetails } from "../../../services/contacts";
-import HistoryApi from "../../../services/history";
-import { d } from "../../../lib/i18n";
-import { Paths } from "../../../routes";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import DeleteContactWindow from "pages/contact/view/DeleteContactWindow";
+import ContactPageTop from "pages/contact/view/ContactPageTop";
+import ContactPageBody from "pages/contact/view/ContactPageBody";
+import ContactApi, { ContactDetails } from "services/contacts";
+import HistoryApi from "services/history";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
 
 const Container = styled.div`
   width: 100%;

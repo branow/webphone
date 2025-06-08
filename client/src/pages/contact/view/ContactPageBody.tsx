@@ -1,20 +1,19 @@
-import { FC, useContext, useRef } from "react";
+import { FC, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import Photo from "../../../components/contact/photo/Photo";
-import Chapter from "../../../components/common/pane/Chapter";
-import ChapterBar from "../../../components/common/pane/ChapterBar";
-import ContactNumbers from "../../../components/contact/ContactNumbers";
-import InfinitePages from "../../../components/common/motion/InfinitePages";
-import CallRecords from "../../../components/history/CallRecords";
-import { useTheme } from "../../../hooks/useTheme";
-import { ContactDetails } from "../../../services/contacts";
-import HistoryApi from "../../../services/history";
-import { d } from "../../../lib/i18n";
-import { font, size } from "../../../styles";
-import { Paths } from "../../../routes";
-import { AccountContext } from "../../../context/AccountContext";
+import Photo from "components/contact/photo/Photo";
+import Chapter from "components/common/pane/Chapter";
+import ChapterBar from "components/common/pane/ChapterBar";
+import ContactNumbers from "components/contact/ContactNumbers";
+import InfinitePages from "components/common/motion/InfinitePages";
+import CallRecords from "components/history/CallRecords";
+import { useTheme } from "hooks/useTheme";
+import { ContactDetails } from "services/contacts";
+import HistoryApi from "services/history";
+import { d } from "lib/i18n";
+import { font, size } from "styles";
+import { Paths } from "routes";
 
 const Container = styled.div`
   overflow-y: auto;

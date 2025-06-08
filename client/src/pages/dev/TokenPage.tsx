@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { Auth } from "../../services/auth";
+import { Auth } from "services/auth";
 
 const TokenPage: FC = () => {
   const [date, setDate] = useState<Date>();

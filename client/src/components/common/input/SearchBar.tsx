@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import TextInput from "../input/TextInput";
-import { d } from "../../../lib/i18n";
-import { useDebounce } from "../../../hooks/useDebounce";
+import TextInput from "components/common/input/TextInput";
+import { useDebounce } from "hooks/useDebounce";
+import { d } from "lib/i18n";
 
 interface Props {
   onQueryChange: (query: string) => void;

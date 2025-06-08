@@ -1,14 +1,14 @@
 import { FC, ReactNode, useContext, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import PendingPane from "../components/common/motion/PendingPane";
-import FadeMotion from "../components/common/motion/FadeMotion";
-import AccountNotFoundPage from "../pages/errors/AccountNotFoundPage";
-import { useAccount } from "../hooks/useAccount";
-import { AccountContext } from "../context/AccountContext";
-import { AuthContext } from "../context/AuthContext";
-import { SipContext } from "../context/SipContext";
-import { d } from "../lib/i18n";
+import PendingPane from "components/common/motion/PendingPane";
+import FadeMotion from "components/common/motion/FadeMotion";
+import AccountNotFoundPage from "pages/errors/AccountNotFoundPage";
+import { useAccount } from "hooks/useAccount";
+import { AccountContext } from "context/AccountContext";
+import { AuthContext } from "context/AuthContext";
+import { SipContext } from "context/SipContext";
+import { d } from "lib/i18n";
 
 interface Props {
   children: ReactNode;

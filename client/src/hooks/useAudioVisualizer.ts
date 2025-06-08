@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import AudioVisualizer from "../util/waveform.js";
+import AudioVisualizer from "util/waveform.js";
 
 export interface AudioVisualizerOptions {
   fillStyle: string,

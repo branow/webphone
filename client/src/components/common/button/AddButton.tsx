@@ -1,7 +1,7 @@
 import { FC, HTMLAttributes } from "react";
 import { FaPlus } from "react-icons/fa";
 import { styled } from "@linaria/react";
-import { useTheme } from "../../../hooks/useTheme";
+import { useTheme } from "hooks/useTheme";
 
 interface ButtonProps {
   size: number;

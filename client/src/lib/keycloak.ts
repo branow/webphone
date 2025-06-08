@@ -1,6 +1,6 @@
 import Keycloak from "keycloak-js";
-import { Authentication, AuthService, Role, User } from "../services/auth";
-import { CONTEXT_PATH } from "../routes";
+import { Authentication, AuthService, Role, User } from "services/auth";
+import { CONTEXT_PATH } from "routes";
 
 let keycloak: Keycloak;
 

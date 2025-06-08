@@ -1,9 +1,9 @@
 import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import NavTabs, { NavTab } from "./NabTabs";
-import { useFetchActiveAccount } from "../../hooks/fetch";
-import { d } from "../../lib/i18n";
-import { Paths } from "../../routes";
+import NavTabs, { NavTab } from "components/navtabs/NabTabs";
+import { useFetchActiveAccount } from "hooks/fetch";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
 
 export enum Tab {
   Dialpad = "dialpad",

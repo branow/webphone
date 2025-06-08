@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { styled } from "@linaria/react";
-import AdminNavTabs, { Tab } from "../../components/navtabs/AdminNavTabs";
-import AccountsPageTop from "./AccountsPageTop";
-import AccountsPageBody from "./AccountsPageBody";
+import AdminNavTabs, { Tab } from "components/navtabs/AdminNavTabs";
+import AccountsPageTop from "pages/accounts/AccountsPageTop";
+import AccountsPageBody from "pages/accounts/AccountsPageBody";
 
 const Container = styled.div`
   height: 100%;

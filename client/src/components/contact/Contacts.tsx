@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import ClickableContactPreview from "../../components/contact/ClickableContactPreview";
-import { useTheme } from "../../hooks/useTheme";
-import { Contact } from "../../services/contacts";
-import { d } from "../../lib/i18n";
-import { font } from "../../styles";
+import ClickableContactPreview from "components/contact/ClickableContactPreview";
+import { useTheme } from "hooks/useTheme";
+import { Contact } from "services/contacts";
+import { d } from "lib/i18n";
+import { font } from "styles";
 
 const Container = styled.div`
   display: flex;

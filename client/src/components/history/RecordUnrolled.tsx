@@ -2,14 +2,14 @@ import { FC, useContext } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { styled } from "@linaria/react";
-import DeleteButton from "../common/button/DeleteButton";
-import CallButton from "../call/CallButton";
-import RecordUnrolledContent from "./RecordUnrolledContent";
-import { SipContext } from "../../context/SipContext";
-import { AccountContext } from "../../context/AccountContext";
-import HistoryApi, { Record } from "../../services/history";
-import { extractPhoneNumber } from "../../util/format";
-import { Paths } from "../../routes";
+import DeleteButton from "components/common/button/DeleteButton";
+import CallButton from "components/call/CallButton";
+import RecordUnrolledContent from "components/history/RecordUnrolledContent";
+import { SipContext } from "context/SipContext";
+import { AccountContext } from "context/AccountContext";
+import HistoryApi, { Record } from "services/history";
+import { extractPhoneNumber } from "util/format";
+import { Paths } from "routes";
 
 const Container = styled.div`
   position: relative;

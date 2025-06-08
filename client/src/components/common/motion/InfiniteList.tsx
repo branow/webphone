@@ -1,14 +1,14 @@
-import { ReactNode, RefObject } from "react";
+import { RefObject, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import { styled } from "@linaria/react";
 import FadeMotion from "./FadeMotion";
 import PendingPane from "./PendingPane";
-import ErrorBanner from "../messages/ErrorBanner";
-import AutoHeightMotion from "./AutoHeightMotion";
-import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
-import { d } from "../../../lib/i18n";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import AutoHeightMotion from "components/common/motion/AutoHeightMotion";
+import { useInfiniteScroll } from "hooks/useInfiniteScroll";
+import { d } from "lib/i18n";
 
 const Container = styled.div`
   width: 100%;

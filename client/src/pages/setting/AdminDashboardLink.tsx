@@ -1,12 +1,12 @@
 import { FC, useContext } from "react";
-import { AccountContext } from "../../context/AccountContext";
-import TransparentRectButton from "../../components/common/button/TransparentRectButton";
-import { font } from "../../styles";
-import { css } from "@linaria/core";
 import { useNavigate } from "react-router";
-import { Paths } from "../../routes";
 import { useTranslation } from "react-i18next";
-import { d } from "../../lib/i18n";
+import { css } from "@linaria/core";
+import { AccountContext } from "context/AccountContext";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
+import { font } from "styles";
 
 const cssButton = css`
   width: 100%;

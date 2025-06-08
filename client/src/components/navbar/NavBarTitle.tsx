@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Link } from "react-router";
 import { css } from "@linaria/core";
-import { useTheme } from "../../hooks/useTheme";
-import { font } from "../../styles";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const title = css`
   text-transform: uppercase;

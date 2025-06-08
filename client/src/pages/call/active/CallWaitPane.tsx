@@ -1,14 +1,14 @@
 import { FC, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import CallButton from "../../../components/call/CallButton.js";
-import HangUpButton from "../../../components/call/HangUpButton.js";
-import PendingPane from "../../../components/common/motion/PendingPane.js";
-import { CallContext } from "../../../context/CallContext";
-import { CallOriginator } from "../../../lib/sip";
-import { d } from "../../../lib/i18n";
-import DTMFAudio from "../../../util/dtmf.js";
-import { font } from "../../../styles";
+import CallButton from "components/call/CallButton";
+import HangUpButton from "components/call/HangUpButton";
+import PendingPane from "components/common/motion/PendingPane";
+import { CallContext } from "context/CallContext";
+import { CallOriginator } from "lib/sip";
+import { d } from "lib/i18n";
+import DTMFAudio from "util/dtmf.js";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 100%;

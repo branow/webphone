@@ -1,5 +1,5 @@
-import i18n, { d } from "../lib/i18n";
-import { log } from "../util/log";
+import i18n, { d } from "lib/i18n";
+import { log } from "util/log";
 
 export const BACKEND_ORIGIN = import.meta.env.WEBPHONE_BACKEND_ORIGIN + import.meta.env.WEBPHONE_CONTEXT_PATH;
 

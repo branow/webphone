@@ -1,10 +1,10 @@
 import { FC, HTMLAttributes } from "react";
 import { ImPhoneHangUp } from "react-icons/im";
-import { useTheme } from "../../hooks/useTheme";
-import ScaleButton from "../common/button/ScaleButton";
+import { useTheme } from "hooks/useTheme";
+import ScaleButton from "components/common/button/ScaleButton";
 import { styled } from "@linaria/react";
 import { cx } from "@linaria/core";
-import { styles } from "../../styles";
+import { styles } from "styles";
 
 const Container = styled.div``;
 

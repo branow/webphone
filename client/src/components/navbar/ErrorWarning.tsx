@@ -1,11 +1,11 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
-import { styled } from "@linaria/react";
 import { IoIosWarning } from "react-icons/io";
-import AutoHeightMotion from "../common/motion/AutoHeightMotion";
-import { ErrorContext, PrioritizedMessage } from "../../context/ErrorContext";
-import { useTheme } from "../../hooks/useTheme";
-import { font, size } from "../../styles";
+import { styled } from "@linaria/react";
+import AutoHeightMotion from "components/common/motion/AutoHeightMotion";
+import { ErrorContext, PrioritizedMessage } from "context/ErrorContext";
+import { useTheme } from "hooks/useTheme";
+import { font, size } from "styles";
 
 const ErrorWarning: FC = () => {
   const [checked, setChecked] = useState<string[]>([]);

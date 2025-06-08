@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { BsPersonFill } from "react-icons/bs";
 import { styled } from "@linaria/react";
-import BackendPhoto from "./BackendPhoto";
-import { useTheme } from "../../../hooks/useTheme";
+import BackendPhoto from "components/contact/photo/BackendPhoto";
+import { useTheme } from "hooks/useTheme";
 
 const Container = styled.div<{ size: number, bg: string, color: string }>`
   width: ${p => p.size}px;

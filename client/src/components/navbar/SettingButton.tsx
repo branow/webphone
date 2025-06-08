@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
 import { FaGear } from "react-icons/fa6";
-import { css } from "@linaria/core";
-import TransparentRoundButton from "../common/button/TransparentRoundButton";
-import { useTheme } from "../../hooks/useTheme";
-import { font, size } from "../../styles";
 import { styled } from "@linaria/react";
+import { css } from "@linaria/core";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { useTheme } from "hooks/useTheme";
+import { font, size } from "styles";
 
 const Container = styled.div`
   position: absolute;

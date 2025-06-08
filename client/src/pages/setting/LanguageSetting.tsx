@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
-import Select from "../../components/common/input/Select";
-import { d } from "../../lib/i18n";
 import { styled } from "@linaria/react";
-import { font } from "../../styles";
-import { useTheme } from "../../hooks/useTheme";
+import Select from "components/common/input/Select";
+import { useTheme } from "hooks/useTheme";
+import { d } from "lib/i18n";
+import { font } from "styles";
 
 interface ContainerProps {
   bgHover: string;

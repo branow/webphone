@@ -1,6 +1,6 @@
 import { FC, ReactNode, useContext } from "react";
-import { SipContext } from "../context/SipContext";
-import { CallContext } from "../context/CallContext";
+import { SipContext } from "context/SipContext";
+import { CallContext } from "context/CallContext";
 
 interface Props {
   callId: string;

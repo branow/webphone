@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
 import { css } from "@linaria/core";
-import TransparentClickableContainer from "../common/button/TransparentClickableContainer";
-import ContactPreview from "./ContactPreview";
-import { Contact } from "../../services/contacts";
-import { Paths } from "../../routes";
+import TransparentClickableContainer from "components/common/button/TransparentClickableContainer";
+import ContactPreview from "components/contact/ContactPreview";
+import { Contact } from "services/contacts";
+import { Paths } from "routes";
 
 const style = css`
   border-radius: 10px;

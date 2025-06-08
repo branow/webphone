@@ -1,9 +1,9 @@
 import { FC, useRef, ReactNode, MouseEvent } from "react";
 import { styled } from "@linaria/react";
 import { IoClose } from "react-icons/io5";
-import TransparentRoundButton from "../button/TransparentRoundButton";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const OuterContainer = styled.div<{ bg: string }>`
   position: fixed;

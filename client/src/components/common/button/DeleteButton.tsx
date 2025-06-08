@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { css } from "@linaria/core";
-import TransparentRoundButton from "./TransparentRoundButton";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 import { styled } from "@linaria/react";
 
 

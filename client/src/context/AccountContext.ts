@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Sip } from "../services/accounts";
+import { Sip } from "services/accounts";
 
 export interface AccountContextType {
   user: string;

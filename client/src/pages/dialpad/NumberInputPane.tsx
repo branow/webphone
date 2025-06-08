@@ -1,7 +1,7 @@
 import { FC } from "react";
-import NumberInput from "./NumberInput";
-import NumberCleanButton from "./NumberCleanButton";
 import { styled } from "@linaria/react";
+import NumberInput from "pages/dialpad/NumberInput";
+import NumberCleanButton from "pages/dialpad/NumberCleanButton";
 
 interface Props {
   number: string;

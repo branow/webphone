@@ -1,11 +1,11 @@
 import { FC, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import PendingPane from "../../components/common/motion/PendingPane";
-import NotFoundPage from "../errors/NotFoundPage";
-import { SipContext } from "../../context/SipContext";
-import { d } from "../../lib/i18n";
-import { Paths } from "../../routes";
+import PendingPane from "components/common/motion/PendingPane";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import { SipContext } from "context/SipContext";
+import { d } from "lib/i18n";
+import { Paths } from "routes";
 
 const CallPage: FC = () => {
   const navigate = useNavigate();

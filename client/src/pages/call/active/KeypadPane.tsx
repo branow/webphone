@@ -1,10 +1,10 @@
 import { FC, useContext, useState } from "react";
 import { styled } from "@linaria/react";
-import Keypad, { Key } from "../../../components/keypad/Keypad";
-import TextInput from "../../../components/common/input/TextInput";
-import { CallContext } from "../../../context/CallContext";
-import { extractPhoneNumber } from "../../../util/format";
-import { font } from "../../../styles";
+import Keypad, { Key } from "components/keypad/Keypad";
+import TextInput from "components/common/input/TextInput";
+import { CallContext } from "context/CallContext";
+import { extractPhoneNumber } from "util/format";
+import { font } from "styles";
 
 const Container = styled.div`
   display: flex;

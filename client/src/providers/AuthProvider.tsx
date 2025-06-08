@@ -1,13 +1,13 @@
 import { FC, ReactNode } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import FadeMotion from "../components/common/motion/FadeMotion";
-import PendingPane from "../components/common/motion/PendingPane";
-import AuthenticationFailedPage from "../pages/errors/AuthenticationFailedPage";
-import { useAuth } from "../hooks/useAuth";
-import { AuthContext } from "../context/AuthContext";
-import { Auth, Role } from "../services/auth";
-import { d } from "../lib/i18n";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import AuthenticationFailedPage from "pages/errors/AuthenticationFailedPage";
+import { useAuth } from "hooks/useAuth";
+import { AuthContext } from "context/AuthContext";
+import { Auth, Role } from "services/auth";
+import { d } from "lib/i18n";
 
 interface Props {
   children: ReactNode;

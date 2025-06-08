@@ -1,16 +1,16 @@
 import { FC, useContext } from "react";
 import { AnimatePresence } from "framer-motion";
 import { styled } from "@linaria/react";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import Photo from "../../../components/contact/photo/Photo";
-import NotFoundPage from "../../errors/NotFoundPage";
-import CallWaitPane from "./CallWaitPane";
-import CallActivePane from "./CallActivePane";
-import CallEndPane from "./CallEndPane";
-import { useTheme } from "../../../hooks/useTheme";
-import { CallContext } from "../../../context/CallContext";
-import { formatPhoneNumber } from "../../../util/format";
-import { font } from "../../../styles";
+import FadeMotion from "components/common/motion/FadeMotion";
+import Photo from "components/contact/photo/Photo";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import CallWaitPane from "pages/call/active/CallWaitPane";
+import CallActivePane from "pages/call/active/CallActivePane";
+import CallEndPane from "pages/call/active/CallEndPane";
+import { useTheme } from "hooks/useTheme";
+import { CallContext } from "context/CallContext";
+import { formatPhoneNumber } from "util/format";
+import { font } from "styles";
 
 const Container = styled.div`
   width: 100%;

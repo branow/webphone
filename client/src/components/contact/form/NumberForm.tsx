@@ -1,14 +1,14 @@
 import { FC, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import TextInput from "../../common/input/TextInput";
-import DeleteButton from "../../common/button/DeleteButton";
-import { EditableNumber } from "../../../hooks/useEditContact";
-import { useTheme } from "../../../hooks/useTheme";
-import { NumberType } from "../../../services/contacts";
-import { d } from "../../../lib/i18n";
-import { formatPhoneNumber, extractPhoneNumber } from "../../../util/format";
-import { font } from "../../../styles";
+import TextInput from "components/common/input/TextInput";
+import DeleteButton from "components/common/button/DeleteButton";
+import { EditableNumber } from "hooks/useEditContact";
+import { useTheme } from "hooks/useTheme";
+import { NumberType } from "services/contacts";
+import { d } from "lib/i18n";
+import { formatPhoneNumber, extractPhoneNumber } from "util/format";
+import { font } from "styles";
 
 const Container = styled.div`
   position: relative;

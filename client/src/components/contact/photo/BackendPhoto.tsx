@@ -3,11 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
 import { AnimatePresence } from "framer-motion";
-import ErrorBanner from "../../common/messages/ErrorBanner";
-import FadeMotion from "../../common/motion/FadeMotion";
-import PendingPane from "../../common/motion/PendingPane";
-import PhotoApi from "../../../services/photos";
-import { d } from "../../../lib/i18n";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import PhotoApi from "services/photos";
+import { d } from "lib/i18n";
 
 const Image = styled.img`
   object-fit: cover;

@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import Chapter from "../../../components/common/pane/Chapter";
-import ChapterBar from "../../../components/common/pane/ChapterBar";
-import Paragraph from "../../../components/common/pane/Paragraph";
-import { useTheme } from "../../../hooks/useTheme";
-import { Account } from "../../../services/accounts";
-import { d } from "../../../lib/i18n";
-import { font } from "../../../styles";
+import Chapter from "components/common/pane/Chapter";
+import ChapterBar from "components/common/pane/ChapterBar";
+import Paragraph from "components/common/pane/Paragraph";
+import { useTheme } from "hooks/useTheme";
+import { Account } from "services/accounts";
+import { d } from "lib/i18n";
+import { font } from "styles";
 
 const Container = styled.div`
   overflow-y: auto;

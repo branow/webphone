@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { styled } from "@linaria/react";
-import TransparentClickableContainer from "../common/button/TransparentClickableContainer";
-import AutoHeightMotion from "../common/motion/AutoHeightMotion";
-import RecordRolledUp from "./RecordRolledUp";
-import RecordUnrolled from "./RecordUnrolled";
-import { Record } from "../../services/history";
-import { useTheme } from "../../hooks/useTheme";
+import TransparentClickableContainer from "components/common/button/TransparentClickableContainer";
+import AutoHeightMotion from "components/common/motion/AutoHeightMotion";
+import RecordRolledUp from "components/history/RecordRolledUp";
+import RecordUnrolled from "components/history/RecordUnrolled";
+import { Record } from "services/history";
+import { useTheme } from "hooks/useTheme";
 
 const Container = styled.div<{ color: string }>`
   border-left: 4px solid ${p => p.color};

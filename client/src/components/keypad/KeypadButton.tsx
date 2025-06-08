@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import TransparentRoundButton from "../../components/common/button/TransparentRoundButton";
-import { useTheme } from "../../hooks/useTheme";
-import DTMFAudio from "../../util/dtmf.js";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { useTheme } from "hooks/useTheme";
+import DTMFAudio from "util/dtmf.js";
 
 
 const Container = styled.div<{ size: number }>`

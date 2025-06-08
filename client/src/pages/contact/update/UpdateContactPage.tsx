@@ -1,7 +1,7 @@
 import { FC } from "react";
-import NotFoundPage from "../../errors/NotFoundPage";
-import UpdateContactFetchingPage from "./UpdateContactFetchingPage";
-import { useTransitionAwareParam } from "../../../hooks/useTransitionAwareParam";
+import NotFoundPage from "pages/errors/NotFoundPage";
+import UpdateContactFetchingPage from "pages/contact/update/UpdateContactFetchingPage";
+import { useTransitionAwareParam } from "hooks/useTransitionAwareParam";
 
 const UpdateContactPage: FC = () => {
   const id = useTransitionAwareParam("id");

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
-import ContactsPageTop from "./ContactsPageTop";
-import ContactsPageBody from "./ContactsPageBody";
+import ContactsPageTop from "pages/contacts/view/ContactsPageTop";
+import ContactsPageBody from "pages/contacts/view/ContactsPageBody";
 
 const ContactsPageMain: FC<{ user: string }> = ({ user }) => {
   const [query, setQuery] = useState<string>("");

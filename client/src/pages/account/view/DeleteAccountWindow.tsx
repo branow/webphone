@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Trans } from "react-i18next";
-import DeleteWindow from "../../../components/common/pane/RemoveWindow";
-import { d } from "../../../lib/i18n";
+import DeleteWindow from "components/common/pane/RemoveWindow";
+import { d } from "lib/i18n";
 
 interface Props {
   accountName: string;

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import AccountApi, { Account } from "../services/accounts";
-import { Paths } from "../routes";
+import AccountApi, { Account } from "services/accounts";
+import { Paths } from "routes";
 
 interface Props {
   initAccount: Account;

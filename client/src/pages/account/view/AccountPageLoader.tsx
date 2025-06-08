@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import ErrorBanner from "../../../components/common/messages/ErrorBanner";
-import TransparentRectButton from "../../../components/common/button/TransparentRectButton";
-import PendingPane from "../../../components/common/motion/PendingPane";
-import AccountPageMain from "./AccountPageMain";
-import { useFetchAccount } from "../../../hooks/fetch";
-import { d } from "../../../lib/i18n";
+import FadeMotion from "components/common/motion/FadeMotion";
+import ErrorBanner from "components/common/messages/ErrorBanner";
+import TransparentRectButton from "components/common/button/TransparentRectButton";
+import PendingPane from "components/common/motion/PendingPane";
+import AccountPageMain from "pages/account/view/AccountPageMain";
+import { useFetchAccount } from "hooks/fetch";
+import { d } from "lib/i18n";
 
 const AccountPageLoader: FC<{ id: string }> = ({ id }) => {
   const { account, isPending, error } = useFetchAccount({ id, enabled: !!id });

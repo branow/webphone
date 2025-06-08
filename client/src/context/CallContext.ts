@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Call } from "../lib/sip";
+import { Call } from "lib/sip";
 
 export type CallContextType = {
   call: Call | null;

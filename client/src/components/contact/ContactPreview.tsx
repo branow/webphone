@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
-import Photo from "../../components/contact/photo/Photo";
-import ContactNumbers from "../../components/contact/ContactNumbers";
-import { useTheme } from "../../hooks/useTheme";
-import { Contact } from "../../services/contacts";
+import Photo from "components/contact/photo/Photo";
+import ContactNumbers from "components/contact/ContactNumbers";
+import { useTheme } from "hooks/useTheme";
+import { Contact } from "services/contacts";
 
 const Container = styled.div`
   width: 100%;

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Role } from "../services/auth";
+import { Role } from "services/auth";
 
 export interface AuthContextType {
   authenticated: boolean;

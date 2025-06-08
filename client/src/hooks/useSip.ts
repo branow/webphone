@@ -3,8 +3,8 @@ import { UA } from "jssip";
 import { RTCSessionEvent } from "jssip/lib/UA";
 import { IncomingAckEvent, IncomingEvent, OutgoingAckEvent, OutgoingEvent, RTCSession } from "jssip/lib/RTCSession";
 import { IncomingRequest, OutgoingRequest } from "jssip/lib/SIPMessage";
-import { ConnectionState, IncomingCallHandler, CallInfo, SipAccount, init, CallState, CallDirection, Call, ConnectionStateWrapper, Session, CallStateWrapper, getCallOriginator } from "../lib/sip";
-import { log, warn } from "../util/log";
+import { ConnectionState, IncomingCallHandler, CallInfo, SipAccount, init, CallState, CallDirection, Call, ConnectionStateWrapper, Session, CallStateWrapper, getCallOriginator } from "lib/sip";
+import { log, warn } from "util/log";
 
 interface Return {
   account: SipAccount | null;

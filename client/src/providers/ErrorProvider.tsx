@@ -1,9 +1,9 @@
 import { FC, ReactNode, useCallback, useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ErrorContext, PrioritizedMessage } from "../context/ErrorContext";
-import { AccountContext } from "../context/AccountContext";
-import { SipContext } from "../context/SipContext";
-import { d } from "../lib/i18n";
+import { ErrorContext, PrioritizedMessage } from "context/ErrorContext";
+import { AccountContext } from "context/AccountContext";
+import { SipContext } from "context/SipContext";
+import { d } from "lib/i18n";
 
 interface Props {
   children: ReactNode;

@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import PendingPane from "../../../components/common/motion/PendingPane";
-import AccountForm, { Operation } from "../../../components/account/form/AccountForm";
-import AccountApi, { Account } from "../../../services/accounts";
-import { useSaveAccount } from "../../../hooks/useSaveAccount";
-import { d } from "../../../lib/i18n";
+import FadeMotion from "components/common/motion/FadeMotion";
+import PendingPane from "components/common/motion/PendingPane";
+import AccountForm, { Operation } from "components/account/form/AccountForm";
+import AccountApi, { Account } from "services/accounts";
+import { useSaveAccount } from "hooks/useSaveAccount";
+import { d } from "lib/i18n";
 
 const UpdateAccountFormPage: FC<{ initAccount: Account }> = ({ initAccount }) => {
   const { account, save, isPending, error } = useSaveAccount({

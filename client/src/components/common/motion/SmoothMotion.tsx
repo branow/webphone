@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { motion } from "framer-motion";
-import { size } from "../../../styles";
+import { size } from "styles";
 
 export enum Side {
   Right = "right",

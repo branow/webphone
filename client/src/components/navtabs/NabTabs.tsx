@@ -1,9 +1,9 @@
-import { FC  } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router";
 import { styled } from "@linaria/react";
-import ControlPane from "../common/pane/ControlPane";
-import { useTheme } from "../../hooks/useTheme";
-import { font, size } from "../../styles";
+import ControlPane from "components/common/pane/ControlPane";
+import { useTheme } from "hooks/useTheme";
+import { font, size } from "styles";
 
 const Container = styled.div<{ bg: string }>`
   position: absolute;

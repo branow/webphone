@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { styled } from "@linaria/react";
 import { MdEdit } from "react-icons/md";
-import TransparentRoundButton from "./TransparentRoundButton";
-import { useTheme } from "../../../hooks/useTheme";
-import { font } from "../../../styles";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import { useTheme } from "hooks/useTheme";
+import { font } from "styles";
 
 const IconContainer = styled.div<{ size: number }>`
   width: ${p => p.size}px;

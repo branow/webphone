@@ -1,8 +1,8 @@
 import { FC, useContext } from "react";
-import HistoryApi, { Record, CreateRecord, CallStatus } from "../../services/history";
-import ContactApi, { ContactDetails, Number, NumberType, CreateContact } from "../../services/contacts";
-import PhotoApi from "../../services/photos";
-import { AccountContext } from "../../context/AccountContext";
+import HistoryApi, { Record, CreateRecord, CallStatus } from "services/history";
+import ContactApi, { ContactDetails, Number, NumberType, CreateContact } from "services/contacts";
+import PhotoApi from "services/photos";
+import { AccountContext } from "context/AccountContext";
 
 const TestDataPage: FC = () => {
   const { user, account } = useContext(AccountContext);

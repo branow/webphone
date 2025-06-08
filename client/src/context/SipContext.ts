@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Call, ConnectionState, ConnectionStateWrapper, IncomingCallHandler, SipAccount } from "../lib/sip";
+import { Call, ConnectionState, ConnectionStateWrapper, IncomingCallHandler, SipAccount } from "lib/sip";
 
 export type SipContextType = {
   account: SipAccount | null;

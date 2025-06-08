@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ContactApi, { ContactDetails } from "../services/contacts";
-import PhotoApi from "../services/photos";
-import { Paths } from "../routes";
+import ContactApi, { ContactDetails } from "services/contacts";
+import PhotoApi from "services/photos";
+import { Paths } from "routes";
 
 interface Props {
   initContact: ContactDetails;
