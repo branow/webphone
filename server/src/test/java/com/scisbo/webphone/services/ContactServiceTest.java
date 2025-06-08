@@ -361,6 +361,7 @@ public class ContactServiceTest {
         when(this.photoRepository.getById(photo.getId())).thenReturn(photo);
 
         ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
+        expected.setUser(oldContact.getUser());
         ContactDetailsDto actual = this.service.update(updateContact);
 
         assertEquals(expected, actual);
