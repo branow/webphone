@@ -1,42 +1,23 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import FadeMotion from "../../../components/common/motion/FadeMotion";
 import ErrorBanner from "../../../components/common/messages/ErrorBanner";
 import TransparentRectButton from "../../../components/common/button/TransparentRectButton";
 import PendingPane from "../../../components/common/motion/PendingPane";
-import NotFoundPage from "../../errors/NotFoundPage";
-import ContactPageContent from "./ContactPageContent";
-import { useTransitionAwareParam } from "../../../hooks/useTransitionAwareParam";
-import ContactApi from "../../../services/contacts";
+import AccountPageMain from "./AccountPageMain";
+import { useFetchAccount } from "../../../hooks/fetch";
 import { d } from "../../../lib/i18n";
 
-const ContactPage: FC = () => {
-  const id = useTransitionAwareParam("id");
-
-  if (!id) return <NotFoundPage />;
-
-  return <ContactFetchingPage id={id} />;
-}
-
-export default ContactPage;
-
-const ContactFetchingPage: FC<{ id: string }> = ({ id }) => {
-
-  const { data, isPending, error } = useQuery({
-    queryKey: ContactApi.QueryKeys.contact(id),
-    queryFn: () => ContactApi.get(id),
-    enabled: !!id,
-  })
-
+const AccountPageLoader: FC<{ id: string }> = ({ id }) => {
+  const { account, isPending, error } = useFetchAccount({ id, enabled: !!id });
   const { t } = useTranslation();
 
   return (
     <AnimatePresence mode="wait">
-      {data && (
-        <FadeMotion key="contact">
-          <ContactPageContent contact={data} />
+      {account && (
+        <FadeMotion key="account">
+          <AccountPageMain account={account} />
         </FadeMotion>
       )}
       {error && (
@@ -57,3 +38,4 @@ const ContactFetchingPage: FC<{ id: string }> = ({ id }) => {
   );
 }
 
+export default AccountPageLoader;

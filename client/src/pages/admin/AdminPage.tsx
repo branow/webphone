@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
-import NavTabs, { Tab } from "../../components/navtabs/NavTabs";
+import AdminNavTabs, { Tab } from "../../components/navtabs/AdminNavTabs";
 import BackgroundMessage from "../../components/common/messages/BackgroundMessage";
 import NotFoundPage from "../errors/NotFoundPage";
 import { AccountContext } from "../../context/AccountContext";
@@ -47,7 +47,7 @@ const AdminPage: FC = () => {
       <Body color={th.colors.text}>
         <BackgroundMessage text={t(d.admin.messages.commingSoon)} />
       </Body>
-      <NavTabs tabs={[Tab.ACCOUNTS]} />
+      <AdminNavTabs tabs={[Tab.Accounts]} />
     </Container>
   );
 };

@@ -21,7 +21,7 @@ type ContactBase = {
 }
 
 export type Contact = ContactBase;
-export type ContactDetails = ContactBase & { bio?: string };
+export type ContactDetails = ContactBase & { user: string, bio?: string };
 
 type ContactSave = {
   name: string;
@@ -34,7 +34,7 @@ export type CreateContact = ContactSave;
 export type UpdateContact = ContactSave & { id: string };
 
 export const QueryKeys = {
-  contacts: (query: string, size = 25): string[] => ["contact", query, `${size}`],
+  contacts: (user: string, query: string, size = 25): string[] => ["contact", user, query, `${size}`],
   contact: (id: string): string[] => ["contact", id],
   featureCodes: (query: string): string[] => ["contact", "feature-codes", query],
   predicate: (query: Query) => {

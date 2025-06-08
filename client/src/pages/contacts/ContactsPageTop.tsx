@@ -18,10 +18,11 @@ const Container = styled.div`
 `;
 
 interface Props {
+  user: string;
   setQuery: (query: string) => void;
 }
 
-const ContactsPageTop: FC<Props> = ({ setQuery }) => {
+const ContactsPageTop: FC<Props> = ({ user, setQuery }) => {
   const navigate = useNavigate();
   const { account } = useContext(AccountContext);
 
@@ -30,8 +31,8 @@ const ContactsPageTop: FC<Props> = ({ setQuery }) => {
       <SearchBar onQueryChange={setQuery} debounced={true} />
       <AddButton
         size={font.size.xl}
-        disabled={!account || account.isDefault}
-        onClick={() => navigate(Paths.ContactCreate())}
+        disabled={!account || account?.isDefault}
+        onClick={() => navigate(Paths.ContactCreate({ user: user }))}
       />
     </Container>
   )

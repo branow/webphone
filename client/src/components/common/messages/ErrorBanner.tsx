@@ -17,9 +17,10 @@ const Container = styled.div<{ color: string, size: number }>`
 interface Props {
   error: Error | string | undefined | null;
   size?: number;
+  className?: string;
 }
 
-const ErrorBanner: FC<Props> = ({ error, size }) => {
+const ErrorBanner: FC<Props> = ({ error, size, className }) => {
   const th = useTheme();
 
   const message = error instanceof Error ? error.message : error;
@@ -30,7 +31,13 @@ const ErrorBanner: FC<Props> = ({ error, size }) => {
 
   return (
     <FadeMotion key={message} center={true}>
-      <Container color={th.colors.redHover} size={size}>{message}</Container>
+      <Container
+        className={className}
+        color={th.colors.redHover}
+        size={size}
+      >
+          {message}
+      </Container>
     </FadeMotion>
   );
 };

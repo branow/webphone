@@ -67,7 +67,7 @@ function InfiniteList<T>({ scrollRef, queryKey, queryFunc, getNextPageParam, chi
         )}
         {!isPending && (
           <>
-            {data && (
+            {!error && data && (
               <FadeMotion key="records">
                 <AutoHeightMotion duration={1}>
                   {children(data.pages)}

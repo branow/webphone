@@ -1,48 +1,14 @@
-import { FC, useContext } from "react";
-import { useTranslation } from "react-i18next";
-import { AnimatePresence } from "framer-motion";
-import FadeMotion from "../../../components/common/motion/FadeMotion";
-import PendingPane from "../../../components/common/motion/PendingPane";
-import ContactForm from "../../../components/contact/form/ContactForm";
-import { AccountContext } from "../../../context/AccountContext";
-import { useSaveContact } from "../../../hooks/useSaveContact";
-import ContactApi, { ContactDetails } from "../../../services/contacts";
-import { d } from "../../../lib/i18n";
-
-const emptyContact: ContactDetails = {
-  id: "",
-  name: "",
-  numbers: [],
-}
+import { FC } from "react";
+import NotFoundPage from "../../errors/NotFoundPage";
+import CreateContactPageForm from "./CreateContactFormPage";
+import { useTransitionAwareParam } from "../../../hooks/useTransitionAwareParam";
 
 const CreateContactPage: FC = () => {
-  const { user } = useContext(AccountContext);
-  const { contact, save, isPending, error } = useSaveContact({
-    initContact: emptyContact,
-    saveContact: (contact: ContactDetails) => ContactApi.create(user, contact),
-  });
+  const user = useTransitionAwareParam("user");
 
-  const { t } = useTranslation();
+  if (!user) return <NotFoundPage />;
 
-  return (
-    <AnimatePresence mode="wait">
-      {isPending && (
-        <PendingPane
-          label={t(d.ui.loading.creating)}
-          message={d.ui.loading.wait}
-        />
-      )}
-      {!isPending && (
-        <FadeMotion key="contact">
-          <ContactForm
-            contact={contact}
-            save={save}
-            savingError={error ?? undefined}
-          />
-        </FadeMotion>
-      )}
-    </AnimatePresence>
-  );
+  return <CreateContactPageForm user={user} />;
 }
 
 export default CreateContactPage;

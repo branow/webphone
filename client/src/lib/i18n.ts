@@ -50,6 +50,7 @@ export const d = {
       history: "ui.tabs.history",
       contacts: "ui.tabs.contacts",
       accounts: "ui.tabs.accounts",
+      account: "ui.tabs.account",
       admin: "ui.tabs.admin",
     },
     search: {
@@ -256,6 +257,12 @@ export const d = {
     title: "admin.title",
     messages: {
       commingSoon: "admin.messages.comingSoon",
+    },
+  },
+
+  features: {
+    errors: {
+      noDefaultAccount: "features.errors.noDefaultAccount",
     },
   },
 };

@@ -26,6 +26,7 @@
       "history": "Historial",
       "contacts": "Contactos",
       "accounts": "Cuentas",
+      "account": "Cuenta",
       "admin": "Admin"
     },
     "search": {
@@ -221,5 +222,12 @@
     "messages": {
       "comingSoon": "Próximamente"
     }
+  },
+
+  "features": {
+    "errors": {
+      "noDefaultAccount": "Por favor, asegúrate de que se haya creado y activado una cuenta predeterminada."
+    }
   }
+
 }

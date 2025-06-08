@@ -48,7 +48,6 @@ interface Props {
 
 const ContactPageBody: FC<Props> = ({ contact }) => {
   const navigate = useNavigate();
-  const { user } = useContext(AccountContext);
 
   const call = (number: string) => navigate(Paths.Call({ number: number }));
 
@@ -80,7 +79,7 @@ const ContactPageBody: FC<Props> = ({ contact }) => {
         <InfinitePages
           scrollRef={scrollRef}
           queryKey={HistoryApi.QueryKeys.historyByContact(contact.id, 30)}
-          queryFunc={(page) => HistoryApi.getAllByContact(user, contact.id, { number: page, size: 30 })}
+          queryFunc={(page) => HistoryApi.getAllByContact(contact.user, contact.id, { number: page, size: 30 })}
         >
           {(records) => <CallRecords records={records} />}
         </InfinitePages>

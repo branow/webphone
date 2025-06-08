@@ -18,17 +18,20 @@ const Container = styled.div`
 `;
 
 const Header = styled.div<{ color: string }>`
+  text-align: center;
   font-size: ${font.size.xxl}px;
   font-weight: bold;
   color: ${p => p.color};
 `;
 
 const Message = styled.div<{ color: string }>`
+  text-align: center;
   font-size: ${font.size.m}px;
   color: ${p => p.color};
 `;
 
 const cssButton = css`
+  text-align: center;
   padding: 10px;
   font-size: ${font.size.l}px;
 `;

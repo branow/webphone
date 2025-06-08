@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next";
 import { styled } from "@linaria/react";
 import Chapter from "../../../components/common/pane/Chapter";
 import ChapterBar from "../../../components/common/pane/ChapterBar";
-import { useTheme } from "../../../hooks/useTheme";
-import { d } from "../../../lib/i18n";
-import { font, size } from "../../../styles";
-import { Account } from "../../../services/accounts";
 import Paragraph from "../../../components/common/pane/Paragraph";
+import { useTheme } from "../../../hooks/useTheme";
+import { Account } from "../../../services/accounts";
+import { d } from "../../../lib/i18n";
+import { font } from "../../../styles";
 
 const Container = styled.div`
   overflow-y: auto;
-  height: ${size.phone.h - size.navbar.h - size.contact.top.h}px;
+  height: 100%;
   padding: 0px 20px 20px 20px;
   box-sizing: border-box;
   display: flex;
