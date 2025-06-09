@@ -9,8 +9,8 @@ const Container = styled.div<{ size: number, bg: string }>`
   transition: all 0.5s;
   position: relative;
   height: ${p => p.size}px;
-  width: ${p => p.size * 1.8}px;
-  padding: ${p => p.size * 0.15}px;
+  width: ${p => p.size * 1.75}px;
+  padding: ${p => p.size * 0.1}px;
   box-sizing: border-box;
   border-radius: ${p => p.size}px;
   background-color: ${p => p.bg};
@@ -21,8 +21,8 @@ const Container = styled.div<{ size: number, bg: string }>`
 
 const Slide = styled.div<{ size: number, bg: string }>`
   transition: all 0.5s;
-  height: ${p => p.size * 0.75}px;
-  min-height: ${p => p.size * 0.75}px;
+  height: ${p => p.size * 0.9}px;
+  min-height: ${p => p.size * 0.9}px;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   background-color: ${p => p.bg};
@@ -32,7 +32,7 @@ const Slide = styled.div<{ size: number, bg: string }>`
 `;
 
 const cssChecked = css`
-  transform: translateX(100%);
+  transform: translateX(75%);
 `;
 
 interface Props {

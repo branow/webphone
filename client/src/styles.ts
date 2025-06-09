@@ -130,6 +130,7 @@ export const size = {
   setting: { top: { h: 50, }, },
   account: { top: { h: 50, }, },
   admin: { top: { h: 50, }, },
+  import: { top: { h: 50 }, },
 }
 
 const pulsatingShaking = css`

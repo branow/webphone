@@ -1,5 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 import AccountApi, { Account } from "services/accounts";
+import ContactApi, { CreateContact } from "services/contacts";
+import { Paths } from "routes";
 
 type Props<T> = {
   retry?: number;
@@ -31,4 +34,17 @@ export function useFetchActiveAccount({ user, enabled, initial }: Props<Account>
 
 export function useFetchActiveDefaultAccount(props?: Props<Account>) {
   return useFetchActiveAccount({ ...props, user: "default" });
+}
+
+export function useCreateContactsBatch({ user }: { user: string }) {
+  const navigate = useNavigate();
+  const client = useQueryClient();
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: (contacts: CreateContact[]) => ContactApi.createBatch(user, contacts),
+    onSuccess: () => {
+      client.invalidateQueries({ predicate: ContactApi.QueryKeys.predicate });
+      navigate(Paths.Contacts({ user }))
+    },
+  });
+  return { create: mutate, isPending, error };
 }

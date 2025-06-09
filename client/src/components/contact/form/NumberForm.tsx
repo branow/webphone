@@ -67,7 +67,7 @@ const NumberForm: FC<Props> = ({ number, updateNumber, deleteNumber, error }) =>
         onValueChange={handleNumberChange}
         error={error}
       />
-      <DeleteButton iconSize={font.size.m} remove={deleteNumber} />
+      <DeleteButton size={font.size.xl} action={deleteNumber} />
     </Container>
   );
 }

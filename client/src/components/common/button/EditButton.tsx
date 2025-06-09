@@ -1,43 +1,22 @@
 import { FC } from "react";
-import { styled } from "@linaria/react";
 import { MdEdit } from "react-icons/md";
-import TransparentRoundButton from "components/common/button/TransparentRoundButton";
-import { useTheme } from "hooks/useTheme";
-import { font } from "styles";
-
-const IconContainer = styled.div<{ size: number }>`
-  width: ${p => p.size}px;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+import IconButton from "components/common/button/IconButton";
 
 interface Props {
-  edit: () => void;
+  action: () => void;
   disabled?: boolean;
-  btnSize?: number;
-  iconSize?: number;
+  size?: number;
 }
 
-const EditButton: FC<Props> = ({ edit, disabled, iconSize, btnSize }) => {
-  const th = useTheme();
-
-  iconSize = iconSize || font.size.xl;
-  btnSize = btnSize || iconSize * 1.75;
-
+const EditButton: FC<Props> = ({ action, disabled, size }) => {
   return (
-    <TransparentRoundButton
-      onClick={edit}
+    <IconButton
+      Icon={MdEdit}
+      onClick={action}
       disabled={disabled}
-      color={th.colors.blue}
-      colorHover={th.colors.blueHover}
-      colorActive={th.colors.blue}
-    >
-      <IconContainer size={btnSize}>
-        <MdEdit size={font.size.xl} />
-      </IconContainer>
-    </TransparentRoundButton>
+      btnSize={size}
+      iconScale={0.8}
+    />
   );
 };
 

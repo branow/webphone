@@ -18,16 +18,16 @@ const matrixes = [
     ["account"],
   ],
   [
-    ["settings", "settings", "settings", "settings"],
-    ["contacts", "contact", "contact-update", "contact-create"],
-    ["admin", "admin", "admin", "admin"],
+    ["settings", "settings", "settings", "settings", "settings"],
+    ["contacts", "contacts-import", "contact", "contact-update", "contact-create"],
+    ["admin", "admin", "admin", "admin", "admin"],
   ],
   [
     ["settings", "settings"],
     ["history", "contact"],
   ],
   [
-    ["settings", "settings"],
+    ["settings", "settings", "settings"],
     ["dialpad", "dialpad", "dialpad"],
     ["features", "admin", "accounts"],
   ],

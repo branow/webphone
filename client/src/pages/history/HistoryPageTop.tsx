@@ -41,8 +41,8 @@ const HistoryPageTop: FC<Props> = ({ clean, cleanDisabled }) => {
       <Title color={th.colors.textDisabled}>{t(d.history.title)}</Title>
       <CleanButtonContainer>
         <DeleteButton
-          iconSize={font.size.l}
-          remove={clean}
+          action={clean}
+          size={font.size.x4l}
           disabled={cleanDisabled}
         />
       </CleanButtonContainer>

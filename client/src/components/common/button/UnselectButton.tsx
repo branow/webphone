@@ -1,28 +1,28 @@
 import { FC } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 import IconButton from "components/common/button/IconButton";
 import { useTheme } from "hooks/useTheme";
 
 interface Props {
-  action: () => void;
+  unselect: () => void;
   disabled?: boolean;
   size?: number;
 }
 
-const AddButton: FC<Props> = ({ action, disabled, size }) => {
+const UnselectButton: FC<Props> = ({ unselect, disabled, size }) => {
   const th = useTheme();
 
   return (
     <IconButton
-      Icon={FaPlus}
-      onClick={action}
+      Icon={FaMinus}
+      onClick={unselect}
       disabled={disabled}
       btnSize={size}
       iconScale={0.7}
-      color={th.colors.green}
-      colorHover={th.colors.greenHover}
+      color={th.colors.blue}
+      colorHover={th.colors.blueHover}
     />
   );
 };
 
-export default AddButton;
+export default UnselectButton;
