@@ -35,7 +35,7 @@ export type UpdateContact = ContactSave & { id: string };
 export const QueryKeys = {
   contacts: (user: string, query: string, size = 25): string[] => ["contact", user, query, `${size}`],
   contact: (id: string): string[] => ["contact", id],
-  featureCodes: (query: string): string[] => ["contact", "feature-codes", query],
+  contactByNumber: (user: string, number: string): string[] => ["contact", user, number],
   predicate: (query: Query) => {
     return query.queryKey.includes("contact");
   }
@@ -47,6 +47,19 @@ export async function get(id: string): Promise<Contact> {
     .url(u => u
       .origin(BACKEND_ORIGIN)
       .path(`/api/contacts/${id}`))
+    .get().bearer(token).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Contact>())
+}
+
+export async function getByNumber(user: string, number: string): Promise<Contact> {
+  const { token } = await Auth().ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/user/${user}/number/${number}`))
     .get().bearer(token).fetch();
   return response
     .any(logRequestResponse)
@@ -124,8 +137,9 @@ export async function remove(id: string): Promise<void> {
 
 export default {
   QueryKeys,
-  get,
   getAll,
+  get,
+  getByNumber,
   create,
   createBatch,
   update,
