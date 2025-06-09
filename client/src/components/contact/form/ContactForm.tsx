@@ -9,8 +9,8 @@ import ControlPane from "components/common/pane/ControlPane";
 import ErrorBanner from "components/common/messages/ErrorBanner";
 import PhotoForm from "components/contact/form/PhotoForm";
 import NumbersForm from "components/contact/form/NumbersForm";
-import { mapContactDetails, useEditContact } from "hooks/useEditContact";
-import { ContactDetails } from "services/contacts";
+import { mapContact, useEditContact } from "hooks/useEditContact";
+import { Contact } from "services/contacts";
 import { d } from "lib/i18n";
 import { font, size } from "styles";
 
@@ -31,8 +31,8 @@ const Info = styled.div`
 `;
 
 interface Props {
-  contact: ContactDetails;
-  save: (contact: ContactDetails, photo?: File) => void;
+  contact: Contact;
+  save: (contact: Contact, photo?: File) => void;
   savingError?: Error;
 }
 
@@ -97,7 +97,7 @@ const ContactForm: FC<Props> = ({ contact, save, savingError }) => {
             key: "save",
             children: t(d.ui.buttons.save),
             disabled: !!error,
-            onClick: () => save(mapContactDetails(form), photoFile),
+            onClick: () => save(mapContact(form), photoFile),
           },
           {
             key: "cancel",

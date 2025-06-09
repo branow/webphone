@@ -1,6 +1,6 @@
 import { FC, useContext } from "react";
 import HistoryApi, { Record, CreateRecord, CallStatus } from "services/history";
-import ContactApi, { ContactDetails, Number, NumberType, CreateContact } from "services/contacts";
+import ContactApi, { Contact, Number, NumberType, CreateContact } from "services/contacts";
 import PhotoApi from "services/photos";
 import { AccountContext } from "context/AccountContext";
 
@@ -39,7 +39,7 @@ const callStatuses = [CallStatus.INCOMING, CallStatus.OUTGOING, CallStatus.FAILE
 
 
 interface Model {
-  contact: ContactDetails;
+  contact: Contact;
   records: Record[];
 }
 
@@ -69,11 +69,11 @@ async function createModel(user: string): Promise<Model> {
   return { contact, records };
 }
 
-async function createContact(user: string): Promise<ContactDetails> {
+async function createContact(user: string): Promise<Contact> {
   return ContactApi.create(user, await generateContact());
 }
 
-async function createRecord(user: string, contact?: ContactDetails): Promise<Record> {
+async function createRecord(user: string, contact?: Contact): Promise<Record> {
   return HistoryApi.create(user, generateRecord(contact));
 }
 
@@ -101,7 +101,7 @@ async function uploadPhoto(url: string): Promise<string> {
   return (await PhotoApi.upload(file)).id;
 }
 
-function generateRecord(contact?: ContactDetails): CreateRecord {
+function generateRecord(contact?: Contact): CreateRecord {
   const number = contact ? randItem(contact.numbers).number : randNumber({ max: 999_999_999 }).toString();
   const startDate = randDate({ min: new Date(2024, 10, 1), max: new Date() });
   const endDate = randBoolean(0.8) ? randDate({ min: startDate, max: new Date(startDate.getTime() + 1000 * 60 * 60 * 5) }) : undefined;

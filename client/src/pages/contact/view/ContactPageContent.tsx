@@ -10,7 +10,7 @@ import ErrorBanner from "components/common/messages/ErrorBanner";
 import DeleteContactWindow from "pages/contact/view/DeleteContactWindow";
 import ContactPageTop from "pages/contact/view/ContactPageTop";
 import ContactPageBody from "pages/contact/view/ContactPageBody";
-import ContactApi, { ContactDetails } from "services/contacts";
+import ContactApi, { Contact } from "services/contacts";
 import HistoryApi from "services/history";
 import { d } from "lib/i18n";
 import { Paths } from "routes";
@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 interface Props {
-  contact: ContactDetails;
+  contact: Contact;
 }
 
 const ContactPageContent: FC<Props> = ({ contact }) => {

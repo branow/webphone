@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
@@ -65,14 +64,14 @@ public class ContactService {
      * Retrieves the contact details DTO by its identifier.
      *
      * @param id the contact's identifier
-     * @return a {@link ContactDetailsDto} object
+     * @return a {@link ContactDto} object
      * @throws EntityNotFoundException if no contact is found by the given identifier
      * */
     @LogBefore("Retrieving contact with ID=#{#id}")
     @LogAfter("Retrieved contacts with ID=#{#result.getId()}")
     @LogError("Failed to retrieve contact [#{#error.toString()}]")
-    public ContactDetailsDto getDetailsById(String id) {
-        return this.mapper.mapContactDetailsDto(this.repository.getById(id));
+    public ContactDto getById(String id) {
+        return this.mapper.mapContactDto(this.repository.getById(id));
     }
 
     /**
@@ -80,7 +79,7 @@ public class ContactService {
      *
      * @param user      the user creating the contact
      * @param createDto the data for the new contact
-     * @return the created {@link ContactDetailsDto} object
+     * @return the created {@link ContactDto} object
      * @throws EntityAlreadyExistsException if a contact with the same name or
      *         or number already exists
      * @throws EntityNotFoundException if a photo is present and it does not
@@ -89,11 +88,11 @@ public class ContactService {
     @LogBefore("Creating contact for user=#{#user}")
     @LogAfter("Created contact with ID=#{#result.getId()}")
     @LogError("Failed to create contact [#{#error.toString()}]")
-    public ContactDetailsDto create(String user, CreateContactDto createDto) {
+    public ContactDto create(String user, CreateContactDto createDto) {
         validateNewContact(createDto, user);
         Contact contact = this.mapper.mapContact(createDto, user);
         this.repository.insert(contact);
-        return this.mapper.mapContactDetailsDto(contact);
+        return this.mapper.mapContactDto(contact);
     }
 
     private void validateNewContact(CreateContactDto createDto, String user) {
@@ -114,7 +113,7 @@ public class ContactService {
      *
      * @param user       the user creating the contacts
      * @param createDtos the data for the new contacts
-     * @return the list of successfully created {@link ContactDetailsDto} objects
+     * @return the list of successfully created {@link ContactDto} objects
      * @throws EntityAlreadyExistsException if a contact with the same name or
      *         or number already exists
      * @throws EntityNotFoundException if a photo is present and it does not
@@ -123,7 +122,7 @@ public class ContactService {
     @LogBefore("Creating batch of contacts for user=#{#user} size=#{#createDtos.size()}")
     @LogAfter("Created batch of contacts for user=#{#user} size=#{#result.size()}")
     @LogError("Failed to create batch of contacts [#{#error.toString()}]")
-    public List<ContactDetailsDto> create(String user, List<CreateContactDto> createDtos) {
+    public List<ContactDto> create(String user, List<CreateContactDto> createDtos) {
         if (createDtos.isEmpty()) return List.of();
 
         validateNewContacts(createDtos, user);
@@ -132,7 +131,7 @@ public class ContactService {
             .map(dto -> this.mapper.mapContact(dto, user)).toList();
 
         return this.repository.insert(contacts).stream()
-            .map(this.mapper::mapContactDetailsDto)
+            .map(this.mapper::mapContactDto)
             .toList();
     }
 
@@ -156,7 +155,7 @@ public class ContactService {
      * the previous photo will be deleted if present.
      *
      * @param updateDto the update data
-     * @return the updated {@link ContactDetailsDto}
+     * @return the updated {@link ContactDto}
      * @throws EntityNotFoundException if no contact exists the given identifier
      * @throws EntityAlreadyExistsException if another contact with the same name 
      *         or number exists
@@ -164,7 +163,7 @@ public class ContactService {
     @LogBefore("Updating contact for ID=#{#updateDto.getId()}")
     @LogAfter("Updated contact with ID=#{#result.getId()}")
     @LogError("Failed to update contact [#{#error.toString()}]")
-    public ContactDetailsDto update(UpdateContactDto updateDto) {
+    public ContactDto update(UpdateContactDto updateDto) {
         Contact oldContact = this.repository.getById(updateDto.getId());
         Contact newContact = this.mapper.mapContact(updateDto);
         
@@ -176,7 +175,7 @@ public class ContactService {
         validateUpdatedContact(oldContact);
 
         this.repository.save(oldContact);
-        return this.mapper.mapContactDetailsDto(oldContact);
+        return this.mapper.mapContactDto(oldContact);
     }
 
     private void validateUpdatedContact(Contact contact) {

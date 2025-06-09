@@ -12,7 +12,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ContactResponse {
     String id;
+    String user;
     String name;
     String photo;
+    String bio;
     List<NumberResponse> numbers;
 }

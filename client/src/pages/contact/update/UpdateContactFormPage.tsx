@@ -5,13 +5,13 @@ import FadeMotion from "components/common/motion/FadeMotion";
 import PendingPane from "components/common/motion/PendingPane";
 import ContactForm from "components/contact/form/ContactForm";
 import { useSaveContact } from "hooks/useSaveContact";
-import ContactApi, { ContactDetails } from "services/contacts";
+import ContactApi, { Contact } from "services/contacts";
 import { d } from "lib/i18n";
 
-const UpdateContactFormPage: FC<{ initContact: ContactDetails }> = ({ initContact }) => {
+const UpdateContactFormPage: FC<{ initContact: Contact }> = ({ initContact }) => {
   const { contact, save, isPending, error } = useSaveContact({
     initContact: initContact,
-    saveContact: (contact: ContactDetails) => ContactApi.update({ ...contact }),
+    saveContact: (contact: Contact) => ContactApi.update({ ...contact }),
   });
 
   const { t } = useTranslation();

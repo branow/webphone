@@ -11,11 +11,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.scisbo.webphone.dtos.controller.request.CreateContactRequest;
 import com.scisbo.webphone.dtos.controller.request.NumberRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;
-import com.scisbo.webphone.dtos.controller.response.ContactDetailsResponse;
 import com.scisbo.webphone.dtos.controller.response.ContactResponse;
 import com.scisbo.webphone.dtos.controller.response.ContactSummaryResponse;
 import com.scisbo.webphone.dtos.controller.response.NumberResponse;
-import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.ContactSummaryDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
@@ -88,37 +86,13 @@ public class ContactMapperTest {
     }
 
     @Test
-    public void testMapContactDetailsResponse() {
-        var dto = ContactDetailsDto.builder()
-            .id("id")
-            .name("name")
-            .photo("photo")
-            .bio("bio")
-            .numbers(
-                List.of(NumberDto.builder().type("work").number("1111").build())
-            )
-            .build();
-
-        var expected = ContactDetailsResponse.builder()
-            .id("id")
-            .name("name")
-            .photo("photo")
-            .bio("bio")
-            .numbers(
-                List.of(NumberResponse.builder().type("work").number("1111").build())
-            )
-            .build();
-
-        var actual = this.mapper.mapContactDetailsResponse(dto);
-        assertEquals(expected, actual);
-    }
-
-    @Test
     public void testMapContactResponse() {
         var dto = ContactDto.builder()
             .id("id")
+            .user("user")
             .name("name")
             .photo("photo")
+            .bio("bio")
             .numbers(
                 List.of(NumberDto.builder().type("work").number("1111").build())
             )
@@ -126,8 +100,10 @@ public class ContactMapperTest {
 
         var expected = ContactResponse.builder()
             .id("id")
+            .user("user")
             .name("name")
             .photo("photo")
+            .bio("bio")
             .numbers(
                 List.of(NumberResponse.builder().type("work").number("1111").build())
             )
@@ -206,34 +182,6 @@ public class ContactMapperTest {
     }
 
     @Test
-    public void testMapContactDetailsDto() {
-        var dto = Contact.builder()
-            .id("id")
-            .user("user")
-            .name("name")
-            .photo("photo")
-            .bio("bio")
-            .numbers(List.of(
-                Number.builder().type(NumberType.WORK).number("number").build()
-            ))
-            .build();
-
-        var expected = ContactDetailsDto.builder()
-            .id("id")
-            .user("user")
-            .name("name")
-            .photo("photo")
-            .bio("bio")
-            .numbers(List.of(
-                NumberDto.builder().type("work").number("number").build()
-            ))
-            .build();
-
-        var actual = this.mapper.mapContactDetailsDto(dto);
-        assertEquals(expected, actual);
-    }
-
-    @Test
     public void testMapContactDto() {
         var dto = Contact.builder()
             .id("id")
@@ -248,8 +196,10 @@ public class ContactMapperTest {
 
         var expected = ContactDto.builder()
             .id("id")
+            .user("user")
             .name("name")
             .photo("photo")
+            .bio("bio")
             .numbers(List.of(
                 NumberDto.builder().type("work").number("number").build()
             ))

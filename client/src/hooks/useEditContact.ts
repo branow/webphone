@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Number, ContactDetails } from "services/contacts";
+import { Number, Contact } from "services/contacts";
 import { d } from "lib/i18n";
 import { hex } from "util/identifier";
 import { validator } from "util/validator";
@@ -23,7 +23,7 @@ export interface ContactError {
 }
 
 interface Props {
-  initContact: ContactDetails;
+  initContact: Contact;
 }
 
 export function useEditContact({ initContact } : Props) {
@@ -73,11 +73,11 @@ export function useEditContact({ initContact } : Props) {
   };
 }
 
-export function mapContactDetails(contact: EditableContact): ContactDetails {
+export function mapContact(contact: EditableContact): Contact {
   return { ...contact, numbers: contact.numbers.map(mapNumber), user: "" };
 }
 
-export function mapEditableContact(contact: ContactDetails): EditableContact {
+export function mapEditableContact(contact: Contact): EditableContact {
   return { ...contact, numbers: contact.numbers.map(mapEditableNumber) };
 }
 

@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scisbo.webphone.dtos.controller.request.CreateContactRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;
-import com.scisbo.webphone.dtos.controller.response.ContactDetailsResponse;
 import com.scisbo.webphone.dtos.controller.response.ContactResponse;
 import com.scisbo.webphone.dtos.controller.response.PageResponse;
-import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.UpdateContactDto;
@@ -56,51 +54,51 @@ public class ContactController {
 
     @GetMapping("/{id}")
     @PreAuthorize("@authService.canRetrieveContact(authentication, #id)")
-    public ResponseEntity<ContactDetailsResponse> getById(
+    public ResponseEntity<ContactResponse> getById(
         @PathVariable("id") String id
     ) {
-        ContactDetailsDto contact = this.service.getDetailsById(id);
-        ContactDetailsResponse res = this.mapper.mapContactDetailsResponse(contact);
+        ContactDto contact = this.service.getById(id);
+        ContactResponse res = this.mapper.mapContactResponse(contact);
         return ResponseEntity.ok(res);
     }
 
     @PostMapping("/user/{userId}")
     @PreAuthorize("@authService.canCreateContact(authentication, #userId)")
-    public ResponseEntity<ContactDetailsResponse> create(
+    public ResponseEntity<ContactResponse> create(
         @PathVariable("userId") String userId,
         @RequestBody @Valid CreateContactRequest request
     ) {
         CreateContactDto contact = this.mapper.mapCreateContactDto(request);
-        ContactDetailsDto createdContact = this.service.create(userId, contact);
-        ContactDetailsResponse res = this.mapper.mapContactDetailsResponse(createdContact);
+        ContactDto createdContact = this.service.create(userId, contact);
+        ContactResponse res = this.mapper.mapContactResponse(createdContact);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @PostMapping("/user/{userId}/batch")
     @PreAuthorize("@authService.canCreateContact(authentication, #userId)")
-    public ResponseEntity<List<ContactDetailsResponse>> create(
+    public ResponseEntity<List<ContactResponse>> create(
         @PathVariable("userId") String userId,
         @RequestBody @Valid List<CreateContactRequest> request
     ) {
         List<CreateContactDto> contacts = request.stream()
             .map(this.mapper::mapCreateContactDto)
             .toList();
-        List<ContactDetailsDto> created = this.service.create(userId, contacts);
-        List<ContactDetailsResponse> res = created.stream()
-            .map(this.mapper::mapContactDetailsResponse)
+        List<ContactDto> created = this.service.create(userId, contacts);
+        List<ContactResponse> res = created.stream()
+            .map(this.mapper::mapContactResponse)
             .toList();
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("@authService.canUpdateContact(authentication, #id)")
-    public ResponseEntity<ContactDetailsResponse> update(
+    public ResponseEntity<ContactResponse> update(
         @PathVariable("id") String id,
         @RequestBody @Valid UpdateContactRequest request
     ) {
         UpdateContactDto contact = this.mapper.mapUpdateContactDto(request, id);
-        ContactDetailsDto createdContact = this.service.update(contact);
-        ContactDetailsResponse res = this.mapper.mapContactDetailsResponse(createdContact);
+        ContactDto createdContact = this.service.update(contact);
+        ContactResponse res = this.mapper.mapContactResponse(createdContact);
         return ResponseEntity.ok(res);
     }
 

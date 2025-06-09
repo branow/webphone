@@ -9,7 +9,7 @@ import ContactNumbers from "components/contact/ContactNumbers";
 import InfinitePages from "components/common/motion/InfinitePages";
 import CallRecords from "components/history/CallRecords";
 import { useTheme } from "hooks/useTheme";
-import { ContactDetails } from "services/contacts";
+import { Contact } from "services/contacts";
 import HistoryApi from "services/history";
 import { d } from "lib/i18n";
 import { font, size } from "styles";
@@ -42,7 +42,7 @@ const Name = styled.div<{ color: string }>`
 
 
 interface Props {
-  contact: ContactDetails;
+  contact: Contact;
 }
 
 const ContactPageBody: FC<Props> = ({ contact }) => {
