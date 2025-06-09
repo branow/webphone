@@ -1,12 +1,10 @@
 import { FC, useContext } from "react";
 import { useNavigate } from "react-router";
-import { IoIosArrowBack } from "react-icons/io";
 import { styled } from "@linaria/react";
-import TransparentRoundButton from "components/common/button/TransparentRoundButton";
 import EditButton from "components/common/button/EditButton";
 import DeleteButton from "components/common/button/DeleteButton";
+import ArrowLeftButton from "components/common/button/ArrowLeftButton";
 import { PageSwitcherContext } from "context/PageSwitcherContext";
-import { useTheme } from "hooks/useTheme";
 import { font, size } from "styles";
 import { Paths } from "routes";
 
@@ -22,14 +20,6 @@ const Left = styled.div``;
 
 const Right = styled.div`
   display: flex;
-  align-items: center;
-`;
-
-const IconContainer = styled.div`
-  width: ${size.contact.top.h * 0.8}px;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -51,32 +41,22 @@ const AccountPageTop: FC<Props> = ({ edit, remove }) => {
     }
   }
 
-  const th = useTheme();
-
   return (
     <Container>
       <Left>
-        <TransparentRoundButton
-          onClick={() => back()}
-          color={th.colors.subtitle}
-          colorHover={th.colors.title}
-          colorActive={th.colors.text}
-        >
-          <IconContainer>
-            <IoIosArrowBack size={font.size.x3l} />
-          </IconContainer>
-        </TransparentRoundButton>
+        <ArrowLeftButton
+          action={() => back()}
+          size={font.size.x4l}
+        />
       </Left>
       <Right>
         <EditButton
-          edit={edit}
-          btnSize={size.account.top.h * 0.8}
-          iconSize={font.size.xl}
+          action={edit}
+          size={font.size.x4l}
         />
         <DeleteButton
-          remove={remove}
-          btnSize={size.account.top.h * 0.8}
-          iconSize={font.size.xl}
+          action={remove}
+          size={font.size.x4l}
         />
       </Right>
     </Container>

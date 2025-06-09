@@ -10,6 +10,7 @@ import { AccountContext } from "context/AccountContext";
 import HistoryApi, { Record } from "services/history";
 import { extractPhoneNumber } from "util/format";
 import { Paths } from "routes";
+import { font } from "styles";
 
 const Container = styled.div`
   position: relative;
@@ -57,7 +58,11 @@ const RecordUnrolled: FC<Props> = ({ record }) => {
   return (
     <Container>
       <DeleteButtonContainer>
-        <DeleteButton iconSize={18} remove={remove} disabled={account?.isDefault} />
+        <DeleteButton
+          size={font.size.xxl}
+          action={remove}
+          disabled={account?.isDefault}
+        />
       </DeleteButtonContainer>
       <RecordUnrolledContent record={record} />
       <CallButtonContainer>

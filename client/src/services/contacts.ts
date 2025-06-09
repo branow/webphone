@@ -83,6 +83,19 @@ export async function create(user: string, contact: CreateContact): Promise<Cont
     .handle((res) => res.json<Contact>())
 }
 
+export async function createBatch(user: string, contacts: CreateContact[]): Promise<Contact> {
+  const { token } = await Auth().ensureAuthentication();
+  const response = await new RequestBuilder()
+    .url(u => u
+      .origin(BACKEND_ORIGIN)
+      .path(`/api/contacts/user/${user}/batch`))
+    .post().bearer(token).bodyJson(contacts).fetch();
+  return response
+    .any(logRequestResponse)
+    .error(handleApiError)
+    .handle((res) => res.json<Contact>())
+}
+
 export async function update(contact: UpdateContact): Promise<Contact> {
   const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
@@ -114,6 +127,7 @@ export default {
   get,
   getAll,
   create,
+  createBatch,
   update,
   remove,
 };

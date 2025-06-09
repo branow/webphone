@@ -29,9 +29,9 @@ const AccountsPageTop: FC<Props> = ({ setQuery }) => {
     <Container>
       <SearchBar onQueryChange={setQuery} debounced={true} />
       <AddButton
-        size={font.size.xl}
+        size={font.size.x4l}
         disabled={!isAdmin}
-        onClick={() => navigate(Paths.AccountCreate())}
+        action={() => navigate(Paths.AccountCreate())}
       />
     </Container>
   )

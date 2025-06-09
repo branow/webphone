@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router";
 import PhoneLayout from "components/phone/PhoneLayout";
 import HistoryPage from "pages/history/HistoryPage";
 import ContactsPage from "pages/contacts/view/ContactsPage";
+import ImportContactsPage from "pages/contacts/import/ImportContactsPage";
 import ContactPage from "pages/contact/view/ContactPage";
 import UpdateContactPage from "pages/contact/update/UpdateContactPage";
 import CreateContactPage from "pages/contact/create/CreateContactPage";
@@ -12,17 +13,17 @@ import CallActivePage from "pages/call/active/CallActivePage";
 import SettingPage from "pages/setting/SettingPage";
 import NotFoundPage from "pages/errors/NotFoundPage";
 import TestDataPage from "pages/dev/TestDataPage";
-import PageSwitcher from "pages/PageSwitcher";
 import AccountsPage from "pages/accounts/AccountsPage";
 import AccountPage from "pages/account/view/AccountPage";
 import CreateAccountPage from "pages/account/create/CreateAccountPage";
 import UpdateAccountPage from "pages/account/update/UpdateAccountPage";
 import AdminPage from "pages/admin/AdminPage";
+import PageSwitcher from "pages/PageSwitcher";
 
 export const Paths = {
   Dialpad: () => "/dialpad",
   Contacts: ({ user }: { user: string }) => `/contacts/view/${user}`,
-  // ContactsImport: ({ user }: { user: string }) => `/contacts/import/from-user/${user}`,
+  ContactsImport: ({ user }: { user: string }) => `/contacts/import/user/${user}`,
   History: ({ user }: { user: string }) => `/history/view/${user}`,
   ContactView: ({ id }: { id: string }) => `/contact/view/${id}`,
   ContactCreate: ({ user }: { user: string }) => `/contact/create/${user}`,
@@ -56,6 +57,12 @@ export const routes: Route[] = [
     paths: [Paths.Contacts({ user: ":user" })],
     element: <PageSwitcher />,
     page: <ContactsPage />,
+  },
+  {
+    key: "contacts-import",
+    paths: [Paths.ContactsImport({ user: ":user" })],
+    element: <PageSwitcher />,
+    page: <ImportContactsPage />,
   },
   {
     key: "contact",

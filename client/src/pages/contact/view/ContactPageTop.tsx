@@ -1,13 +1,11 @@
 import { FC, useContext } from "react";
 import { useNavigate } from "react-router";
-import { IoIosArrowBack } from "react-icons/io";
-import { BsFillTrash3Fill } from "react-icons/bs";
-import { MdEdit } from "react-icons/md";
 import { styled } from "@linaria/react";
-import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import EditButton from "components/common/button/EditButton";
+import ArrowLeftButton from "components/common/button/ArrowLeftButton";
+import DeleteButton from "components/common/button/DeleteButton";
 import { PageSwitcherContext } from "context/PageSwitcherContext";
 import { AccountContext } from "context/AccountContext";
-import { useTheme } from "hooks/useTheme";
 import { font, size } from "styles";
 import { Paths } from "routes";
 
@@ -57,45 +55,25 @@ const ContactPageTop: FC<Props> = ({ user, edit, remove }) => {
     }
   }
 
-  const th = useTheme();
-
   return (
     <Container>
       <Left>
-        <TransparentRoundButton
-          onClick={() => back()}
-          color={th.colors.subtitle}
-          colorHover={th.colors.title}
-          colorActive={th.colors.text}
-        >
-          <IconContainer>
-            <IoIosArrowBack size={font.size.x3l} />
-          </IconContainer>
-        </TransparentRoundButton>
+        <ArrowLeftButton
+          action={() => back()}
+          size={font.size.x4l}
+        />
       </Left>
       <Right>
-        <TransparentRoundButton
-          onClick={edit}
+        <EditButton
+          action={edit}
           disabled={account?.isDefault}
-          color={th.colors.blue}
-          colorHover={th.colors.blueHover}
-          colorActive={th.colors.blue}
-        >
-          <IconContainer>
-            <MdEdit size={font.size.xl} />
-          </IconContainer>
-        </TransparentRoundButton>
-        <TransparentRoundButton
-          onClick={remove}
+          size={font.size.x4l}
+        />
+        <DeleteButton
+          action={remove}
           disabled={account?.isDefault}
-          color={th.colors.red}
-          colorHover={th.colors.redHover}
-          colorActive={th.colors.red}
-        >
-          <IconContainer>
-            <BsFillTrash3Fill size={font.size.l} />
-          </IconContainer>
-        </TransparentRoundButton>
+          size={font.size.x4l}
+        />
       </Right>
     </Container>
   );

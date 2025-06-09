@@ -1,10 +1,8 @@
 import { FC } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { css } from "@linaria/core";
-import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import IconButton from "components/common/button/IconButton";
 import { useTheme } from "hooks/useTheme";
-import { font } from "styles";
-import { styled } from "@linaria/react";
 
 
 const cssButton = css`
@@ -21,39 +19,26 @@ const cssButton = css`
     }
 `;
 
-const IconContainer = styled.div<{ size: number }>`
-  width: ${p => p.size}px;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 interface Props {
-  remove: () => void;
-  btnSize?: number;
-  iconSize?: number;
+  action: () => void;
   disabled?: boolean;
+  size?: number;
 }
 
-const DeleteButton: FC<Props> = ({ remove, btnSize, iconSize, disabled }) => {
+const DeleteButton: FC<Props> = ({ action, size, disabled }) => {
   const th = useTheme();
 
-  iconSize = iconSize || font.size.xl;
-  btnSize = btnSize || iconSize * 1.75;
-
   return (
-    <TransparentRoundButton
+    <IconButton
       className={cssButton}
-      onClick={remove}
+      Icon={BsFillTrash3Fill}
+      onClick={action}
       disabled={disabled}
+      btnSize={size}
+      iconScale={0.7}
       color={th.colors.red}
       colorHover={th.colors.redHover}
-    >
-      <IconContainer size={btnSize}>
-        <BsFillTrash3Fill size={iconSize} />
-      </IconContainer>
-    </TransparentRoundButton>
+    />
   );
 }
 

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { FaPlus } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
 import IconButton from "components/common/button/IconButton";
 import { useTheme } from "hooks/useTheme";
 
@@ -9,20 +9,20 @@ interface Props {
   size?: number;
 }
 
-const AddButton: FC<Props> = ({ action, disabled, size }) => {
+const ArrowLeftButton: FC<Props> = ({ action, disabled, size }) => {
   const th = useTheme();
 
   return (
     <IconButton
-      Icon={FaPlus}
+      Icon={IoIosArrowBack}
       onClick={action}
       disabled={disabled}
       btnSize={size}
-      iconScale={0.7}
-      color={th.colors.green}
-      colorHover={th.colors.greenHover}
+      iconScale={1}
+      color={th.colors.subtitle}
+      colorHover={th.colors.title}
     />
   );
 };
 
-export default AddButton;
+export default ArrowLeftButton;

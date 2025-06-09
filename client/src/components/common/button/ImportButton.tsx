@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { FaPlus } from "react-icons/fa";
+import { BiImport } from "react-icons/bi";
 import IconButton from "components/common/button/IconButton";
 import { useTheme } from "hooks/useTheme";
 
@@ -9,20 +9,20 @@ interface Props {
   size?: number;
 }
 
-const AddButton: FC<Props> = ({ action, disabled, size }) => {
+const ImportButton: FC<Props> = ({ action, disabled, size }) => {
   const th = useTheme();
 
   return (
-    <IconButton
-      Icon={FaPlus}
+    <IconButton 
+      Icon={BiImport}
       onClick={action}
       disabled={disabled}
       btnSize={size}
-      iconScale={0.7}
+      iconScale={0.9}
       color={th.colors.green}
       colorHover={th.colors.greenHover}
     />
   );
 };
 
-export default AddButton;
+export default ImportButton;
