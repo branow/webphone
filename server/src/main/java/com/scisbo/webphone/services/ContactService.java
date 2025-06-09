@@ -61,17 +61,33 @@ public class ContactService {
     }
 
     /**
-     * Retrieves the contact details DTO by its identifier.
+     * Retrieves the contact DTO by its identifier.
      *
      * @param id the contact's identifier
      * @return a {@link ContactDto} object
      * @throws EntityNotFoundException if no contact is found by the given identifier
      * */
     @LogBefore("Retrieving contact with ID=#{#id}")
-    @LogAfter("Retrieved contacts with ID=#{#result.getId()}")
+    @LogAfter("Retrieved contact with ID=#{#result.getId()}")
     @LogError("Failed to retrieve contact [#{#error.toString()}]")
     public ContactDto getById(String id) {
         return this.mapper.mapContactDto(this.repository.getById(id));
+    }
+
+    /**
+     * Retrieves the contact DTO for the given user with the given number.
+     *
+     * @param user   the contact's user
+     * @param number the contact's number
+     * @return a {@link ContactDto} object
+     * @throws EntityNotFoundException if no contact is found for the given user
+     *         with the given number
+     * */
+    @LogBefore("Retrieving contact for user=#{#user} with number=#{#number}")
+    @LogAfter("Retrieved contact with ID=#{#result.getId()}")
+    @LogError("Failed to retrieve contact [#{#error.toString()}]")
+    public ContactDto getByNumber(String user, String number) {
+        return this.mapper.mapContactDto(this.repository.getByNumber(user, number));
     }
 
     /**

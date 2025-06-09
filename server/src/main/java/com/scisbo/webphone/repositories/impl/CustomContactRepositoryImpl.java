@@ -1,6 +1,7 @@
 package com.scisbo.webphone.repositories.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.data.domain.Page;
@@ -12,7 +13,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.scisbo.webphone.exceptions.EntityNotFoundException;
 import com.scisbo.webphone.models.Contact;
+import com.scisbo.webphone.repositories.ContactRepository;
 import com.scisbo.webphone.repositories.CustomContactRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,19 @@ public class CustomContactRepositoryImpl implements CustomContactRepository {
 
     private final MongoTemplate template;
 
+
+    @Override
+    public Contact getByNumber(String user, String number) {
+        Criteria userCriteria = Criteria.where("user").is(user);
+        Criteria numberCriteria = Criteria.where("numbers")
+            .elemMatch(Criteria.where("number").is(number));
+
+        Query query = Query.query(userCriteria).addCriteria(numberCriteria);
+        Contact contact = this.template.findOne(query, Contact.class);
+
+        return Optional.ofNullable(contact)
+            .orElseThrow(() -> new EntityNotFoundException(ContactRepository.ENTITY_NAME, "number", number));
+    }
 
     @Override
     public Page<Contact> findByUserAndKeywordOrderByName(String user, String keyword, Pageable pageable) {

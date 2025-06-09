@@ -129,6 +129,26 @@ public class ContactControllerTest {
     }
 
     @Test
+    public void testGetByNumber() throws Exception {
+        var user = "user";
+        var number = "number";
+        var contact = TestObjectsUtils.contacts().stream().findAny().orElseThrow();
+        var contactDto = this.mapper.mapContactDto(contact);
+        var contactResponse = this.mapper.mapContactResponse(contactDto);
+
+        when(this.service.getByNumber(user, number)).thenReturn(contactDto);
+
+        var response = RestUtils.toJson(contactResponse);
+
+        this.mockMvc
+            .perform(
+                get("/api/contacts/user/{user}/number/{number}", user, number)
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().string(response));
+    }
+
+    @Test
     public void testCreate() throws Exception {
         var user = "userId";
         var createContactRequest = CreateContactRequest.builder()

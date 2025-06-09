@@ -66,6 +66,28 @@ public class ContactRepositoryIT extends EmbeddedMongoDbAbstractIT {
     }
 
     @Test
+    public void testGetByNumber() {
+        Collection<Document> contacts = this.template.insert(TestDataUtils.contacts(), COLLECTION);
+        Contact expected = contacts.stream()
+            .map(TestObjectsUtils::mapContact)
+            .findAny()
+            .orElseThrow();
+
+        String number = expected.getNumbers().stream()
+            .findAny()
+            .orElseThrow()
+            .getNumber();
+        
+        Contact actual = this.repository.getByNumber(expected.getUser(), number);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetByNumber_isAbsent_throwsException() {
+        assertThrows(EntityNotFoundException.class, () -> this.repository.getByNumber("user", "number"));
+    }
+
+    @Test
     public void testFindAll() {
         Collection<Document> contacts = this.template.insert(TestDataUtils.contacts(), COLLECTION);
         List<Contact> expected = contacts.stream()

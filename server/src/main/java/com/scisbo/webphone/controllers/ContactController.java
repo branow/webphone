@@ -62,6 +62,17 @@ public class ContactController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/user/{userId}/number/{number}")
+    @PreAuthorize("@authService.canRetrieveContacts(authentication, #userId)")
+    public ResponseEntity<ContactResponse> getByNumber(
+        @PathVariable("userId") String userId,
+        @PathVariable("number") String number
+    ) {
+        ContactDto contact = this.service.getByNumber(userId, number);
+        ContactResponse res = this.mapper.mapContactResponse(contact);
+        return ResponseEntity.ok(res);
+    }
+
     @PostMapping("/user/{userId}")
     @PreAuthorize("@authService.canCreateContact(authentication, #userId)")
     public ResponseEntity<ContactResponse> create(
