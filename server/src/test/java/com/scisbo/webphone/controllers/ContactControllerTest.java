@@ -113,12 +113,12 @@ public class ContactControllerTest {
     public void testGetById() throws Exception {
         var id = "contactId";
         var contact = TestObjectsUtils.contacts().get(3);
-        var contactDetailsDto = this.mapper.mapContactDetailsDto(contact);
-        var contactDetailsResponse = this.mapper.mapContactDetailsResponse(contactDetailsDto);
+        var contactDto = this.mapper.mapContactDto(contact);
+        var contactResponse = this.mapper.mapContactResponse(contactDto);
 
-        when(this.service.getDetailsById(id)).thenReturn(contactDetailsDto);
+        when(this.service.getById(id)).thenReturn(contactDto);
 
-        var response = RestUtils.toJson(contactDetailsResponse);
+        var response = RestUtils.toJson(contactResponse);
 
         this.mockMvc
             .perform(
@@ -142,13 +142,13 @@ public class ContactControllerTest {
             .build();
         var createContactDto = this.mapper.mapCreateContactDto(createContactRequest);
         var contact = this.mapper.mapContact(createContactDto, user);
-        var contactDetailsDto = this.mapper.mapContactDetailsDto(contact);
-        var contactDetailsResponse = this.mapper.mapContactDetailsResponse(contactDetailsDto);
+        var contactDto = this.mapper.mapContactDto(contact);
+        var contactResponse = this.mapper.mapContactResponse(contactDto);
 
-        when(this.service.create(user, createContactDto)).thenReturn(contactDetailsDto);
+        when(this.service.create(user, createContactDto)).thenReturn(contactDto);
 
         var request = RestUtils.toJson(createContactRequest);
-        var response = RestUtils.toJson(contactDetailsResponse);
+        var response = RestUtils.toJson(contactResponse);
 
         this.mockMvc
             .perform(
@@ -169,34 +169,35 @@ public class ContactControllerTest {
     @Test
     public void testCreateBatch() throws Exception {
         var user = "userId";
-        var createContactsRequest = List.of(
+        var createContactRequests = List.of(
             CreateContactRequest.builder()
-                .name("name")
-                .photo("photo123")
-                .bio("bio")
+                .name("name1")
                 .numbers(List.of(
-                    NumberRequest.builder().type("work").number("1111").build(),
+                    NumberRequest.builder().type("work").number("1111").build()
+                ))
+                .build(),
+            CreateContactRequest.builder()
+                .name("name2")
+                .numbers(List.of(
                     NumberRequest.builder().type("home").number("2222").build()
                 ))
                 .build()
         );
-        var createContactDtos = createContactsRequest.stream()
+        var createContactDtos = createContactRequests.stream()
             .map(this.mapper::mapCreateContactDto)
             .toList();
-        var contacts = createContactDtos.stream()
-            .map(createContactDto -> this.mapper.mapContact(createContactDto, user))
+        var contacts = TestObjectsUtils.contacts();
+        var contactDtos = contacts.stream()
+            .map(this.mapper::mapContactDto)
             .toList();
-        var contactDetailsDtos = contacts.stream()
-            .map(this.mapper::mapContactDetailsDto)
-            .toList();
-        var contactDetailsResponse = contactDetailsDtos.stream()
-            .map(this.mapper::mapContactDetailsResponse)
+        var contactResponses = contactDtos.stream()
+            .map(this.mapper::mapContactResponse)
             .toList();
 
-        when(this.service.create(user, createContactDtos)).thenReturn(contactDetailsDtos);
+        when(this.service.create(user, createContactDtos)).thenReturn(contactDtos);
 
-        var request = RestUtils.toJson(createContactsRequest);
-        var response = RestUtils.toJson(contactDetailsResponse);
+        var request = RestUtils.toJson(createContactRequests);
+        var response = RestUtils.toJson(contactResponses);
 
         this.mockMvc
             .perform(
@@ -227,14 +228,14 @@ public class ContactControllerTest {
             ))
             .build();
         var updateContactDto = this.mapper.mapUpdateContactDto(updateContactRequest, id);
-        var contact = this.mapper.mapContact(updateContactDto);
-        var contactDetailsDto = this.mapper.mapContactDetailsDto(contact);
-        var contactDetailsResponse = this.mapper.mapContactDetailsResponse(contactDetailsDto);
+        var contact = TestObjectsUtils.contacts().get(3);
+        var contactDto = this.mapper.mapContactDto(contact);
+        var contactResponse = this.mapper.mapContactResponse(contactDto);
 
-        when(this.service.update(updateContactDto)).thenReturn(contactDetailsDto);
+        when(this.service.update(updateContactDto)).thenReturn(contactDto);
 
         var request = RestUtils.toJson(updateContactRequest);
-        var response = RestUtils.toJson(contactDetailsResponse);
+        var response = RestUtils.toJson(contactResponse);
 
         this.mockMvc
             .perform(

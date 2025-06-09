@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ContactApi, { ContactDetails } from "services/contacts";
+import ContactApi, { Contact } from "services/contacts";
 import PhotoApi from "services/photos";
 import { Paths } from "routes";
 
 interface Props {
-  initContact: ContactDetails;
-  saveContact: (contact: ContactDetails) => Promise<ContactDetails>
+  initContact: Contact;
+  saveContact: (contact: Contact) => Promise<Contact>
 }
 
 interface SaveContact {
-  contact: ContactDetails;
+  contact: Contact;
   photo?: File;
 }
 
 export function useSaveContact({ initContact, saveContact }: Props) {
-  const [contact, setContact] = useState<ContactDetails>(initContact);
+  const [contact, setContact] = useState(initContact);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -40,7 +40,7 @@ export function useSaveContact({ initContact, saveContact }: Props) {
     }
   });
 
-  const save = (contact: ContactDetails, photo?: File) => {
+  const save = (contact: Contact, photo?: File) => {
     setContact({ ...contact });
     mutate({ contact, photo });
   };

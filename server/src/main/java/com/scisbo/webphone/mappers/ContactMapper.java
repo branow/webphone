@@ -10,12 +10,10 @@ import org.springframework.stereotype.Component;
 import com.scisbo.webphone.dtos.controller.request.CreateContactRequest;
 import com.scisbo.webphone.dtos.controller.request.NumberRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;
-import com.scisbo.webphone.dtos.controller.response.ContactDetailsResponse;
 import com.scisbo.webphone.dtos.controller.response.ContactResponse;
 import com.scisbo.webphone.dtos.controller.response.ContactSummaryResponse;
 import com.scisbo.webphone.dtos.controller.response.NumberResponse;
 import com.scisbo.webphone.dtos.controller.response.PageResponse;
-import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.ContactSummaryDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
@@ -68,21 +66,6 @@ public class ContactMapper {
             .build();
     }
 
-    public ContactDetailsResponse mapContactDetailsResponse(ContactDetailsDto contact) {
-        List<NumberResponse> numbers = contact.getNumbers().stream()
-            .map(this::mapNumberResponse)
-            .collect(Collectors.toList());
-
-        return ContactDetailsResponse.builder()
-            .id(contact.getId())
-            .user(contact.getUser())
-            .name(contact.getName())
-            .photo(contact.getPhoto())
-            .bio(contact.getBio())
-            .numbers(numbers)
-            .build();
-    }
-
     public PageResponse<ContactResponse> mapContactResponse(Page<ContactDto> page) {
         return this.pageMapper.mapPageResponse(page.map(this::mapContactResponse));
     }
@@ -94,8 +77,10 @@ public class ContactMapper {
 
         return ContactResponse.builder()
             .id(contact.getId())
+            .user(contact.getUser())
             .name(contact.getName())
             .photo(contact.getPhoto())
+            .bio(contact.getBio())
             .numbers(numbers)
             .build();
     }
@@ -135,22 +120,13 @@ public class ContactMapper {
             .build();
     }
 
-    public ContactDetailsDto mapContactDetailsDto(Contact contact) {
-        return ContactDetailsDto.builder()
+    public ContactDto mapContactDto(Contact contact) {
+        return ContactDto.builder()
             .id(contact.getId())
             .user(contact.getUser())
             .name(contact.getName())
             .photo(contact.getPhoto())
             .bio(contact.getBio())
-            .numbers(mapNumberDto(contact.getNumbers()))
-            .build();
-    }
-
-    public ContactDto mapContactDto(Contact contact) {
-        return ContactDto.builder()
-            .id(contact.getId())
-            .name(contact.getName())
-            .photo(contact.getPhoto())
             .numbers(mapNumberDto(contact.getNumbers()))
             .build();
     }

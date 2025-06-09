@@ -13,15 +13,14 @@ export type Number = {
   number: string;
 }
 
-type ContactBase = {
+export type Contact = {
   id: string;
+  user: string;
   name: string;
   photo?: string;
+  bio?: string;
   numbers: Number[];
 }
-
-export type Contact = ContactBase;
-export type ContactDetails = ContactBase & { user: string, bio?: string };
 
 type ContactSave = {
   name: string;
@@ -42,7 +41,7 @@ export const QueryKeys = {
   }
 }
 
-export async function get(id: string): Promise<ContactDetails> {
+export async function get(id: string): Promise<Contact> {
   const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
@@ -52,7 +51,7 @@ export async function get(id: string): Promise<ContactDetails> {
   return response
     .any(logRequestResponse)
     .error(handleApiError)
-    .handle((res) => res.json<ContactDetails>())
+    .handle((res) => res.json<Contact>())
 }
 
 export async function getAll(user: string, { query, number, size }: QueryPageOptions): Promise<Page<Contact>> {
@@ -71,7 +70,7 @@ export async function getAll(user: string, { query, number, size }: QueryPageOpt
     .handle((res) => res.json<Page<Contact>>())
 }
 
-export async function create(user: string, contact: CreateContact): Promise<ContactDetails> {
+export async function create(user: string, contact: CreateContact): Promise<Contact> {
   const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
@@ -81,10 +80,10 @@ export async function create(user: string, contact: CreateContact): Promise<Cont
   return response
     .any(logRequestResponse)
     .error(handleApiError)
-    .handle((res) => res.json<ContactDetails>())
+    .handle((res) => res.json<Contact>())
 }
 
-export async function update(contact: UpdateContact): Promise<ContactDetails> {
+export async function update(contact: UpdateContact): Promise<Contact> {
   const { token } = await Auth().ensureAuthentication();
   const response = await new RequestBuilder()
     .url(u => u
@@ -94,7 +93,7 @@ export async function update(contact: UpdateContact): Promise<ContactDetails> {
   return response
     .any(logRequestResponse)
     .error(handleApiError)
-    .handle((res) => res.json<ContactDetails>())
+    .handle((res) => res.json<Contact>())
 }
 
 export async function remove(id: string): Promise<void> {

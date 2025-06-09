@@ -24,7 +24,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.scisbo.webphone.common.data.TestObjectsUtils;
-import com.scisbo.webphone.dtos.service.ContactDetailsDto;
 import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.NumberDto;
@@ -116,7 +115,7 @@ public class ContactServiceTest {
     }
 
     @Test
-    public void testGetDetailsById() {
+    public void testGetById() {
         String id = UUID.randomUUID().toString();
 
         Contact contact = Contact.builder()
@@ -126,8 +125,8 @@ public class ContactServiceTest {
 
         when(this.repository.getById(id)).thenReturn(contact);
 
-        ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
-        ContactDetailsDto actual = this.service.getDetailsById(id);
+        ContactDto expected = this.mapper.mapContactDto(contact);
+        ContactDto actual = this.service.getById(id);
 
         assertEquals(expected, actual);
     }
@@ -152,8 +151,8 @@ public class ContactServiceTest {
         when(this.repository.findByUser(user)).thenReturn(contacts);
         when(this.photoRepository.getById(photo.getId())).thenReturn(photo);
 
-        ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
-        ContactDetailsDto actual = this.service.create(user, createContact);
+        ContactDto expected = this.mapper.mapContactDto(contact);
+        ContactDto actual = this.service.create(user, createContact);
 
         assertEquals(expected, actual);
         contact.setPhoto(expected.getPhoto());
@@ -226,10 +225,10 @@ public class ContactServiceTest {
         when(this.repository.insert(newContacts)).thenReturn(newContacts);
         when(this.repository.findByUser(user)).thenReturn(contacts);
 
-        List<ContactDetailsDto> expected = newContacts.stream()
-            .map(this.mapper::mapContactDetailsDto)
+        List<ContactDto> expected = newContacts.stream()
+            .map(this.mapper::mapContactDto)
             .toList();
-        List<ContactDetailsDto> actual = this.service.create(user, dtos);
+        List<ContactDto> actual = this.service.create(user, dtos);
 
         assertEquals(expected, actual);
     }
@@ -360,9 +359,9 @@ public class ContactServiceTest {
         when(this.repository.findByUser(oldContact.getUser())).thenReturn(contacts);
         when(this.photoRepository.getById(photo.getId())).thenReturn(photo);
 
-        ContactDetailsDto expected = this.mapper.mapContactDetailsDto(contact);
+        ContactDto expected = this.mapper.mapContactDto(contact);
         expected.setUser(oldContact.getUser());
-        ContactDetailsDto actual = this.service.update(updateContact);
+        ContactDto actual = this.service.update(updateContact);
 
         assertEquals(expected, actual);
         

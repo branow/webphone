@@ -37,7 +37,7 @@ import com.scisbo.webphone.dtos.controller.request.SipRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateAccountRequest;
 import com.scisbo.webphone.dtos.controller.request.UpdateContactRequest;
 import com.scisbo.webphone.dtos.service.AccountDto;
-import com.scisbo.webphone.dtos.service.ContactDetailsDto;
+import com.scisbo.webphone.dtos.service.ContactDto;
 import com.scisbo.webphone.dtos.service.CreateContactDto;
 import com.scisbo.webphone.dtos.service.HistoryRecordDto;
 import com.scisbo.webphone.dtos.service.PhotoDto;
@@ -355,8 +355,8 @@ public class WebSecurityConfigTest {
                 (Consumer<ServiceMap>) (map) -> {
                     when(map.authService.canRetrieveContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(true);
-                    when(map.contactService.getDetailsById(any()))
-                        .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
+                    when(map.contactService.getById(any()))
+                        .thenReturn(ContactDto.builder().numbers(List.of()).build());
                 }
             ),
             Arguments.of(
@@ -367,7 +367,7 @@ public class WebSecurityConfigTest {
                     when(map.authService.canCreateContact(any(JwtAuthenticationToken.class), eq("user1")))
                         .thenReturn(true);
                     when(map.contactService.create(eq("user1"), any(CreateContactDto.class)))
-                        .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
+                        .thenReturn(ContactDto.builder().numbers(List.of()).build());
                 }
             ),
             Arguments.of(
@@ -389,7 +389,7 @@ public class WebSecurityConfigTest {
                     when(map.authService.canUpdateContact(any(JwtAuthenticationToken.class), eq("contact1")))
                         .thenReturn(true);
                     when(map.contactService.update(any()))
-                        .thenReturn(ContactDetailsDto.builder().numbers(List.of()).build());
+                        .thenReturn(ContactDto.builder().numbers(List.of()).build());
                 }
             ),
             Arguments.of(
