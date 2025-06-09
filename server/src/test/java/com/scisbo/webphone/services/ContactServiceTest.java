@@ -132,6 +132,20 @@ public class ContactServiceTest {
     }
 
     @Test
+    public void testGetByNumber() {
+        String user = "user", number = "number";
+        Contact contact = TestObjectsUtils.contacts().stream()
+            .findAny()
+            .orElseThrow();
+
+        when(this.repository.getByNumber(user, number)).thenReturn(contact);
+
+        ContactDto expected = this.mapper.mapContactDto(contact);
+        ContactDto actual = this.service.getByNumber(user, number);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testCreate() {
         List<Contact> contacts = TestObjectsUtils.contacts();
 

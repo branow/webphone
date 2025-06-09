@@ -8,6 +8,17 @@ import org.springframework.data.domain.Pageable;
 public interface CustomContactRepository {
 
     /**
+     * Retrieves the contact for the user by number.
+     *
+     * @param user   the contact's user
+     * @param number the contact's number
+     * @return a {@link Contact} object
+     * @throws EntityNotFoundException if no contact is found for the given user 
+     *         by the number
+     * */
+    Contact getByNumber(String user, String number);
+
+    /**
      * Searches contacts for the specified user using a case-insensitive 
      * keyword search across the fields: {@code name}, {@code bio}, 
      * and {@code numbers.number}.
