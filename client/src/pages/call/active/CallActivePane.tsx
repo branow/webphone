@@ -1,6 +1,6 @@
 import { FC, useContext, useState } from "react";
 import { styled } from "@linaria/react";
-import { BsMicFill, BsMicMuteFill, BsVolumeUpFill, BsVolumeMuteFill } from "react-icons/bs";
+import { BsMicFill, BsMicMuteFill, BsVolumeUpFill, BsVolumeMuteFill, BsPause, BsPlay } from "react-icons/bs";
 import { IoIosKeypad } from "react-icons/io";
 import TransparentRoundButton from "components/common/button/TransparentRoundButton";
 import HangUpButton from "components/call/HangUpButton";
@@ -57,7 +57,7 @@ const audioVisualizerOptions = {
 }
 
 const CallActivePane: FC = () => {
-  const { call, toggleMute, hangupCall } = useContext(CallContext);
+  const { call, toggleMute, toggleHold, hangupCall } = useContext(CallContext);
   const { audioRef } = useAudio(call!.remoteStream);
   const { volume, mute, unmute } = useVolume({ audioRef });
   const { canvasRef } = useAudioVisualizer(call!.remoteStream, audioVisualizerOptions);
@@ -76,28 +76,41 @@ const CallActivePane: FC = () => {
       )}
       <CallControlPane color={th.colors.text}>
         {volume && (
-          <TransparentRoundButton onClick={mute}>
+          <TransparentRoundButton onClick={mute} disabled={call?.isOnHold}>
             <BsVolumeUpFill/>
           </TransparentRoundButton>
         )}
         {!volume && (
-          <TransparentRoundButton onClick={unmute}>
+          <TransparentRoundButton onClick={unmute} disabled={call?.isOnHold}>
             <BsVolumeMuteFill/>
           </TransparentRoundButton>
         )}
         {call!.isMuted && (
-          <TransparentRoundButton onClick={toggleMute}>
+          <TransparentRoundButton onClick={toggleMute} disabled={call?.isOnHold}>
             <BsMicMuteFill />
           </TransparentRoundButton>
         )}
         {!call!.isMuted && (
-          <TransparentRoundButton onClick={toggleMute}>
+          <TransparentRoundButton onClick={toggleMute} disabled={call?.isOnHold}>
             <BsMicFill />
           </TransparentRoundButton>
         )}
-        <TransparentRoundButton onClick={() => setShowKeypad(!showKeypad)}>
+        <TransparentRoundButton
+          onClick={() => setShowKeypad(!showKeypad)}
+          disabled={call?.isOnHold}
+        >
           <IoIosKeypad />
         </TransparentRoundButton>
+        {call!.isOnHold && (
+          <TransparentRoundButton onClick={toggleHold}>
+            <BsPlay />
+          </TransparentRoundButton>
+        )}
+        {!call!.isOnHold && (
+          <TransparentRoundButton onClick={toggleHold}>
+            <BsPause />
+          </TransparentRoundButton>
+        )}
       </CallControlPane>
       <HangUpButton size={65} onClick={hangupCall} />
     </Container>
