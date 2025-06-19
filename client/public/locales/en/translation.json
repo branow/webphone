@@ -66,6 +66,14 @@
     }
   },
 
+  "calls": {
+    "title": "Calls",
+    "messages": {
+      "noCalls": "No active calls",
+      "inCall": "In a call with"
+    }
+  },
+
   "contact": {
     "fields": {
       "name": "Name",

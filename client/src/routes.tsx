@@ -10,6 +10,7 @@ import CreateContactPage from "pages/contact/create/CreateContactPage";
 import DialPadPage from "pages/dialpad/DialPadPage";
 import CallPage from "pages/call/CallPage";
 import CallActivePage from "pages/call/active/CallActivePage";
+import CallsPage from "pages/calls/CallsPage";
 import SettingPage from "pages/setting/SettingPage";
 import NotFoundPage from "pages/errors/NotFoundPage";
 import TestDataPage from "pages/dev/TestDataPage";
@@ -30,6 +31,7 @@ export const Paths = {
   ContactUpdate: ({ id }: { id: string }) => `/contact/update/${id}`,
   Call: ({ number }: { number: string }) => `/call/number/${number}`,
   CallActive: ({ id }: { id: string }) => `/call/session/${id}`,
+  CallsActive: () => `/call/sessions`,
   Accounts: () => "/accounts",
   AccountView: ({ id }: { id: string }) => `/account/view/${id}`,
   AccountCreate: () => "/account/create",
@@ -97,6 +99,12 @@ export const routes: Route[] = [
     key: "call-active",
     paths: [Paths.CallActive({ id: ":id" })],
     element: <CallActivePage />,
+  },
+  {
+    key: "calls-active",
+    paths: [Paths.CallsActive()],
+    element: <PageSwitcher />,
+    page: <CallsPage />,
   },
   {
     key: "accounts",

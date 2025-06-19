@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, RefObject, useRef } from "react";
 import { SipContext } from "context/SipContext";
 import { useSip } from "hooks/useSip.ts";
 
@@ -20,6 +20,8 @@ const SipProvider: FC<Props> = ({ children }) => {
     sendDtmf,
     toggleHold,
     toggleMute,
+    toggleAudio,
+    audioRefs,
   } = useSip();
 
   return (
@@ -37,9 +39,13 @@ const SipProvider: FC<Props> = ({ children }) => {
         sendDtmf,
         toggleHold,
         toggleMute,
+        toggleAudio,
       }}
     >
       {children}
+      {Array.from(audioRefs).map(audioRef => (
+        <audio key={audioRef[0]} ref={audioRef[1]} autoPlay={true} />
+      ))}
     </SipContext.Provider>
   );
 };

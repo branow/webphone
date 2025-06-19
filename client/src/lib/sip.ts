@@ -1,5 +1,6 @@
 import { UA, WebSocketInterface } from "jssip";
 import { RTCSession } from "jssip/lib/RTCSession";
+import { RefObject } from "react";
 
 export interface SipAccount {
   readonly username: string;
@@ -70,6 +71,7 @@ export interface CallInfo {
   readonly endTime?: Date;
   readonly startedBy: CallOriginator;
   readonly endedBy?: CallOriginator;
+  readonly volume: boolean;
   readonly isMuted: boolean;
   readonly isOnHold: boolean;
   readonly error?: string;
@@ -85,6 +87,7 @@ export interface Call {
   readonly endTime?: Date;
   readonly startedBy: CallOriginator;
   readonly endedBy?: CallOriginator;
+  readonly volume: boolean;
   readonly isMuted: boolean;
   readonly isOnHold: boolean;
   readonly error?: string;

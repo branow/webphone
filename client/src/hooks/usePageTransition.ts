@@ -8,6 +8,7 @@ const matrixes = [
   [
     ["settings", "settings", "settings"],
     ["history", "dialpad", "contacts"],
+    ["calls-active", "calls-active", "calls-active"],
     ["admin", "admin", "admin"],
   ],
   [
@@ -20,6 +21,7 @@ const matrixes = [
   [
     ["settings", "settings", "settings", "settings", "settings"],
     ["contacts", "contacts-import", "contact", "contact-update", "contact-create"],
+    ["calls-active", "calls-active", "calls-active", "calls-active", "calls-active"],
     ["admin", "admin", "admin", "admin", "admin"],
   ],
   [

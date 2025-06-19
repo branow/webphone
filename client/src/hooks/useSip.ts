@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, createRef, RefObject } from "react";
 import { UA } from "jssip";
 import { RTCSessionEvent } from "jssip/lib/UA";
 import { IncomingAckEvent, IncomingEvent, OutgoingAckEvent, OutgoingEvent, RTCSession } from "jssip/lib/RTCSession";
@@ -19,6 +19,8 @@ interface Return {
   sendDtmf: (id: string, tone: string | number) => void;
   toggleHold: (id: string) => void;
   toggleMute: (id: string) => void;
+  toggleAudio: (id: string) => void;
+  audioRefs: Map<string, RefObject<HTMLAudioElement>>;
 }
 
 export function useSip(): Return {
@@ -26,6 +28,7 @@ export function useSip(): Return {
   const [connection, setConnection] = useState(ConnectionState.DISCONNECTED);
   const [connectionError, setConnectionError] = useState<Error>();
   const [calls, setCalls] = useState(new Map<string, Session>());
+  const audioRefs = useRef<Map<string, RefObject<HTMLAudioElement>>>(new Map());
   const handleIncomingCallRef = useRef<IncomingCallHandler>();
   const uaRef = useRef<UA>();
 
@@ -178,6 +181,8 @@ export function useSip(): Return {
       e.streams[0]?.getTracks()
         .filter(track => call.remoteStream && !call.remoteStream.getTrackById(track.id))
         .forEach(track => call.remoteStream?.addTrack(track));
+      const audio = audioRefs.current.get(callId)?.current;
+      if (audio && call.remoteStream) audio.srcObject = call.remoteStream;
       return call;
     });
   }
@@ -192,11 +197,13 @@ export function useSip(): Return {
       state: CallState.PROGRESS,
       direction: originator == "local" ? CallDirection.OUTGOING : CallDirection.INCOMING,
       startTime: session.start_time || new Date(),
+      volume: true,
       isOnHold: session.isOnHold().local,
       isMuted: session.isMuted().audio,
       startedBy: getCallOriginator(originator)!,
       remoteStream: new MediaStream(),
     }
+    audioRefs.current.set(session.id, createRef<HTMLAudioElement>())
     setCalls((calls) => {
       if (calls.get(info.id)) { warn(`Cannot add call with dublicate id: ${info.id}`); return calls; }
       const newCalls = new Map(calls);
@@ -217,6 +224,7 @@ export function useSip(): Return {
   }
 
   const removeCall = (id: string) => {
+    audioRefs.current.delete(id);
     setCalls(calls => {
       const call = calls.get(id)
       if (!call) { warn(`Cannot remove unexisting call: ${id}`); return calls; }
@@ -279,6 +287,13 @@ export function useSip(): Return {
     }
   }
 
+  const toggleAudio = (id: string) => {
+    const audio = audioRefs.current.get(id)?.current;
+    if (!audio) { warn(`Cannot toggle audio on unexisting call: ${id}`); return; }
+    audio.muted = !audio.muted;
+    updateCall(id, (call) => ({ ...call, volume: !audio.muted }));
+  }
+
   return {
     account,
     setAccount,
@@ -292,6 +307,8 @@ export function useSip(): Return {
     sendDtmf,
     toggleHold,
     toggleMute,
+    toggleAudio,
+    audioRefs: audioRefs.current,
   };
 };
 

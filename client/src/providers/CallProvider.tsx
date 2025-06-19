@@ -15,6 +15,7 @@ const CallProvider: FC<Props> = ({ callId, children }) => {
     sendDtmf,
     toggleHold,
     toggleMute,
+    toggleAudio,
   } = useContext(SipContext);
 
   return (
@@ -25,6 +26,7 @@ const CallProvider: FC<Props> = ({ callId, children }) => {
       sendDtmf: (tone: string | number) => sendDtmf(callId, tone),
       toggleHold: () => toggleHold(callId),
       toggleMute: () => toggleMute(callId),
+      toggleAudio: () => toggleAudio(callId),
     }}>
       {children}
     </CallContext.Provider>

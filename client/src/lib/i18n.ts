@@ -90,6 +90,14 @@ export const d = {
     },
   },
 
+  calls: {
+    title: "calls.title",
+    messages: {
+      noCalls: "calls.messages.noCalls",
+      inCall: "calls.messages.inCall",
+    },
+  },
+
   contact: {
     fields: {
       name: "contact.fields.name",

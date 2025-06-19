@@ -66,6 +66,14 @@
     }
   },
 
+  "calls": {
+    "title": "Дзвінки",
+    "messages": {
+      "noCalls": "Немає активних дзвінків",
+      "inCall": "У дзвінку з"
+    }
+  },
+
   "contact": {
     "fields": {
       "name": "Ім'я",

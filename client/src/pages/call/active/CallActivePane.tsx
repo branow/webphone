@@ -6,8 +6,6 @@ import TransparentRoundButton from "components/common/button/TransparentRoundBut
 import HangUpButton from "components/call/HangUpButton";
 import KeypadPane from "pages/call/active/KeypadPane";
 import { useAudioVisualizer } from "hooks/useAudioVisualizer";
-import { useAudio } from "hooks/useAudio";
-import { useVolume } from "hooks/useVolume";
 import { useTheme } from "hooks/useTheme";
 import { CallContext } from "context/CallContext";
 import { font } from "styles";
@@ -57,9 +55,7 @@ const audioVisualizerOptions = {
 }
 
 const CallActivePane: FC = () => {
-  const { call, toggleMute, toggleHold, hangupCall } = useContext(CallContext);
-  const { audioRef } = useAudio(call!.remoteStream);
-  const { volume, mute, unmute } = useVolume({ audioRef });
+  const { call, toggleAudio, toggleMute, toggleHold, hangupCall } = useContext(CallContext);
   const { canvasRef } = useAudioVisualizer(call!.remoteStream, audioVisualizerOptions);
   const [showKeypad, setShowKeypad] = useState(false);
 
@@ -67,7 +63,6 @@ const CallActivePane: FC = () => {
 
   return (
     <Container>
-      <audio ref={audioRef} autoPlay={true} />
       <canvas ref={canvasRef} width="300" height="125" />
       {showKeypad && (
         <KeypadContainer>
@@ -75,13 +70,13 @@ const CallActivePane: FC = () => {
         </KeypadContainer>
       )}
       <CallControlPane color={th.colors.text}>
-        {volume && (
-          <TransparentRoundButton onClick={mute} disabled={call?.isOnHold}>
+        {call!.volume && (
+          <TransparentRoundButton onClick={toggleAudio} disabled={call?.isOnHold}>
             <BsVolumeUpFill/>
           </TransparentRoundButton>
         )}
-        {!volume && (
-          <TransparentRoundButton onClick={unmute} disabled={call?.isOnHold}>
+        {!call!.volume && (
+          <TransparentRoundButton onClick={toggleAudio} disabled={call?.isOnHold}>
             <BsVolumeMuteFill/>
           </TransparentRoundButton>
         )}
