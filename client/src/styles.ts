@@ -101,7 +101,7 @@ export const DarkTheme: Theme = {
     gray: "#888",
 
     navbar: {
-      color1: "#4c2a85",
+      color1: "#a42a85",
       color2: "#c14f2b",
     }
   },
