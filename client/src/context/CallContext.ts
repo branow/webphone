@@ -8,6 +8,7 @@ export type CallContextType = {
   sendDtmf: (tone: string | number) => void;
   toggleHold: () => void;
   toggleMute: () => void;
+  toggleAudio: () => void;
 }
 
 export const CallContext = createContext<CallContextType>({
@@ -17,6 +18,7 @@ export const CallContext = createContext<CallContextType>({
   sendDtmf: () => { throwInitError(); },
   toggleHold: () => { throwInitError(); },
   toggleMute: () => { throwInitError(); },
+  toggleAudio: () => { throwInitError(); },
 });
 
 function throwInitError() {

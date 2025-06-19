@@ -14,6 +14,7 @@ export type SipContextType = {
   sendDtmf: (id: string, tone: string | number) => void;
   toggleHold: (id: string) => void;
   toggleMute: (id: string) => void;
+  toggleAudio: (id: string) => void;
 }
 
 export const SipContext = createContext<SipContextType>({
@@ -28,6 +29,7 @@ export const SipContext = createContext<SipContextType>({
   sendDtmf: () => { throwInitError(); },
   toggleHold: () => { throwInitError(); },
   toggleMute: () => { throwInitError(); },
+  toggleAudio: () => { throwInitError(); },
 });
 
 function throwInitError() {

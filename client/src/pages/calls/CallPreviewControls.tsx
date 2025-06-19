@@ -1,0 +1,81 @@
+import { FC, useContext } from "react";
+import { BsMicFill, BsMicMuteFill, BsPause, BsPlay, BsVolumeMuteFill, BsVolumeUpFill } from "react-icons/bs";
+import { styled } from "@linaria/react";
+import TransparentRoundButton from "components/common/button/TransparentRoundButton";
+import HangUpButton from "components/call/HangUpButton";
+import { useTheme } from "hooks/useTheme";
+import { CallContext } from "context/CallContext";
+import DTMFAudio from "util/dtmf.js";
+import { font } from "styles";
+
+const Container = styled.div<{ color: string }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  & > * {
+    padding: 7.5px;
+    font-size: ${font.size.xl}px;
+  }
+
+  & svg {
+    color: ${p => p.color};
+  }
+`;
+
+const CallPreviewControls: FC = () => {
+  const { call, toggleAudio, toggleMute, toggleHold, hangupCall } = useContext(CallContext);
+
+  const hangupCallWithSound = () => {
+    DTMFAudio.playCustom("howler");
+    setTimeout(() => {
+      DTMFAudio.stop();
+    }, 1000);
+
+    hangupCall();
+  }
+
+  const th = useTheme();
+
+  return (
+    <Container
+      color={th.colors.text}
+      onClick={e => e.stopPropagation()}
+    >
+      {call!.volume && (
+        <TransparentRoundButton onClick={toggleAudio} disabled={call?.isOnHold}>
+          <BsVolumeUpFill/>
+        </TransparentRoundButton>
+      )}
+      {!call!.volume && (
+        <TransparentRoundButton onClick={toggleAudio} disabled={call?.isOnHold}>
+          <BsVolumeMuteFill/>
+        </TransparentRoundButton>
+      )}
+      {call!.isMuted && (
+        <TransparentRoundButton onClick={toggleMute} disabled={call?.isOnHold}>
+          <BsMicMuteFill />
+        </TransparentRoundButton>
+      )}
+      {!call!.isMuted && (
+        <TransparentRoundButton onClick={toggleMute} disabled={call?.isOnHold}>
+          <BsMicFill />
+        </TransparentRoundButton>
+      )}
+      {call!.isOnHold && (
+        <TransparentRoundButton onClick={toggleHold}>
+          <BsPlay />
+        </TransparentRoundButton>
+      )}
+      {!call!.isOnHold && (
+        <TransparentRoundButton onClick={toggleHold}>
+          <BsPause />
+        </TransparentRoundButton>
+      )}
+      <HangUpButton size={40} onClick={hangupCallWithSound} />
+    </Container>
+  );
+}
+
+export default CallPreviewControls;
