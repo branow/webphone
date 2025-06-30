@@ -94,13 +94,8 @@ export function useSip(): Return {
         handleIncomingCallRef.current(callId);
       }
 
-      if (session.connection) {
-        session.connection.ontrack = (e) => handleTracks(callId, e);
-      }
-
       session.on("peerconnection", (e) => {
         log("peerconneciton", e);
-        e.peerconnection.ontrack = (event) => handleTracks(callId, event);
       });
 
       session.on("connecting", (e) => {
@@ -121,7 +116,14 @@ export function useSip(): Return {
 
       session.on("confirmed", (e: IncomingAckEvent | OutgoingAckEvent) => {
         log("comfirmed", e);
-        updateCall(callId, call => ({ ...call, state: CallState.ESTABLISHED }));
+        updateCall(callId, call => {
+          session.connection.getReceivers()
+            .map(receiver => receiver.track)
+            .forEach(track => call.remoteStream?.addTrack(track));
+          const audio = audioRefs.current.get(callId)?.current;
+          if (audio && call.remoteStream) audio.srcObject = call.remoteStream;
+          return { ...call, state: CallState.ESTABLISHED };
+        });
       });
 
       session.on("hold", (e) => {
@@ -175,17 +177,6 @@ export function useSip(): Return {
     };
 
   }, [account]);
-
-  const handleTracks = (callId: string, e: RTCTrackEvent) => {
-    updateCall(callId, call => {
-      e.streams[0]?.getTracks()
-        .filter(track => call.remoteStream && !call.remoteStream.getTrackById(track.id))
-        .forEach(track => call.remoteStream?.addTrack(track));
-      const audio = audioRefs.current.get(callId)?.current;
-      if (audio && call.remoteStream) audio.srcObject = call.remoteStream;
-      return call;
-    });
-  }
 
   const addCall = (session: RTCSession, request: IncomingRequest | OutgoingRequest, originator: string): string => {
     const number = originator == "local" ?

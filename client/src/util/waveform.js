@@ -38,7 +38,6 @@ var AudioVisualizer = (function () {
 
         let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         var source;
-        var stream;
 
         analyser = audioCtx.createAnalyser();
         analyser.minDecibels = -90;
@@ -47,7 +46,6 @@ var AudioVisualizer = (function () {
 
         var canvasCtx = canvas.getContext("2d");
 
-        var intendedWidth = canvas.clientWidth;
         var dataArray = null;
         var bufferLength = null;
         var WIDTH = canvas.width;
@@ -56,14 +54,12 @@ var AudioVisualizer = (function () {
         if(remoteAudio){
             console.log("Using provided mediaStream ");
             
-            setTimeout(function(){
-
+            setTimeout(async () => {
                 source = audioCtx.createMediaStreamSource(remoteAudio);
                 source.connect(analyser);
                 started = true;
                 visualize();
-
-            },100);
+            }, 100);
 
         }else{ // Use Local Media
             
@@ -101,7 +97,6 @@ var AudioVisualizer = (function () {
             analyser.fftSize = 2048;
             bufferLength = analyser.fftSize;
 
-            // dataArray = new Uint8Array(bufferLength);
             dataArray = new Float32Array(bufferLength);
             canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
             draw();
@@ -112,7 +107,6 @@ var AudioVisualizer = (function () {
             
             drawVisual = requestAnimationFrame(draw);
         
-            //analyser.getByteTimeDomainData(dataArray);
             analyser.getFloatTimeDomainData(dataArray);
             
             canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
