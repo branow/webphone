@@ -1,6 +1,5 @@
 import { UA, WebSocketInterface } from "jssip";
 import { RTCSession } from "jssip/lib/RTCSession";
-import { RefObject } from "react";
 
 export interface SipAccount {
   readonly username: string;

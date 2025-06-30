@@ -1,6 +1,6 @@
-import { FC, ReactNode, RefObject, useRef } from "react";
+import { FC, ReactNode } from "react";
 import { SipContext } from "context/SipContext";
-import { useSip } from "hooks/useSip.ts";
+import { useSip } from "hooks/useSip";
 
 interface Props {
   children: ReactNode;
