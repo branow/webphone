@@ -7,16 +7,16 @@ export interface AudioVisualizerOptions {
   lineWidth: number,
 }
 
-export function useAudioVisualizer(audio: MediaStream | undefined, options: AudioVisualizerOptions) {
+export function useAudioVisualizer(stream: MediaStream | undefined, options: AudioVisualizerOptions) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (audio && canvasRef.current) {
-      AudioVisualizer.init(canvasRef.current, audio, options);
+    if (stream && stream.getAudioTracks().length > 0 && canvasRef.current) {
+      AudioVisualizer.init(canvasRef.current, stream.clone(), options);
       AudioVisualizer.start();
     }
     return () => AudioVisualizer.stop();
-  }, [audio, canvasRef, options]);
+  }, [stream, canvasRef, options]);
 
   return { canvasRef };
 }
