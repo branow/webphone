@@ -9,7 +9,7 @@ export function useAccount() {
   const fetchingDefault = useUserAccount("default", isAccessDenied(fetching.error));
 
   const account = fetching.account || fetchingDefault.account;
-  const error = (!isAccessDenied(fetching.error) && fetching.error) || fetchingDefault.error;
+  const error = isAccessDenied(fetching.error) ? fetchingDefault.error : fetching.error;
   const isPending = !account && !error;
 
   return {
