@@ -8,7 +8,7 @@ import { CallContext } from "context/CallContext";
 import DTMFAudio from "util/dtmf.js";
 import { font } from "styles";
 
-const Container = styled.div<{ color: string }>`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,10 +17,6 @@ const Container = styled.div<{ color: string }>`
   & > * {
     padding: 7.5px;
     font-size: ${font.size.xl}px;
-  }
-
-  & svg {
-    color: ${p => p.color};
   }
 `;
 
@@ -40,36 +36,63 @@ const CallPreviewControls: FC = () => {
 
   return (
     <Container
-      color={th.colors.text}
       onClick={e => e.stopPropagation()}
     >
       {call!.volume && (
-        <TransparentRoundButton onClick={toggleAudio} disabled={call?.isOnHold}>
+        <TransparentRoundButton
+          onClick={toggleAudio}
+          disabled={call?.isOnHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
           <BsVolumeUpFill/>
         </TransparentRoundButton>
       )}
       {!call!.volume && (
-        <TransparentRoundButton onClick={toggleAudio} disabled={call?.isOnHold}>
+        <TransparentRoundButton
+          onClick={toggleAudio}
+          disabled={call?.isOnHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
           <BsVolumeMuteFill/>
         </TransparentRoundButton>
       )}
       {call!.isMuted && (
-        <TransparentRoundButton onClick={toggleMute} disabled={call?.isOnHold}>
+        <TransparentRoundButton
+          onClick={toggleMute}
+          disabled={call?.isOnHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
           <BsMicMuteFill />
         </TransparentRoundButton>
       )}
       {!call!.isMuted && (
-        <TransparentRoundButton onClick={toggleMute} disabled={call?.isOnHold}>
+        <TransparentRoundButton
+          onClick={toggleMute}
+          disabled={call?.isOnHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
           <BsMicFill />
         </TransparentRoundButton>
       )}
       {call!.isOnHold && (
-        <TransparentRoundButton onClick={toggleHold}>
+        <TransparentRoundButton
+          onClick={toggleHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
           <BsPlay />
         </TransparentRoundButton>
       )}
       {!call!.isOnHold && (
-        <TransparentRoundButton onClick={toggleHold}>
+        <TransparentRoundButton
+          onClick={toggleHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
           <BsPause />
         </TransparentRoundButton>
       )}
