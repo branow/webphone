@@ -24,14 +24,6 @@ const Right = styled.div`
   align-items: center;
 `;
 
-const IconContainer = styled.div`
-  width: ${size.contact.top.h * 0.8}px;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 interface Props {
   user: string;
   edit: () => void;
