@@ -28,25 +28,27 @@ const ImportContactsFormBody: FC<Props> = ({ error, user, query, selected, selec
 
   return (
     <Container ref={scrollRef}>
-      {error && <ErrorBanner error={error} />}
-      {!error && (
-        <InfinitePages
-          scrollRef={scrollRef}
-          queryKey={ContactApi.QueryKeys.contacts(user, query, 25)}
-          queryFunc={(page) => ContactApi.getAll(user, { query: query, number: page, size: 25 })}
-        >
-          {contacts => (
+      <InfinitePages
+        scrollRef={scrollRef}
+        queryKey={ContactApi.QueryKeys.contacts(user, query, 25)}
+        queryFunc={(page) => ContactApi.getAll(user, { query: query, number: page, size: 25 })}
+      >
+        {contacts => (
+          <>
+            {error && <ErrorBanner error={error} />}
             <ImportContacts
               contacts={contacts}
               selected={selected}
               select={select}
               unselect={unselect}
             />
-          )}
-        </InfinitePages>
-      )}
+          </>
+        )}
+      </InfinitePages>
     </Container>
   );
 };
+
+
 
 export default ImportContactsFormBody;
