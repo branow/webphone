@@ -18,8 +18,9 @@ interface Return {
   hangupCall: (id: string) => void;
   sendDtmf: (id: string, tone: string | number) => void;
   toggleHold: (id: string) => void;
-  toggleMute: (id: string) => void;
+  toggleMicro: (id: string) => void;
   toggleAudio: (id: string) => void;
+  toggleCamera: (id: string) => void;
   audioRefs: Map<string, RefObject<HTMLAudioElement>>;
 }
 
@@ -85,21 +86,28 @@ export function useSip(): Return {
       setConnectionError(error);
     });
 
-    ua.on("newRTCSession", (e: RTCSessionEvent) => {
-      log("NEW_RTC_SESSION", e);
-      const session = e.session;
-      const callId =  addCall(session, e.request, e.originator);
+    ua.on("newRTCSession", (sessionEvent: RTCSessionEvent) => {
+      log("NEW_RTC_SESSION", sessionEvent);
+      const session = sessionEvent.session;
+      const callId = session.id;
 
-      if (e.originator === "remote" && handleIncomingCallRef.current) {
+      addCall(session, sessionEvent.request, sessionEvent.originator);
+
+      if (sessionEvent.originator === "remote" && handleIncomingCallRef.current) {
         handleIncomingCallRef.current(callId);
       }
 
-      session.on("peerconnection", (e) => {
-        log("peerconneciton", e);
-      });
-
       session.on("connecting", (e) => {
         log("connecting", e);
+        if (sessionEvent.originator === "local") {
+          updateCall(callId, call => {
+            session.connection.getSenders()
+              .map(sender => sender.track)
+              .filter(track => !!track)
+              .forEach(track => call.localStream.addTrack(track));
+            return { ...call };
+          });
+        }
       });
 
       session.on("sending", (e) => {
@@ -116,15 +124,24 @@ export function useSip(): Return {
 
       session.on("confirmed", (e: IncomingAckEvent | OutgoingAckEvent) => {
         log("comfirmed", e);
+        if (!session.connection) return;
+
         updateCall(callId, call => {
+          if (e.originator === "remote") {
+            session.connection.getSenders()
+              .map(sender => sender.track)
+              .filter(track => !!track)
+              .forEach(track => call.localStream.addTrack(track));
+          }
           session.connection.getReceivers()
             .map(receiver => receiver.track)
-            .forEach(track => call.remoteStream?.addTrack(track));
-          const audio = audioRefs.current.get(callId)?.current;
-          if (audio && call.remoteStream) audio.srcObject = call.remoteStream;
+            .filter(track => !!track)
+            .forEach(track => call.remoteStream.addTrack(track));
+          addAudioSrc(call);
           return { ...call, state: CallState.ESTABLISHED };
         });
       });
+
 
       session.on("hold", (e) => {
         log("hold", e);
@@ -138,32 +155,46 @@ export function useSip(): Return {
 
       session.on("muted", (e) => {
         log("muted", e);
-        updateCall(callId, call => ({ ...call, isMuted: true }));
+        updateCall(callId, call => ({
+          ...call,
+          micro: e.audio ? false : call.audio,
+          video: e.video ? false : call.video,
+        }));
       });
 
       session.on("unmuted", (e) => {
         log("unmuted", e);
-        updateCall(callId, call => ({ ...call, isMuted: false }));
+        updateCall(callId, call => ({
+          ...call,
+          micro: e.audio ? true : call.audio,
+          video: e.video ? true : call.video,
+        }));
       });
 
       session.on("ended", (e) => {
         log("ended", e);
-        const endTime = new Date();
-        const endedBy = getCallOriginator(e.originator);
-        const state = CallState.ENDED;
-        const remoteStream = undefined;
-        updateCall(callId, call => ({ ...call, state, remoteStream, endTime, endedBy }));
+        updateCall(callId, call => {
+          return {
+            ...call,
+            state: CallState.ENDED,
+            endTime: new Date(),
+            endedBy: getCallOriginator(e.originator),
+          };
+        });
         scheduleCallRemoval(callId);
       });
 
       session.on("failed", (e) => {
         log("failed", e);
-        const endTime = new Date();
-        const endedBy = getCallOriginator(e.originator);
-        const state = CallState.ENDED;
-        const remoteStream = undefined;
-        const error = e.cause;
-        updateCall(callId, call => ({ ...call, state, remoteStream, endTime, endedBy, error }))
+        updateCall(callId, call => {
+          return {
+            ...call,
+            state: CallState.ENDED,
+            endTime: new Date(),
+            endedBy: getCallOriginator(e.originator),
+            error: e.cause,
+          };
+        });
         scheduleCallRemoval(callId);
       });
 
@@ -178,21 +209,28 @@ export function useSip(): Return {
 
   }, [account]);
 
-  const addCall = (session: RTCSession, request: IncomingRequest | OutgoingRequest, originator: string): string => {
+  const addAudioSrc = (call: CallInfo) => {
+    const audio = audioRefs.current.get(call.id)?.current;
+    if (audio) audio.srcObject = call.remoteStream;
+  }
+
+  const addCall = async (session: RTCSession, request: IncomingRequest | OutgoingRequest, originator: string) => {
     const number = originator == "local" ?
       (request?.ruri?.user || "unknown") :
       (request?.from?.uri?.user || "unknown");
-    const info = {
+    const info: CallInfo = {
       id: session.id,
       number: number,
       state: CallState.PROGRESS,
       direction: originator == "local" ? CallDirection.OUTGOING : CallDirection.INCOMING,
       startTime: session.start_time || new Date(),
-      volume: true,
-      isOnHold: session.isOnHold().local,
-      isMuted: session.isMuted().audio,
       startedBy: getCallOriginator(originator)!,
+      audio: true,
+      micro: !session.isMuted().audio,
+      video: !session.isMuted().video,
+      localStream: new MediaStream(),
       remoteStream: new MediaStream(),
+      isOnHold: session.isOnHold().local,
     }
     audioRefs.current.set(session.id, createRef<HTMLAudioElement>())
     setCalls((calls) => {
@@ -201,7 +239,6 @@ export function useSip(): Return {
       newCalls.set(info.id, { session, info });
       return newCalls;
     });
-    return info.id;
   }
 
   const updateCall = (id: string, updateFunc: (c: CallInfo) => CallInfo) => {
@@ -233,7 +270,11 @@ export function useSip(): Return {
 
   const makeCall = (number: string): void => {
     if (!uaRef.current) { warn("Cannot make call as UA is undefined"); return; }
-    uaRef.current.call(number, { "mediaConstraints": { "audio": true } });
+
+    uaRef.current.call(number, {
+      mediaConstraints: { audio: true, video: true }, // optional now
+    });
+
   }
 
   const onIncomingCall = (handler: IncomingCallHandler): void => {
@@ -243,7 +284,7 @@ export function useSip(): Return {
   const answerCall = (id: string): void => {
     const call = calls.get(id);
     if (!call) { warn(`Cannot answer unexisting call: ${id}`); return; }
-    call.session.answer();
+    call.session.answer({ mediaConstraints: { audio: true, video: true } });
   }
 
   const hangupCall = (id: string): void => {
@@ -268,7 +309,7 @@ export function useSip(): Return {
     }
   }
 
-  const toggleMute = (id: string) => {
+  const toggleMicro = (id: string) => {
     const call = calls.get(id);
     if (!call) { warn(`Cannot toggle mute on unexisting call: ${id}`); return; }
     if (call.session.isMuted().audio) {
@@ -278,11 +319,22 @@ export function useSip(): Return {
     }
   }
 
+  const toggleCamera = (id: string) => {
+    const call = calls.get(id);
+    if (!call) { warn(`Cannot toggle video on unexisting call: ${id}`); return; }
+    if (call.session.isMuted().video) {
+      call.session.unmute({ video: true });
+    } else {
+      call.session.mute({ video: true });
+    }
+  }
+
   const toggleAudio = (id: string) => {
     const audio = audioRefs.current.get(id)?.current;
     if (!audio) { warn(`Cannot toggle audio on unexisting call: ${id}`); return; }
-    audio.muted = !audio.muted;
-    updateCall(id, (call) => ({ ...call, volume: !audio.muted }));
+    const muted = !audio.muted;
+    audio.muted = muted;
+    updateCall(id, (call) => ({ ...call, audio: !muted }));
   }
 
   return {
@@ -297,7 +349,8 @@ export function useSip(): Return {
     hangupCall,
     sendDtmf,
     toggleHold,
-    toggleMute,
+    toggleMicro,
+    toggleCamera,
     toggleAudio,
     audioRefs: audioRefs.current,
   };

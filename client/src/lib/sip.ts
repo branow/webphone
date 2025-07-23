@@ -70,11 +70,13 @@ export interface CallInfo {
   readonly endTime?: Date;
   readonly startedBy: CallOriginator;
   readonly endedBy?: CallOriginator;
-  readonly volume: boolean;
-  readonly isMuted: boolean;
+  readonly audio: boolean;
+  readonly video: boolean;
+  readonly micro: boolean;
   readonly isOnHold: boolean;
   readonly error?: string;
-  readonly remoteStream?: MediaStream;
+  readonly localStream: MediaStream;
+  readonly remoteStream: MediaStream;
 }
 
 export interface Call {
@@ -86,11 +88,13 @@ export interface Call {
   readonly endTime?: Date;
   readonly startedBy: CallOriginator;
   readonly endedBy?: CallOriginator;
-  readonly volume: boolean;
-  readonly isMuted: boolean;
+  readonly audio: boolean;
+  readonly video: boolean;
+  readonly micro: boolean;
   readonly isOnHold: boolean;
   readonly error?: string;
-  readonly remoteStream?: MediaStream;
+  readonly localStream: MediaStream;
+  readonly remoteStream: MediaStream;
 }
 
 export type IncomingCallHandler = (id: string) => void;
