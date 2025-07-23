@@ -19,8 +19,9 @@ const SipProvider: FC<Props> = ({ children }) => {
     hangupCall,
     sendDtmf,
     toggleHold,
-    toggleMute,
+    toggleMicro,
     toggleAudio,
+    toggleCamera,
     audioRefs,
   } = useSip();
 
@@ -38,8 +39,9 @@ const SipProvider: FC<Props> = ({ children }) => {
         hangupCall,
         sendDtmf,
         toggleHold,
-        toggleMute,
+        toggleMicro,
         toggleAudio,
+        toggleCamera,
       }}
     >
       {children}

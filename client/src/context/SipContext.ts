@@ -13,8 +13,9 @@ export type SipContextType = {
   hangupCall: (id: string) => void;
   sendDtmf: (id: string, tone: string | number) => void;
   toggleHold: (id: string) => void;
-  toggleMute: (id: string) => void;
+  toggleMicro: (id: string) => void;
   toggleAudio: (id: string) => void;
+  toggleCamera: (id: string) => void;
 }
 
 export const SipContext = createContext<SipContextType>({
@@ -28,8 +29,9 @@ export const SipContext = createContext<SipContextType>({
   hangupCall: () => { throwInitError(); },
   sendDtmf: () => { throwInitError(); },
   toggleHold: () => { throwInitError(); },
-  toggleMute: () => { throwInitError(); },
+  toggleMicro: () => { throwInitError(); },
   toggleAudio: () => { throwInitError(); },
+  toggleCamera: () => { throwInitError(); },
 });
 
 function throwInitError() {
