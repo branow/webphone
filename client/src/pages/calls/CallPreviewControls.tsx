@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const CallPreviewControls: FC = () => {
-  const { call, toggleAudio, toggleMute, toggleHold, hangupCall } = useContext(CallContext);
+  const { call, toggleAudio, toggleMicro, toggleHold, hangupCall } = useContext(CallContext);
 
   const hangupCallWithSound = () => {
     DTMFAudio.playCustom("howler");
@@ -38,7 +38,7 @@ const CallPreviewControls: FC = () => {
     <Container
       onClick={e => e.stopPropagation()}
     >
-      {call!.volume && (
+      {call!.audio && (
         <TransparentRoundButton
           onClick={toggleAudio}
           disabled={call?.isOnHold}
@@ -48,7 +48,7 @@ const CallPreviewControls: FC = () => {
           <BsVolumeUpFill/>
         </TransparentRoundButton>
       )}
-      {!call!.volume && (
+      {!call!.audio && (
         <TransparentRoundButton
           onClick={toggleAudio}
           disabled={call?.isOnHold}
@@ -58,24 +58,24 @@ const CallPreviewControls: FC = () => {
           <BsVolumeMuteFill/>
         </TransparentRoundButton>
       )}
-      {call!.isMuted && (
+      {call!.micro && (
         <TransparentRoundButton
-          onClick={toggleMute}
-          disabled={call?.isOnHold}
-          color={th.colors.text}
-          colorHover={th.colors.text}
-        >
-          <BsMicMuteFill />
-        </TransparentRoundButton>
-      )}
-      {!call!.isMuted && (
-        <TransparentRoundButton
-          onClick={toggleMute}
+          onClick={toggleMicro}
           disabled={call?.isOnHold}
           color={th.colors.text}
           colorHover={th.colors.text}
         >
           <BsMicFill />
+        </TransparentRoundButton>
+      )}
+      {!call!.micro && (
+        <TransparentRoundButton
+          onClick={toggleMicro}
+          disabled={call?.isOnHold}
+          color={th.colors.text}
+          colorHover={th.colors.text}
+        >
+          <BsMicMuteFill />
         </TransparentRoundButton>
       )}
       {call!.isOnHold && (
